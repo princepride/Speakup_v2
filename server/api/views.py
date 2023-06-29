@@ -246,3 +246,8 @@ def select_sub_subtitle(request):
         record_data.append([{'id':record_result.id, 'text':record_result.text} for record_result in record_results])
         evaluation_data.append([{'id':evaluation_result.id, 'text':evaluation_result.text} for evaluation_result in evaluation_results])
     return Response({"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data}, status=200)
+
+
+def stream_video(request, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    return FileResponse(open(file_path, 'rb'), content_type='application/x-mpegURL')

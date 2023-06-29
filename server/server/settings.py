@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import json
+import os
 
 with open(r'config.json') as file:
     json_data = json.load(file)
@@ -137,3 +138,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',  # 允许的前端应用地址
     json_data["NGROK"]
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
