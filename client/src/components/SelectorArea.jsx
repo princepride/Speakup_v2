@@ -28,7 +28,30 @@ function SelectorArea() {
         if (isYoutubeUrl(url)) {
             downloadYoutube(url)
             .then(data => {
-                alert(data.message);
+                setVideoUrl(data.videoUrl)
+                setSubSubtitles(data.subSubtitle)
+                setUserSubSubtitles(data.record)
+                setChatGPTResponse(data.evaluation)
+                setYoutubeId(url.slice(-11))
+                const subtitle_text = data.subtitle;
+                const subtitleList = [];
+                console.log(subtitle_text.split('\n\n'))
+                subtitle_text.split('\n\n').filter(item => item.trim() !== '').map((item, index) => {
+                    const lines = item.split('\n');
+                    const [startTime, endTime] = lines[1].split(' --> ');
+                    const text = lines.slice(2).join(' ');
+                    subtitleList.push(
+                        {
+                            "startTime": stringToSecond(startTime),
+                            "endTime": stringToSecond(endTime),
+                            "text": text
+                        }
+                    );
+                })
+                setSubtitle(subtitleList);
+                if(data.subSubtitle.length > 0) {
+                    setSubSubtitlesIndex(0);
+                }
             })
             .catch(error => {
                 console.error(error);
@@ -106,7 +129,7 @@ function SelectorArea() {
     return (
         <StyledContainer maxWidth="xl">
             <Grid container spacing={2}>
-                <Grid item xs={6} lg={8}>
+                <Grid item xs={10}>
                     <TextField
                         fullWidth
                         value={url}
@@ -116,12 +139,12 @@ function SelectorArea() {
                         size="small"
                     />
                 </Grid>
-                <Grid item xs={1.8} lg={1.2}>
+                <Grid item xs={2}>
                     <Button fullWidth variant="contained" color="primary" onClick={handleDownload}>
-                        download
+                        load video
                     </Button>
                 </Grid>
-                <Grid item xs={2.1} lg={1.4}>
+                {/*<Grid item xs={2.1} lg={1.4}>
                     <Button fullWidth variant="contained" color="secondary" onClick={handleLoadVideo}>
                         load video
                     </Button>
@@ -130,7 +153,7 @@ function SelectorArea() {
                     <Button fullWidth variant="contained" color="secondary" onClick={handleLoadSubtitle}>
                         load subtitle
                     </Button>
-                </Grid>
+                </Grid>*/}
             </Grid>
         </StyledContainer>
     );

@@ -33,6 +33,16 @@ settings.MODEL = model
 settings.PROCESSOR = processor
 settings.JSON_DATA = json_data
 
+def read_file(file_path):
+    # 获取脚本的父路径
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # 拼接文件的完整路径
+    full_path = os.path.join(parent_dir, file_path)
+    
+    with open(full_path, 'r') as file:
+        file_text = file.read()
+    return file_text
+
 @api_view(['POST'])
 def download_youtube(request):
     youtube_url = request.data.get('youtube_url', None)
@@ -40,66 +50,96 @@ def download_youtube(request):
 
     if youtube_url is None:
         return Response({"error": "URL not provided"}, status=400)
+    
+    if not Youtube.objects.filter(youtube_id=youtube_url[-11:]).exists():
+        ydl_opts = {
+            'format': 'best',
+            'writesubtitles': True,
+            'writeautomaticsub': True,  # Download auto-generated subtitles
+            'subtitleslangs': ['en', 'zh'],  # Only download English subtitles
+            'outtmpl': 'videos/%(title)s-%(id)s.%(ext)s',
+        }
 
-    ydl_opts = {
-        'format': 'best',
-        'writesubtitles': True,
-        'writeautomaticsub': True,  # Download auto-generated subtitles
-        'subtitleslangs': ['en', 'zh'],  # Only download English subtitles
-        'outtmpl': 'videos/%(title)s-%(id)s.%(ext)s',
-    }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            try:
+                info = ydl.extract_info(youtube_url, download=True)
+            except yt_dlp.DownloadError as e:
+                return Response({"error": str(e)}, status=400)
+        subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
+        subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
+        # Wait for the download to finish
+        while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh):
+            time.sleep(1)
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        try:
-            info = ydl.extract_info(youtube_url, download=True)
-        except yt_dlp.DownloadError as e:
-            return Response({"error": str(e)}, status=400)
+        if os.path.exists(subtitle_file_en):
+            filename = ydl.prepare_filename(info)
+            print(filename.replace('videos\\','videos/'))
+            command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
+                input_file=filename.replace('videos\\','videos/'),
+                output_file="media/" + filename[7:-4] + ".m3u8"
+            )
+            os.system(command)
+            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), subtitle_name=subtitle_file_en)
+            new_youtube_video.save()
+            # Convert EN VTT to EN SRT
+            with open(subtitle_file_en, 'r', encoding='utf-8', errors='replace') as f:
+                captions = WebVTTReader().read(f.read().replace('\ufffd', ' '))
 
-    subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
-    subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
-    # Wait for the download to finish
-    while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh):
-        time.sleep(1)
+            srt_file = subtitle_file_en.replace('.vtt', '.srt')
+            with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
+                print(captions)
+                f.write(SRTWriter().write(captions))
 
-    if os.path.exists(subtitle_file_en):
-        new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), subtitle_name=subtitle_file_en)
-        new_youtube_video.save()
-        # Convert EN VTT to EN SRT
-        with open(subtitle_file_en, 'r', encoding='utf-8', errors='replace') as f:
-            captions = WebVTTReader().read(f.read().replace('\ufffd', ' '))
+            os.remove(subtitle_file_en)
 
-        srt_file = subtitle_file_en.replace('.vtt', '.srt')
-        with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
-            print(captions)
-            f.write(SRTWriter().write(captions))
+            process_subtitle(srt_file, srt_file.replace(".en.srt", " processed.en.srt"))
 
-        os.remove(subtitle_file_en)
+            # Delete original subtitle file
+            os.remove(srt_file)
 
-        process_subtitle(srt_file, srt_file.replace(".en.srt", " processed.en.srt"))
+        elif os.path.exists(subtitle_file_zh):
+            filename = ydl.prepare_filename(info)
+            print(filename.replace('videos\\','videos/'))
+            command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
+                input_file=filename.replace('videos\\','videos/'),
+                output_file="media/" + filename[7:-4] + ".m3u8"
+            )
+            os.system(command)
+            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), subtitle_name=subtitle_file_zh)
+            new_youtube_video.save()
+            # Convert ZH VTT to ZH SRT
+            with open(subtitle_file_zh, 'r', encoding='utf-8', errors='replace') as f:
+                captions = WebVTTReader().read(f.read().replace('\ufffd', ' '))
 
-        # Delete original subtitle file
-        os.remove(srt_file)
+            srt_file = subtitle_file_zh.replace('.vtt', '.srt')
+            with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
+                print(captions)
+                f.write(SRTWriter().write(captions))
 
-    elif os.path.exists(subtitle_file_zh):
-        new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), subtitle_name=subtitle_file_zh)
-        new_youtube_video.save()
-        # Convert ZH VTT to ZH SRT
-        with open(subtitle_file_zh, 'r', encoding='utf-8', errors='replace') as f:
-            captions = WebVTTReader().read(f.read().replace('\ufffd', ' '))
+            os.remove(subtitle_file_zh)
 
-        srt_file = subtitle_file_zh.replace('.vtt', '.srt')
-        with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
-            print(captions)
-            f.write(SRTWriter().write(captions))
+            process_subtitle(srt_file, srt_file.replace(".zh.srt", " processed.zh.srt"))
 
-        os.remove(subtitle_file_zh)
-
-        process_subtitle(srt_file, srt_file.replace(".zh.srt", " processed.zh.srt"))
-
-        # Delete original subtitle file
-        os.remove(srt_file)
-
-    return Response({"message": "Download complete!"}, status=200)
+            # Delete original subtitle file
+            os.remove(srt_file)
+    youtube = Youtube.objects.get(youtube_id=youtube_url[-11:])
+    video_url = "http://localhost:8000/stream/"+youtube.youtube_name[7:-4] + ".m3u8"
+    subtitle = read_file(youtube.subtitle_name.replace(".en.vtt", " processed.en.srt").replace(".zh.vtt", " processed.zh.srt"))
+    youtube_id = youtube.youtube_id
+    # print(youtube_id)
+    sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True)
+    # print(sub_subtitle_results)
+    sub_subtitle_data = [{'id':sub_subtitle_result.id, 'startTime': sub_subtitle_result.start_time, 'endTime': sub_subtitle_result.end_time, 'text': sub_subtitle_result.text} for sub_subtitle_result in sub_subtitle_results]
+    record_data = []
+    evaluation_data = []
+    for data in sub_subtitle_data:
+        record_results = Record.objects.filter(sub_subtitle_id=data['id'])
+        # print(record_results)
+        evaluation_results = Evaluation.objects.filter(sub_subtitle_id=data['id'])
+        # print(evaluation_results)
+        record_data.append([{'id':record_result.id, 'text':record_result.text} for record_result in record_results])
+        evaluation_data.append([{'id':evaluation_result.id, 'text':evaluation_result.text} for evaluation_result in evaluation_results])
+    return Response({"videoUrl":video_url,"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle}, status=200)
 
 @api_view(['POST'])
 def speech_recognition(request):

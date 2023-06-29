@@ -139,5 +139,6 @@ CORS_ALLOWED_ORIGINS = [
     json_data["NGROK"]
 ]
 
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
