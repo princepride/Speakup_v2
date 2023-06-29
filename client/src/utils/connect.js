@@ -84,17 +84,3 @@ export const deleteSubSubtitle = (sub_subtitle_id) => {
         throw new Error(error.message);
     })
 }
-
-export const selectSubSubtitle = (filename) => {
-    const url = process.env.REACT_APP_BACKEND_URL + '/select-sub-subtitle'
-    const data = {
-        filename: filename,
-    }
-    return Axios.post(url, data)
-    .then(response => {
-        return response.data
-    })
-    .catch(error => {
-        throw new Error(error.message);
-    })
-}

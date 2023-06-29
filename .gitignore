@@ -131,6 +131,9 @@ dist
 *.webv
 *.srt
 *.mp4
+*.ts
+*.m3u8
 */db.sqlite3
+
 
 config.json

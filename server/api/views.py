@@ -265,29 +265,6 @@ def delete_sub_subtitle(request):
     except SubSubtitle.DoesNotExist:
         return Response({"error": "SubSubtitle with this id does not exist"}, status=404)
 
-@api_view(['POST'])
-def select_sub_subtitle(request):
-    filename = request.data.get('filename')
-    if filename is None:
-        return Response({'error': 'Filename not provided'}, status=400)
-
-    youtube_id = filename[-28:-17]
-    # print(youtube_id)
-    sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True)
-    # print(sub_subtitle_results)
-    sub_subtitle_data = [{'id':sub_subtitle_result.id, 'startTime': sub_subtitle_result.start_time, 'endTime': sub_subtitle_result.end_time, 'text': sub_subtitle_result.text} for sub_subtitle_result in sub_subtitle_results]
-    record_data = []
-    evaluation_data = []
-    for data in sub_subtitle_data:
-        record_results = Record.objects.filter(sub_subtitle_id=data['id'])
-        # print(record_results)
-        evaluation_results = Evaluation.objects.filter(sub_subtitle_id=data['id'])
-        # print(evaluation_results)
-        record_data.append([{'id':record_result.id, 'text':record_result.text} for record_result in record_results])
-        evaluation_data.append([{'id':evaluation_result.id, 'text':evaluation_result.text} for evaluation_result in evaluation_results])
-    return Response({"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data}, status=200)
-
-
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     return FileResponse(open(file_path, 'rb'), content_type='application/x-mpegURL')
