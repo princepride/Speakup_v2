@@ -1,0 +1,32 @@
+{
+    "copy_button_config":[
+        {
+            "button_name":"Paraphrase",
+            "output_key_words":"Paraphrase Text",
+            "prompts":"Please provide a score for the paraphrase, and explain your rating considering various dimensions such as accuracy, grammatical complexity and coherence. After that, you should give me some advice. 请全部用中文回答问题",
+            "has_memory":false,
+            "use_original_text":true
+        },
+        {
+            "button_name":"Seque",
+            "output_key_words":"Sentence Continuation",
+            "prompts":"Please provide a score for the sentence continuation, and explain your rating considering various dimensions such as the rationality of logic, the correctness of grammar, and the complexity of the sentence. After that, you should give me some advice. 请全部用中文回答问题",
+            "has_memory":false,
+            "use_original_text":true
+        },
+        {
+            "button_name":"Zh-En",
+            "output_key_words":"Chinese to English Translation",
+            "prompts":"Please provide a score for the Chinese to English translation, and explain your rating considering various dimensions such as fidelity to the original text, linguistic intricacy, and overall fluency. After that, you should give me some advice. 请全部用中文回答问题",
+            "has_memory":false,
+            "use_original_text":true
+        },
+        {
+            "button_name":"conversation",
+            "output_key_words":"My Response",
+            "prompts":"I want to practice English conversation with you, I say a sentence, and you say a sentence. You will role-play a character and dialogue with me, or start a discussion about a particular thing, all in English. Now you need to decide a suitable role for yourself based on what I said, then chat with me",
+            "has_memory":true,
+            "use_original_text":false
+        }
+    ]
+}
