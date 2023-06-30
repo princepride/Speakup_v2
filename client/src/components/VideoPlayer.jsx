@@ -19,27 +19,54 @@ const VideoPlayer = () => {
   const videoRef = useRef(null);
   const { videoUrl, currentTime, setCurrentTime, tabIndex, subSubtitles, subSubtitlesIndex, isSelectSubtitle } = useStateContext();
 
-  useEffect(() => {
-    const video = videoRef.current;
+//  useEffect(() => {
+//    const video = videoRef.current;
 
-    if (video && videoUrl) {
-      if (Hls.isSupported()) {
-        var hls = new Hls({
-          debug: true,
-        });
-        hls.loadSource(videoUrl);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-          // video.muted = true;
-          // video.play();
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = videoUrl;
-        video.addEventListener('canplay', function () {
-          video.play();
-        });
-      }
+//    if (video && videoUrl) {
+//      if (Hls.isSupported()) {
+//        var hls = new Hls({
+//          debug: true,
+//        });
+//        hls.loadSource(videoUrl);
+//        hls.attachMedia(video);
+//        hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+//          // video.muted = true;
+//          // video.play();
+//        });
+//      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+//        video.src = videoUrl;
+//        video.addEventListener('canplay', function () {
+//          video.play();
+//        });
+//      }
+//    }
+//}, [videoUrl])
+
+useEffect(() => {
+  const video = videoRef.current;
+
+  if (video && videoUrl) {
+    if (Hls.isSupported()) {
+      var hls = new Hls({
+        debug: true,
+        xhrSetup: function(xhr, url) {
+          //这是添加自定义请求头的地方
+          xhr.setRequestHeader('ngrok-skip-browser-warning', '69420');
+        }
+      });
+      hls.loadSource(videoUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+        // video.muted = true;
+        // video.play();
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoUrl;
+      video.addEventListener('canplay', function () {
+        video.play();
+      });
     }
+  }
 }, [videoUrl])
 
 useEffect(() => {

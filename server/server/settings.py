@@ -134,11 +134,18 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',  # 允许的前端应用地址
-    json_data["NGROK"]
-]
+#CORS_ALLOWED_ORIGINS = [
+#    'http://localhost:3000',  # 允许的前端应用地址
+#    json_data["NGROK"]
+#]
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+CORS_ALLOW_HEADERS = [
+    'content-type',
+    'ngrok-skip-browser-warning',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True

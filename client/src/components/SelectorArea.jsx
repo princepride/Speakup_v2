@@ -26,10 +26,10 @@ function SelectorArea() {
         setLoopIndex,
         setSubSubtitlesIndex } = useStateContext();
 
-    const isYoutubeUrl = (url) => {
-        const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\//;
-        return youtubeRegex.test(url);
-    };
+        const isYoutubeUrl = (url) => {
+            const youtubeRegex = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\//;
+            return youtubeRegex.test(url);
+        };
 
     const handleDownload = () => {
         // 实现下载功能
@@ -40,7 +40,8 @@ function SelectorArea() {
             downloadYoutube(url)
             .then(data => {
                 setVisible(false)
-                setVideoUrl(data.videoUrl)
+                console.log(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
+                setVideoUrl(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
                 setSubSubtitles(data.subSubtitle)
                 setUserSubSubtitles(data.record)
                 setChatGPTResponse(data.evaluation)
