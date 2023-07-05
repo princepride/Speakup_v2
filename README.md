@@ -3,7 +3,7 @@ lang: en
 ---
 [English](README.md) | [中文](README.zh.md)
 
-# Speakup
+# Speakup_v2
 
  A powerful ai tool combined with youtube to help speaking English.
 
