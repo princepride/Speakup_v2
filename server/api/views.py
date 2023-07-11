@@ -39,7 +39,7 @@ def read_file(file_path):
     # 拼接文件的完整路径
     full_path = os.path.join(parent_dir, file_path)
     
-    with open(full_path, 'r') as file:
+    with open(full_path, 'r', encoding='utf-8') as file:
         file_text = file.read()
     return file_text
 
