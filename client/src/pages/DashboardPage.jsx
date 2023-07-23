@@ -80,7 +80,7 @@ const DashboardPage = () => {
                         </Tooltip>
                     </NavigationItem>
                     <NavigationItem component={Link} to="/Bookmarks">
-                        <Tooltip title="Bookmarks">
+                        <Tooltip title="Favourite">
                             <IconButton color="inherit">
                                 <BookmarksIcon />
                             </IconButton>
