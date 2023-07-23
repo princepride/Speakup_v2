@@ -2,9 +2,11 @@ import styled from '@emotion/styled';
 import { Box, List, ListItem, ListItemIcon, Tooltip, IconButton } from '@mui/material';
 import { Routes, Route, Outlet, Link } from 'react-router-dom';
 import MainPage from './MainPage';
-import StatisticPage from './StatisticPage'
-import R2024Icon from '@mui/icons-material/Event'; // Assume this icon for R2024
-import GoBangIcon from '@mui/icons-material/Gamepad'; // Assume this icon for GoBang
+import StatisticPage from './StatisticPage';
+import BookmarksPage from './BookmarksPage';
+import SpeakUpIcon from '@mui/icons-material/SettingsVoice';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import StatisticIcon from '@mui/icons-material/Equalizer';
 
 const MainContainer = styled(Box)`
     display: flex;
@@ -41,17 +43,24 @@ const NavigationList = styled(List)`
     }
 `;
 
+//const NavigationItem = styled(ListItem)`
+//    cursor: pointer;
+
+//    //&:hover {
+//    //    background-color: #CCC;
+//    //    border-radius: 20px;
+//    //}
+
+//    & .MuiIconButton-root {
+//        margin-left: -14px; 
+//    }
+//`;
+
 const NavigationItem = styled(ListItem)`
+    display: flex; 
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
-
-    //&:hover {
-    //    background-color: #CCC;
-    //    border-radius: 20px;
-    //}
-
-    & .MuiIconButton-root {
-        margin-left: -14px; 
-    }
 `;
 
 const ContentContainer = styled(Box)`
@@ -66,14 +75,21 @@ const DashboardPage = () => {
                     <NavigationItem component={Link} to="/">
                         <Tooltip title="Speak Up">
                             <IconButton color="inherit">
-                                <R2024Icon />
+                                <SpeakUpIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
-                    <NavigationItem component={Link} to="/StatisticPage">
+                    <NavigationItem component={Link} to="/Bookmarks">
+                        <Tooltip title="Bookmarks">
+                            <IconButton color="inherit">
+                                <BookmarksIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </NavigationItem>
+                    <NavigationItem component={Link} to="/Statistic">
                         <Tooltip title="Statistic">
                             <IconButton color="inherit">
-                                <GoBangIcon />
+                                <StatisticIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
@@ -83,7 +99,8 @@ const DashboardPage = () => {
                 <Outlet />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
-                    <Route path="/StatisticPage" element={<StatisticPage />} />
+                    <Route path="/Bookmarks" element={<BookmarksPage />} />
+                    <Route path="/Statistic" element={<StatisticPage />} />
                 </Routes>
             </ContentContainer>
         </MainContainer>
