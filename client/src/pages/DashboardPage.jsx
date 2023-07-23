@@ -21,7 +21,7 @@ const NavigationContainer = styled(Box)`
     background-repeat: no-repeat;
     background-position: center;
     color: #fff;
-    width: 4%;
+    width: 3%;
 
     @media screen and (max-width: 1080px) {
         width: 100%;
@@ -44,13 +44,13 @@ const NavigationList = styled(List)`
 const NavigationItem = styled(ListItem)`
     cursor: pointer;
 
-    &:hover {
-        background-color: #CCC;
-        border-radius: 20px;
-    }
+    //&:hover {
+    //    background-color: #CCC;
+    //    border-radius: 20px;
+    //}
 
     & .MuiIconButton-root {
-        margin-left: -8px; 
+        margin-left: -14px; 
     }
 `;
 
