@@ -1,18 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import DashboardPage from './DashboardPage';
 import MainPage from './MainPage';
-import TestPage from './TestPage';
-import ChatPage from './ChatPage';
 
-function RoutePage() {
+const RoutePage = () => {
     return (
-    <BrowserRouter>
-        <Routes>
-            <Route path="/" element={(<MainPage />)} />
-            <Route path="/chat" element={(<ChatPage />)} />
-            <Route path="/test" element={(<TestPage />)} />
-        </Routes>
-    </BrowserRouter>
-    );
+        <BrowserRouter>
+            <Routes>
+                <Route path="/*" element={(<DashboardPage />)} />
+                <Route path="/test" element={(<MainPage />)} />
+            </Routes>
+        </BrowserRouter>
+    )
 }
 
-export default RoutePage;
+export default RoutePage
