@@ -150,11 +150,11 @@ import isUrlHttp from 'is-url-http';
 // 确定文件类型并返回相应的颜色
 const colorByFileType = (fileType) => {
     switch(fileType) {
-        case 'image': return '#FF9B9B'; // 红色
-        case 'document': return '#FFD6A5'; // 绿色
-        case 'video': return '#FFFEC4'; // 蓝色
-        case 'audio': return '#CBFFA9'; // 紫色
-        default: return '#4E4FEB'; // 黑色
+        case 'image': return '#FF9B9B';
+        case 'document': return '#FFD6A5';
+        case 'video': return '#FFFEC4';
+        case 'audio': return '#CBFFA9';
+        default: return '#4E4FEB';
     }
 };
 
