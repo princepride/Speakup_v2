@@ -185,7 +185,7 @@ const Link = (props) => {
     return (
         <button 
             title={file.name}
-            style={{margin:'0 2px', border:`2px solid ${color}`,borderRadius:'3px', height:'24px'}}
+            style={{margin:'0 2px', border:`2px solid ${color}`,borderRadius:'3px', height:'24px', cursor: 'pointer'}}
             onClick={() => window.open(url, '_blank')}>
             {props.children}
         </button>
@@ -216,7 +216,7 @@ const URLLink = (props) => {
 
     return (
         <span 
-            title={`ctrl+click ${url}`}
+            title={`按住ctrl跳转: ${url}`}
             onClick={handleClick} 
             style={{color: 'blue', fontStyle: 'italic', textDecoration: 'underline', cursor: 'pointer'}}
         >
@@ -278,7 +278,8 @@ const MyEditor = () => {
                     let contentStateWithLink = Modifier.insertText(
                         newEditorState.getCurrentContent(),
                         selectionState,
-                        file.name.slice(0,3) + '...',
+                        // file.name.slice(0,3) + '...',
+                        determineFileType(file).toUpperCase(),
                         newEditorState.getCurrentInlineStyle(),
                         entityKey
                     );
