@@ -23,6 +23,7 @@ function SelectorArea() {
         setIsLiked((prevIsLiked) => !prevIsLiked);
     };
     const { setVideoUrl, 
+        videoUrl,
         setYoutubeId, 
         setSubtitle, 
         setSubSubtitles, 
@@ -105,18 +106,18 @@ function SelectorArea() {
                     style={{
                         fontSize: "36px",
                         color: "red",
-                        cursor: "pointer",
+                        cursor: videoUrl === "" ? "default" : "pointer",
                     }}
-                    onClick={handleHeartClick}
+                    onClick={videoUrl === "" ? null : handleHeartClick}
                     />
                     ) : (
                         <FavoriteBorderIcon
                         style={{
                             fontSize: "36px",
                             color: "#45CFDD",
-                            cursor: "pointer",
+                            cursor: videoUrl ===""?"default" : "pointer",
                         }}
-                        onClick={handleHeartClick}
+                        onClick={videoUrl === "" ? null : handleHeartClick}
                         />
                     )}
                 </Grid>
