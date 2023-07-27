@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, List, ListItem, Tooltip, IconButton } from '@mui/material';
-import { Routes, Route, Outlet, Link } from 'react-router-dom';
+import { Routes, Route, Outlet, Link, useLocation } from 'react-router-dom';
 import MainPage from './MainPage';
 import StatisticPage from './StatisticPage';
 import BookmarksPage from './BookmarksPage';
@@ -68,27 +68,28 @@ const ContentContainer = styled(Box)`
 `;
 
 const DashboardPage = () => {
+    const location = useLocation();
     return (
         <MainContainer>
             <NavigationContainer>
                 <NavigationList>
                     <NavigationItem component={Link} to="/">
                         <Tooltip title="Speak Up">
-                            <IconButton style={{color:"#45CFDD"}}>
+                            <IconButton style={{ color : location.pathname === '/' ? "#45CFDD" : "gray" }}>
                                 <SpeakUpIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
                     <NavigationItem component={Link} to="/Bookmarks">
                         <Tooltip title="Favourite">
-                            <IconButton style={{color:"#45CFDD"}}>
+                            <IconButton style={{ color : location.pathname === '/Bookmarks' ? "#45CFDD" : "gray" }}>
                                 <BookmarksIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
                     <NavigationItem component={Link} to="/Statistic">
                         <Tooltip title="Statistic">
-                            <IconButton style={{color:"#45CFDD"}}>
+                            <IconButton style={{ color : location.pathname === '/Statistic' ? "#45CFDD" : "gray" }}>
                                 <StatisticIcon />
                             </IconButton>
                         </Tooltip>

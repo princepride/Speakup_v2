@@ -103,7 +103,7 @@ function SelectorArea() {
                     {isLiked ? (
                     <FavoriteIcon
                     style={{
-                        fontSize: "32px",
+                        fontSize: "36px",
                         color: "red",
                         cursor: "pointer",
                     }}
@@ -112,7 +112,7 @@ function SelectorArea() {
                     ) : (
                         <FavoriteBorderIcon
                         style={{
-                            fontSize: "32px",
+                            fontSize: "36px",
                             color: "#45CFDD",
                             cursor: "pointer",
                         }}
