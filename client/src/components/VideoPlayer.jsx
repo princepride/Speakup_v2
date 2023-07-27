@@ -3,6 +3,7 @@ import { useStateContext } from '../contexts/ContextProvider'
 import styled from "@emotion/styled";
 import Hls from 'hls.js';
 
+
 // VideoPlayer 组件
 const StyledVideoPlayer = styled.video`
     width: 960px;
@@ -18,29 +19,6 @@ const StyledVideoPlayer = styled.video`
 const VideoPlayer = () => {
   const videoRef = useRef(null);
   const { videoUrl, currentTime, setCurrentTime, tabIndex, subSubtitles, subSubtitlesIndex, isSelectSubtitle } = useStateContext();
-
-//  useEffect(() => {
-//    const video = videoRef.current;
-
-//    if (video && videoUrl) {
-//      if (Hls.isSupported()) {
-//        var hls = new Hls({
-//          debug: true,
-//        });
-//        hls.loadSource(videoUrl);
-//        hls.attachMedia(video);
-//        hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-//          // video.muted = true;
-//          // video.play();
-//        });
-//      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-//        video.src = videoUrl;
-//        video.addEventListener('canplay', function () {
-//          video.play();
-//        });
-//      }
-//    }
-//}, [videoUrl])
 
 useEffect(() => {
   const video = videoRef.current;
@@ -103,11 +81,11 @@ useEffect(() => {
   };
 
   return (
-    <StyledVideoPlayer 
-        ref={videoRef} 
-        onTimeUpdate={handleTimeUpdate} 
-        controls={!isSelectSubtitle}
-    />
+      <StyledVideoPlayer 
+          ref={videoRef} 
+          onTimeUpdate={handleTimeUpdate} 
+          controls={!isSelectSubtitle}
+      />
   );
 };
 

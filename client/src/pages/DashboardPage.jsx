@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, List, ListItem, ListItemIcon, Tooltip, IconButton } from '@mui/material';
+import { Box, List, ListItem, Tooltip, IconButton } from '@mui/material';
 import { Routes, Route, Outlet, Link } from 'react-router-dom';
 import MainPage from './MainPage';
 import StatisticPage from './StatisticPage';
@@ -74,21 +74,21 @@ const DashboardPage = () => {
                 <NavigationList>
                     <NavigationItem component={Link} to="/">
                         <Tooltip title="Speak Up">
-                            <IconButton color="inherit">
+                            <IconButton style={{color:"#45CFDD"}}>
                                 <SpeakUpIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
                     <NavigationItem component={Link} to="/Bookmarks">
                         <Tooltip title="Favourite">
-                            <IconButton color="inherit">
+                            <IconButton style={{color:"#45CFDD"}}>
                                 <BookmarksIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
                     <NavigationItem component={Link} to="/Statistic">
                         <Tooltip title="Statistic">
-                            <IconButton color="inherit">
+                            <IconButton style={{color:"#45CFDD"}}>
                                 <StatisticIcon />
                             </IconButton>
                         </Tooltip>

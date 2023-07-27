@@ -4,6 +4,8 @@ import { Button, TextField, Grid } from "@mui/material";
 import styled from "@emotion/styled";
 import {stringToSecond} from "../utils/timeConvert.js"
 import {downloadYoutube} from "../utils/connect.js"
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const StyledContainer = styled.div`
     display: 'flex';
@@ -15,6 +17,11 @@ const StyledContainer = styled.div`
 
 function SelectorArea() {
     const [url, setUrl] = useState("");
+    const [isLiked, setIsLiked] = useState(false);
+
+    const handleHeartClick = () => {
+        setIsLiked((prevIsLiked) => !prevIsLiked);
+    };
     const { setVideoUrl, 
         setYoutubeId, 
         setSubtitle, 
@@ -77,7 +84,7 @@ function SelectorArea() {
     return (
         <StyledContainer maxWidth="xl">
             <Grid container spacing={2}>
-                <Grid item xs={10}>
+                <Grid item xs={9.8}>
                     <TextField
                         fullWidth
                         value={url}
@@ -91,6 +98,27 @@ function SelectorArea() {
                     <Button fullWidth variant="contained" color="primary" onClick={handleDownload}>
                         load video
                     </Button>
+                </Grid>
+                <Grid item xs={0.2}>
+                    {isLiked ? (
+                    <FavoriteIcon
+                    style={{
+                        fontSize: "32px",
+                        color: "red",
+                        cursor: "pointer",
+                    }}
+                    onClick={handleHeartClick}
+                    />
+                    ) : (
+                        <FavoriteBorderIcon
+                        style={{
+                            fontSize: "32px",
+                            color: "#45CFDD",
+                            cursor: "pointer",
+                        }}
+                        onClick={handleHeartClick}
+                        />
+                    )}
                 </Grid>
             </Grid>
         </StyledContainer>
