@@ -65,8 +65,12 @@ def download_youtube(request):
                 info = ydl.extract_info(youtube_url, download=True)
             except yt_dlp.DownloadError as e:
                 return Response({"error": str(e)}, status=400)
-        subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
-        subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
+            # Get video duration and thumbnail
+            video_duration = info.get('duration')
+            video_thumbnail = info.get('thumbnail')
+            
+            subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
+            subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
         # Wait for the download to finish
         while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh):
             time.sleep(1)

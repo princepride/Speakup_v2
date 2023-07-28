@@ -3,6 +3,7 @@ from django.db import models
 class Youtube(models.Model): 
     youtube_id = models.CharField(max_length=255,primary_key=True)
     youtube_name = models.CharField(max_length=255)
+    youtube_duration = models.IntegerField()
     subtitle_name = models.CharField(max_length=255)
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now_add=True)
@@ -12,7 +13,7 @@ class Youtube(models.Model):
         verbose_name_plural = "YouTube Videos"
 
     def __str__(self):
-        return str(self.youtube_id)+' '+str(self.youtube_name)+' '+str(self.subtitle_name)
+        return str(self.youtube_id)+' '+str(self.youtube_name)+' '+str(self.youtube_duration)+' '+str(self.subtitle_name)
     
 class SubSubtitle(models.Model):
     youtube_id = models.CharField(max_length=255)
@@ -60,3 +61,16 @@ class Evaluation(models.Model):
 
     def __str__(self):
         return str(self.sub_subtitle_id)+' '+str(self.mission_type)+' '+str(self.model)+' '+str(self.text)+' '+str(self.score)+' '+str(self.difficulty)
+    
+class Bookmark(models.Model):
+    youtube_id = models.CharField(max_length=255)
+    created_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Bookmark"
+        verbose_name_plural = "Bookmark"
+
+    def __str__(self):
+        return str(self.youtube_id)
+    
