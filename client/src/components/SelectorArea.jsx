@@ -6,6 +6,7 @@ import {stringToSecond} from "../utils/timeConvert.js"
 import {downloadYoutube} from "../utils/connect.js"
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import {removeBookmark, addBookmark} from "../utils/connect"
 
 const StyledContainer = styled.div`
     display: 'flex';
@@ -20,10 +21,17 @@ function SelectorArea() {
     const [isLiked, setIsLiked] = useState(false);
 
     const handleHeartClick = () => {
+        if(isLiked) {
+            removeBookmark(youtubeId)
+        }
+        else {
+            addBookmark(youtubeId)
+        }
         setIsLiked((prevIsLiked) => !prevIsLiked);
     };
     const { setVideoUrl, 
         videoUrl,
+        youtubeId, 
         setYoutubeId, 
         setSubtitle, 
         setSubSubtitles, 

@@ -81,8 +81,8 @@ function BookmarksPage() {
         <h1>Bookmarks</h1>
         <StyledContainer maxWidth="lg">
             <Grid container spacing={2}>
-                {bookMarks.map((bookmark) => (
-                    <Grid item xs={6} md={4} lg={3} key={bookmark.youtube_id}>
+                {bookMarks.map((bookmark, index) => (
+                    <Grid item xs={6} md={4} lg={3} key={index}>
                     <VideoCard
                         youtube_id={bookmark.youtube_id}
                         youtube_name={bookmark.youtube_name}
