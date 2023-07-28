@@ -67,13 +67,6 @@ def download_youtube(request):
                 return Response({"error": str(e)}, status=400)
             # Get video duration and thumbnail
             video_duration = info.get('duration')
-            video_thumbnail = info.get('thumbnail')
-
-            # Download and save the thumbnail
-            response = requests.get(video_thumbnail, stream=True)
-            if response.status_code == 200:
-                with open('media/'+info.get('id')+'.jpg', 'wb') as out_file:
-                    out_file.write(response.content)
 
             subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
             subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
@@ -321,3 +314,5 @@ def select_all_bookmark(request):
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     return FileResponse(open(file_path, 'rb'), content_type='application/x-mpegURL')
+
+
