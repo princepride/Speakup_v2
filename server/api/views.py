@@ -12,7 +12,7 @@ import torch
 import torchaudio
 import math
 import json
-from base.models import Youtube, SubSubtitle, Record, Evaluation
+from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark
 from django.utils import timezone
 import requests
 from django.http import FileResponse
@@ -274,6 +274,49 @@ def delete_sub_subtitle(request):
         
     except SubSubtitle.DoesNotExist:
         return Response({"error": "SubSubtitle with this id does not exist"}, status=404)
+    
+@api_view(['POST'])
+def remove_bookmark(request):
+    youtube_id = request.data.get('youtube_id')
+    bookmarks = Bookmark.objects.filter(youtube_id=youtube_id)
+    if bookmarks.exists():
+        bookmarks.delete()
+        return Response({"success": "Bookmarks with this id have been deleted"}, status=200)
+    else:
+        return Response({"error": "Bookmark with this id does not exist"}, status=404)
+    
+@api_view(['POST'])
+def add_bookmark(request):
+    youtube_id = request.data.get('youtube_id')
+    
+    if not youtube_id:
+        return Response({"error": "Youtube ID is required"}, status=400)
+    
+    try:
+        bookmark = Bookmark.objects.create(youtube_id=youtube_id)
+        return Response({"success": f"Bookmark with id {bookmark.youtube_id} has been created"}, status=200)
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
+
+@api_view(['POST'])
+def select_all_bookmark(request):
+    bookmarks = Bookmark.objects.all()
+    response = []
+    
+    for bookmark in bookmarks:
+        try:
+            youtube = Youtube.objects.get(youtube_id=bookmark.youtube_id)
+            response.append({
+                "youtube_id": youtube.youtube_id,
+                "youtube_name": youtube.youtube_name,
+                "youtube_duration": youtube.youtube_duration,
+            })
+        except Exception:
+            return Response({"error": f"Youtube object with id {bookmark.youtube_id} does not exist"},
+                            status=404)
+
+    return Response(response, status=200)
+
 
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
