@@ -14,7 +14,7 @@ import math
 import json
 from base.models import Youtube, SubSubtitle, Record, Evaluation
 from django.utils import timezone
-import subprocess
+import requests
 from django.http import FileResponse
 
 
@@ -68,7 +68,13 @@ def download_youtube(request):
             # Get video duration and thumbnail
             video_duration = info.get('duration')
             video_thumbnail = info.get('thumbnail')
-            
+
+            # Download and save the thumbnail
+            response = requests.get(video_thumbnail, stream=True)
+            if response.status_code == 200:
+                with open('media/'+info.get('id')+'.jpg', 'wb') as out_file:
+                    out_file.write(response.content)
+
             subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
             subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
         # Wait for the download to finish
@@ -83,7 +89,7 @@ def download_youtube(request):
                 output_file="media/" + filename[7:-4] + ".m3u8"
             )
             os.system(command)
-            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), subtitle_name=subtitle_file_en)
+            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en)
             new_youtube_video.save()
             # Convert EN VTT to EN SRT
             with open(subtitle_file_en, 'r', encoding='utf-8', errors='replace') as f:
