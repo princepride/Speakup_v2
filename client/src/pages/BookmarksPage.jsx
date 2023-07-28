@@ -17,62 +17,62 @@ function BookmarksPage() {
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
         {
             youtube_id:"oLcjVwpsOrY",
             youtube_name:"TestTestTest",
-            youtube_name:"00:01:30",
+            youtube_duration:"00:01:30",
         },
     ]);
 

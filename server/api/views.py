@@ -292,7 +292,7 @@ def add_bookmark(request):
         return Response({"error": str(e)}, status=500)
 
 @api_view(['POST'])
-def select_all_bookmark(request):
+def select_all_bookmarks(request):
     bookmarks = Bookmark.objects.all()
     response = []
     

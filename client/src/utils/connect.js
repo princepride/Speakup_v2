@@ -84,3 +84,44 @@ export const deleteSubSubtitle = (sub_subtitle_id) => {
         throw new Error(error.message);
     })
 }
+
+export const removeBookmark = (youtube_id) => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/remove_bookmark'
+    const data = {
+        youtube_id: youtube_id
+    }
+    return Axios.post(url, data)
+    .then(response => {
+        return response.data
+    })
+    .catch(error => {
+        throw new Error(error.message);
+    })
+}
+
+export const addBookmark = (youtube_id) => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/add_bookmark'
+    const data = {
+        youtube_id: youtube_id
+    }
+    return Axios.post(url, data)
+    .then(response => {
+        return response.data
+    })
+    .catch(error => {
+        throw new Error(error.message);
+    })
+}
+
+export const selectAllBookmarks = () => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/select_all_bookmarks'
+    const data = {}
+    return Axios.post(url, data)
+    .then(response => {
+        return response.data
+    })
+    .catch(error => {
+        throw new Error(error.message);
+    })
+}
+
