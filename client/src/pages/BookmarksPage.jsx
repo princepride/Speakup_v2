@@ -38,7 +38,7 @@ function BookmarksPage() {
                     <Grid item xs={6} md={4} lg={3} key={index}>
                     <VideoCard
                         youtube_id={bookmark.youtube_id}
-                        youtube_name={bookmark.youtube_name.replace("videos\\","").replace(".mp4","")}
+                        youtube_name={bookmark.youtube_name.slice(7).slice(0, -16)}
                         youtube_duration={secondToString2(bookmark.youtube_duration)}
                     />
                     </Grid>

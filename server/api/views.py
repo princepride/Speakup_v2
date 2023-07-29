@@ -129,9 +129,7 @@ def download_youtube(request):
     video_url = "http://localhost:8000/stream/"+youtube.youtube_name[7:-4] + ".m3u8"
     subtitle = read_file(youtube.subtitle_name.replace(".en.vtt", " processed.en.srt").replace(".zh.vtt", " processed.zh.srt"))
     youtube_id = youtube.youtube_id
-    # print(youtube_id)
     sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True)
-    # print(sub_subtitle_results)
     sub_subtitle_data = [{'id':sub_subtitle_result.id, 'startTime': sub_subtitle_result.start_time, 'endTime': sub_subtitle_result.end_time, 'text': sub_subtitle_result.text} for sub_subtitle_result in sub_subtitle_results]
     record_data = []
     evaluation_data = []
@@ -142,7 +140,11 @@ def download_youtube(request):
         # print(evaluation_results)
         record_data.append([{'id':record_result.id, 'text':record_result.text} for record_result in record_results])
         evaluation_data.append([{'id':evaluation_result.id, 'text':evaluation_result.text} for evaluation_result in evaluation_results])
-    return Response({"videoUrl":video_url,"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle}, status=200)
+    is_bookmark = False
+    bookmark = Bookmark.objects.filter(youtube_id=youtube_id)
+    if bookmark.exists():
+        is_bookmark = True
+    return Response({"videoUrl":video_url,"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle, "isBookmark":is_bookmark}, status=200)
 
 @api_view(['POST'])
 def speech_recognition(request):
@@ -309,7 +311,6 @@ def select_all_bookmarks(request):
                             status=404)
 
     return Response(response, status=200)
-
 
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)

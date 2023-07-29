@@ -7,6 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea, CardActions } from '@mui/material';
 import Box from '@mui/material/Box';
+import styled from '@emotion/styled';
 import { useStateContext } from '../contexts/ContextProvider'
 import {stringToSecond} from "../utils/timeConvert.js"
 import {removeBookmark, addBookmark, downloadYoutube } from "../utils/connect"
@@ -16,7 +17,9 @@ function VideoCard(props) {
     const navigate = useNavigate();
     const { youtube_id, youtube_name, youtube_duration } = props
     const [isLiked, setIsLiked] = useState(true);
-    const { setVideoUrl, 
+    const { 
+        setIsMainLiked,
+        setVideoUrl, 
         setYoutubeId, 
         setSubtitle, 
         setSubSubtitles, 
@@ -24,6 +27,21 @@ function VideoCard(props) {
         setChatGPTResponse, 
         setVisible,
         setSubSubtitlesIndex } = useStateContext();
+
+    const ScrollBox = styled(Box)({
+        height: "70px",
+        overflowY: "auto",
+        "&::-webkit-scrollbar": {
+            width: "4px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+            background: "#888",
+            borderRadius: "2px",
+        },
+        "&::-webkit-scrollbar-thumb:hover": {
+            background: "#555",
+        },
+    });
 
     const handleHeartClick = () => {
         if(isLiked) {
@@ -46,7 +64,6 @@ function VideoCard(props) {
             setYoutubeId(youtube_id)
             const subtitle_text = data.subtitle;
             const subtitleList = [];
-            console.log(subtitle_text.split('\n\n'))
             subtitle_text.split('\n\n').filter(item => item.trim() !== '').map((item, index) => {
                 const lines = item.split('\n');
                 const [startTime, endTime] = lines[1].split(' --> ');
@@ -60,6 +77,7 @@ function VideoCard(props) {
                 );
             })
             setSubtitle(subtitleList);
+            setIsMainLiked(data.isBookmark);
             if(data.subSubtitle.length > 0) {
                 setSubSubtitlesIndex(0);
             }
@@ -82,9 +100,11 @@ function VideoCard(props) {
                 alt={youtube_id}
                 />
                 <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {youtube_name}
-                    </Typography>
+                    <ScrollBox>
+                        <Typography gutterBottom variant="h6" component="div" title={youtube_name}>
+                            {youtube_name}
+                        </Typography>
+                    </ScrollBox>
                 </CardContent>
             </CardActionArea>
             <CardActions>

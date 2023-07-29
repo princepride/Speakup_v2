@@ -18,18 +18,11 @@ const StyledContainer = styled.div`
 
 function SelectorArea() {
     const [url, setUrl] = useState("");
-    const [isLiked, setIsLiked] = useState(false);
 
-    const handleHeartClick = () => {
-        if(isLiked) {
-            removeBookmark(youtubeId)
-        }
-        else {
-            addBookmark(youtubeId)
-        }
-        setIsLiked((prevIsLiked) => !prevIsLiked);
-    };
-    const { setVideoUrl, 
+    const { 
+        isMainLiked,
+        setIsMainLiked,
+        setVideoUrl, 
         videoUrl,
         youtubeId, 
         setYoutubeId, 
@@ -42,6 +35,15 @@ function SelectorArea() {
         setLoopIndex,
         setSubSubtitlesIndex } = useStateContext();
 
+        const handleHeartClick = () => {
+            if(isMainLiked) {
+                removeBookmark(youtubeId)
+            }
+            else {
+                addBookmark(youtubeId)
+            }
+            setIsMainLiked((prevIsLiked) => !prevIsLiked);
+        };
         const isYoutubeUrl = (url) => {
             const youtubeRegex = /^(https?:\/\/)?(www\.|m\.)?(youtube\.com|youtu\.be)\//;
             return youtubeRegex.test(url);
@@ -78,6 +80,7 @@ function SelectorArea() {
                     );
                 })
                 setSubtitle(subtitleList);
+                setIsMainLiked(data.isBookmark);
                 if(data.subSubtitle.length > 0) {
                     setSubSubtitlesIndex(0);
                 }
@@ -109,14 +112,14 @@ function SelectorArea() {
                     </Button>
                 </Grid>
                 <Grid item xs={0.2}>
-                    {isLiked ? (
+                    {isMainLiked ? (
                     <FavoriteIcon
-                    style={{
-                        fontSize: "36px",
-                        color: "red",
-                        cursor: videoUrl === "" ? "default" : "pointer",
-                    }}
-                    onClick={videoUrl === "" ? null : handleHeartClick}
+                        style={{
+                            fontSize: "36px",
+                            color: "red",
+                            cursor: videoUrl === "" ? "default" : "pointer",
+                        }}
+                        onClick={videoUrl === "" ? null : handleHeartClick}
                     />
                     ) : (
                         <FavoriteBorderIcon

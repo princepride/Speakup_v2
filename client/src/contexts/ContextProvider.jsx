@@ -6,6 +6,8 @@ const StateContext = createContext();
 
 export const ContextProvider = ({ children }) => {
 
+    const [isMainLiked, setIsMainLiked] = useState(false)
+
     const [videoUrl, setVideoUrl] = useState('');
     const [youtubeId, setYoutubeId] = useState('');
     const [subtitle, setSubtitle] = useState([]);
@@ -34,7 +36,8 @@ export const ContextProvider = ({ children }) => {
         , setSubtitleEndTime, chatGPTResponse, setChatGPTResponse
         , model, setModel
         , visible, setVisible, loopBody, setLoopBody, timeInterval
-        , setTimeInterval,loopIndex, setLoopIndex}}>
+        , setTimeInterval,loopIndex, setLoopIndex
+        , isMainLiked, setIsMainLiked}}>
             {children}
         </StateContext.Provider>
     );
