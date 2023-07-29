@@ -1,7 +1,9 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
 import VideoCard from '../components/VideoCard'
+import { selectAllBookmarks } from '../utils/connect'
+import { secondToString2 } from '../utils/timeConvert'
 
 const StyledContainer = styled.div`
     display: 'flex';
@@ -13,68 +15,19 @@ const StyledContainer = styled.div`
 
 function BookmarksPage() {
 
-    const [bookMarks, setBookMarks] = useState([
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-        {
-            youtube_id:"oLcjVwpsOrY",
-            youtube_name:"TestTestTest",
-            youtube_duration:"00:01:30",
-        },
-    ]);
+    const [bookMarks, setBookMarks] = useState([]);
+
+    useEffect(() => {
+        const fetchBookmarks = async () => {
+            try {
+                const bookmarksData = await selectAllBookmarks();
+                setBookMarks(bookmarksData);
+            } catch(error) {
+                console.error(error);
+            }
+        };
+        fetchBookmarks();
+    }, []);
 
     return (
         <>
@@ -85,8 +38,8 @@ function BookmarksPage() {
                     <Grid item xs={6} md={4} lg={3} key={index}>
                     <VideoCard
                         youtube_id={bookmark.youtube_id}
-                        youtube_name={bookmark.youtube_name}
-                        youtube_duration={bookmark.youtube_duration}
+                        youtube_name={bookmark.youtube_name.replace("videos\\","").replace(".mp4","")}
+                        youtube_duration={secondToString2(bookmark.youtube_duration)}
                     />
                     </Grid>
                 ))}

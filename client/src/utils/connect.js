@@ -1,18 +1,17 @@
 import Axios from 'axios';
 
-export const downloadYoutube = (youtube_url) => 
+export const downloadYoutube = async (youtube_url) => 
 {
     const url = process.env.REACT_APP_BACKEND_URL + '/download-youtube';
     const data = {
         youtube_url: youtube_url,
     };
-    return Axios.post(url, data)
-        .then(response => {
-        return response.data;
-        })
-        .catch(error => {
+    try {
+        const response = await Axios.post(url, data)
+        return response.data
+    } catch(error) {
         throw new Error(error.message);
-        });
+    }
 }
 
 export const speechRecognition = (audioBlob, request_type, sub_subtitle_id, id) =>
@@ -29,13 +28,13 @@ export const speechRecognition = (audioBlob, request_type, sub_subtitle_id, id) 
         }
     }).then(response => {
         return response.data;
-        })
-        .catch(error => {
+    })
+    .catch(error => {
         throw new Error(error.message);
         });
 }
 
-export const chatGPT = (request_type, id, sub_subtitle_id, mission_type, model, prompt) => {
+export const chatGPT = async (request_type, id, sub_subtitle_id, mission_type, model, prompt) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/chatGPT';
     const data = {
         request_type: request_type,
@@ -45,16 +44,15 @@ export const chatGPT = (request_type, id, sub_subtitle_id, mission_type, model, 
         model: model,
         prompt: prompt,
     };
-    return Axios.post(url, data)
-        .then(response => {
-        return response.data;
-        })
-        .catch(error => {
+    try {
+        const response = await Axios.post(url, data)
+        return response.data
+    } catch(error) {
         throw new Error(error.message);
-        });
+    }
 }
 
-export const insertSubSubtitle = (youtube_id, start_time, end_time, text) => {
+export const insertSubSubtitle = async (youtube_id, start_time, end_time, text) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/insert-sub-subtitle'
     const data = {
         youtube_id: youtube_id,
@@ -62,66 +60,61 @@ export const insertSubSubtitle = (youtube_id, start_time, end_time, text) => {
         end_time: end_time,
         text: text,
     }
-    return Axios.post(url, data)
-    .then(response => {
+    try {
+        const response = await Axios.post(url, data)
         return response.data
-    })
-    .catch(error => {
+    } catch(error) {
         throw new Error(error.message);
-    })
+    }
 }
 
-export const deleteSubSubtitle = (sub_subtitle_id) => {
+export const deleteSubSubtitle = async (sub_subtitle_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/delete-sub-subtitle'
     const data = {
         sub_subtitle_id: sub_subtitle_id,
     }
-    return Axios.post(url, data)
-    .then(response => {
+    try {
+        const response = await Axios.post(url, data)
         return response.data
-    })
-    .catch(error => {
+    } catch(error) {
         throw new Error(error.message);
-    })
+    }
 }
 
-export const removeBookmark = (youtube_id) => {
+export const removeBookmark = async (youtube_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/remove_bookmark'
     const data = {
         youtube_id: youtube_id
     }
-    return Axios.post(url, data)
-    .then(response => {
+    try {
+        const response = await Axios.post(url, data)
         return response.data
-    })
-    .catch(error => {
+    } catch(error) {
         throw new Error(error.message);
-    })
+    }
 }
 
-export const addBookmark = (youtube_id) => {
+export const addBookmark = async (youtube_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/add_bookmark'
     const data = {
         youtube_id: youtube_id
     }
-    return Axios.post(url, data)
-    .then(response => {
+    try {
+        const response = await Axios.post(url, data)
         return response.data
-    })
-    .catch(error => {
+    } catch(error) {
         throw new Error(error.message);
-    })
+    }
 }
 
-export const selectAllBookmarks = () => {
+export const selectAllBookmarks = async () => {
     const url = process.env.REACT_APP_BACKEND_URL + '/select_all_bookmarks'
     const data = {}
-    return Axios.post(url, data)
-    .then(response => {
+    try {
+        const response = await Axios.post(url, data)
         return response.data
-    })
-    .catch(error => {
+    } catch(error) {
         throw new Error(error.message);
-    })
+    }
 }
 

@@ -39,7 +39,6 @@ function VideoCard(props) {
         downloadYoutube(youtube_id)
         .then(data => {
             setVisible(false)
-            console.log(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
             setVideoUrl(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
             setSubSubtitles(data.subSubtitle)
             setUserSubSubtitles(data.record)
