@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
-import VideoCard from '../components/VideoCard'
+import VideoCard from '../components/VideoCard';
+import Typography from '@mui/material/Typography';
 import { selectAllBookmarks } from '../utils/connect'
 import { secondToString2 } from '../utils/timeConvert'
 
@@ -31,7 +32,9 @@ function BookmarksPage() {
 
     return (
         <>
-        <h1>Bookmarks</h1>
+        <Typography variant="h4" style={{marginLeft: "30px", color: "#333333"}}>
+            Bookmarks
+        </Typography>
         <StyledContainer maxWidth="lg">
             <Grid container spacing={2}>
                 {bookMarks.map((bookmark, index) => (
