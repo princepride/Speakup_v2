@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import styled from '@emotion/styled';
 import useEmblaCarousel from 'embla-carousel-react'
 import {
     PrevButton,
@@ -11,9 +12,32 @@ import image2 from '../images/slide-2.jpg'
 import image3 from '../images/slide-3.jpg'
 import image4 from '../images/slide-4.jpg'
 
-export const images = [image1, image2, image3, image4]
+const images = [image1, image2, image3, image4]
 
 const imageByIndex = (index) => images[index % images.length]
+
+const EmblaPrevButton = styled.div`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 5%;
+
+    @media screen and (max-width: 1080px) {
+        top: 60%;
+        left: 2%;
+    }
+`
+
+const EmblaNextButton = styled.div`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 2%;
+
+    @media screen and (max-width: 1080px) {
+        top: 60%;
+    }
+`
 
 const EmblaCarousel = (props) => {
     const { slides, options } = props
@@ -52,28 +76,12 @@ const EmblaCarousel = (props) => {
         </div>
 
         <div>
-            <div
-            className="embla__button embla__button--prev"
-            style={{
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                left: '5%'
-            }}
-            >
+            <EmblaPrevButton className="embla__button embla__button--prev">
             <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-            </div>
-            <div
-            className="embla__button embla__button--next"
-            style={{
-                position: 'absolute',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                right: '2%'
-            }}
-            >
+            </EmblaPrevButton>
+            <EmblaNextButton className="embla__button embla__button--next">
             <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-            </div>
+            </EmblaNextButton>
         </div>
         </div>
     )

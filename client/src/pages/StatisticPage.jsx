@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Chart, registerables } from 'chart.js';
-import './embla.css'
+import '../style/embla.css'
 import EmblaCarousel from '../components/EmblaCarousel'
 
 const OPTIONS = { loop: true }
