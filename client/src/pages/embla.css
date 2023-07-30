@@ -1,7 +1,7 @@
 .embla {
     --slide-spacing: 1rem;
     --slide-size: 90%;
-    --slide-height: 19rem;
+    --slide-height: 40rem;
     padding: 1.6rem;
   }
   .embla__viewport {
@@ -58,7 +58,6 @@
     bottom: 0;
   }
   .embla__button {
-    -webkit-appearance: none;
     background-color: transparent;
     touch-action: manipulation;
     display: inline-flex;
@@ -67,14 +66,6 @@
     border: 0;
     padding: 0;
     margin: 0;
-  }
-  .embla__buttons {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 1.6rem;
   }
   .embla__button {
     z-index: 1;

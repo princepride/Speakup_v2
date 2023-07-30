@@ -51,14 +51,14 @@ const EmblaCarousel = (props) => {
             </div>
         </div>
 
-        <div className="embla__buttons" style={{ position: 'relative' }}>
+        <div>
             <div
             className="embla__button embla__button--prev"
             style={{
                 position: 'absolute',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                left: '0'
+                left: '5%'
             }}
             >
             <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
@@ -69,7 +69,7 @@ const EmblaCarousel = (props) => {
                 position: 'absolute',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                right: '0'
+                right: '2%'
             }}
             >
             <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
