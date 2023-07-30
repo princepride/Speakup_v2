@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import DashboardPage from './DashboardPage';
 import TestPage from './TestPage';
+import StatisticPage from './StatisticPage';
 
 const RoutePage = () => {
     return (
         <BrowserRouter>
             <Routes>
                 <Route path="/*" element={(<DashboardPage />)} />
-                <Route path="/test" element={(<TestPage />)} />
+                <Route path="/test" element={(<StatisticPage />)} />
             </Routes>
         </BrowserRouter>
     )

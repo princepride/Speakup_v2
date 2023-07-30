@@ -1,6 +1,6 @@
 .embla {
-    --slide-spacing: 1rem;
-    --slide-size: 90%;
+    --slide-spacing: 3rem;
+    --slide-size: 70%;
     --slide-height: 40rem;
     padding: 1.6rem;
   }
@@ -37,7 +37,8 @@
   }
   .embla__button {
     z-index: 1;
-    color: var(--background-site);
+    /*color: var(--background-site);*/
+    color:aliceblue;
     display: flex;
     align-items: center;
     justify-content: center;
