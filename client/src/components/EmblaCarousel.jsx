@@ -7,14 +7,16 @@ import {
     usePrevNextButtons
 } from './EmblaCarouselArrowButtons'
 import EmblaCarouselAutoplay from 'embla-carousel-autoplay'
-import image1 from '../images/slide-1.jpg'
-import image2 from '../images/slide-2.jpg'
-import image3 from '../images/slide-3.jpg'
-import image4 from '../images/slide-4.jpg'
+import '../style/embla.css'
 
-const images = [image1, image2, image3, image4]
+//import image1 from '../images/slide-1.jpg'
+//import image2 from '../images/slide-2.jpg'
+//import image3 from '../images/slide-3.jpg'
+//import image4 from '../images/slide-4.jpg'
 
-const imageByIndex = (index) => images[index % images.length]
+//const images = [image1, image2, image3, image4]
+
+//const imageByIndex = (index) => images[index % images.length]
 
 const EmblaPrevButton = styled.div`
     position: absolute;
@@ -62,14 +64,11 @@ const EmblaCarousel = (props) => {
             <div className="embla__container">
             {slides.map((index) => (
                 <div className="embla__slide" key={index}>
-                {/*<div className="embla__slide__number">
-                    <span>{index + 1}</span>
-                </div>*/}
-                <img
+                {/*<img
                     className="embla__slide__img"
                     src={imageByIndex(index)}
                     alt="Your alt text"
-                />
+                />*/}
                 </div>
             ))}
             </div>
