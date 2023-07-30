@@ -20,6 +20,7 @@ function VideoCard(props) {
     const { 
         setIsMainLiked,
         setVideoUrl, 
+        youtubeId,
         setYoutubeId, 
         setSubtitle, 
         setSubSubtitles, 
@@ -46,9 +47,15 @@ function VideoCard(props) {
     const handleHeartClick = () => {
         if(isLiked) {
             removeBookmark(youtube_id)
+            if(youtube_id === youtubeId) {
+                setIsMainLiked(false)
+            }
         }
         else {
             addBookmark(youtube_id)
+            if(youtube_id === youtubeId) {
+                setIsMainLiked(true)
+            }
         }
         setIsLiked((prevIsLiked) => !prevIsLiked);
     };
