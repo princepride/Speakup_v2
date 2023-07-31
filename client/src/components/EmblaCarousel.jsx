@@ -22,12 +22,7 @@ const EmblaPrevButton = styled.div`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    left: 5%;
-
-    @media screen and (max-width: 1080px) {
-        top: 60%;
-        left: 2%;
-    }
+    left: 2%;
 `
 
 const EmblaNextButton = styled.div`
@@ -65,7 +60,7 @@ const EmblaCarousel = (props) => {
             <div className="embla__container">
                 {chartData.map((chart, index) => (
                 <div className="embla__slide" key={index}>
-                <Chart type={chart.type} data={chart.data} />
+                <Chart type={chart.type} data={chart.data}/>
                 </div>
                 ))}
             </div>

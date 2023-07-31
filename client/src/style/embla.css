@@ -19,12 +19,6 @@
     padding-left: var(--slide-spacing);
     position: relative;
   }
-  .embla__slide__img {
-    display: block;
-    height: var(--slide-height);
-    width: 100%;
-    object-fit: cover;
-  }
   .embla__button {
     background-color: transparent;
     touch-action: manipulation;
