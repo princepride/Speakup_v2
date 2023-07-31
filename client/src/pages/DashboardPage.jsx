@@ -80,16 +80,16 @@ const DashboardPage = () => {
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
-                    <NavigationItem component={Link} to="/Bookmarks">
+                    <NavigationItem component={Link} to="/bookmarks">
                         <Tooltip title="Favourite">
-                            <IconButton style={{ color : location.pathname === '/Bookmarks' ? "#45CFDD" : "gray" }}>
+                            <IconButton style={{ color : location.pathname === '/bookmarks' ? "#45CFDD" : "gray" }}>
                                 <BookmarksIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
-                    <NavigationItem component={Link} to="/Statistic">
+                    <NavigationItem component={Link} to="/statistic">
                         <Tooltip title="Statistic">
-                            <IconButton style={{ color : location.pathname === '/Statistic' ? "#45CFDD" : "gray" }}>
+                            <IconButton style={{ color : location.pathname === '/statistic' ? "#45CFDD" : "gray" }}>
                                 <StatisticIcon />
                             </IconButton>
                         </Tooltip>
@@ -100,8 +100,8 @@ const DashboardPage = () => {
                 <Outlet />
                 <Routes>
                     <Route path="/" element={<MainPage />} />
-                    <Route path="/Bookmarks" element={<BookmarksPage />} />
-                    <Route path="/Statistic" element={<StatisticPage />} />
+                    <Route path="/bookmarks" element={<BookmarksPage />} />
+                    <Route path="/statistic" element={<StatisticPage />} />
                 </Routes>
             </ContentContainer>
         </MainContainer>

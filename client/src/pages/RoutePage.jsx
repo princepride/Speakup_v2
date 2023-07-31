@@ -8,7 +8,7 @@ const RoutePage = () => {
         <BrowserRouter>
             <Routes>
                 <Route path="/*" element={(<DashboardPage />)} />
-                <Route path="/test" element={(<StatisticPage />)} />
+                <Route path="/test" element={(<TestPage />)} />
             </Routes>
         </BrowserRouter>
     )
