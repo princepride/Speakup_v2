@@ -375,9 +375,9 @@ def get_statistic(request):
                 # Loop through the evaluations, comparing each one to the next
                 for current_eval, next_eval in zip(filtered_evaluations_list, filtered_evaluations_list[1:]):
                     diff = next_eval.last_update_time - current_eval.last_update_time
-                    if diff <= timedelta(hours=1):
+                    if diff <= timedelta(minutes=5):
                         time_difference += diff
-                specificDuration[videonames.index(videoname)][categories.index(category)] = int((time_difference + (timedelta(minutes=3) if len(filtered_evaluations_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
+                specificDuration[videonames.index(videoname)][categories.index(category)] = int((time_difference + (timedelta(minutes=1) if len(filtered_evaluations_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
         duration = [0] * len(videonames)
         for i in range(len(videonames)):
             duration[i] = sum(specificDuration[i])

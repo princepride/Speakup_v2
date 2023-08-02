@@ -36,9 +36,11 @@ const Chart = ({ type, data, title, categories, seriesNames, yAxisTitle }) => {
       y: 80,
       floating: true,
       borderWidth: 1,
-      backgroundColor:
-      Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
-    shadow: true
+      backgroundColor:Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+      shadow: true,
+      labelFormatter: function() {
+        return this.name.substring(0, 20);
+      }
     },
     credits: {
     enabled: false
