@@ -18,6 +18,9 @@ import requests
 from django.http import FileResponse
 from django.db.models import Sum, Min, Max
 from django.db.models.functions import ExtractDay
+from util.algorithms import isExistKey
+from datetime import datetime, timedelta
+from datetime import time as dt_time
 
 # 加载模型和处理器
 processor = AutoProcessor.from_pretrained("openai/whisper-medium.en")
@@ -315,34 +318,72 @@ def select_all_bookmarks(request):
 
 @api_view(['POST'])
 def get_statistic(request):
-    data = [
-    {
-        'date': '2023-07-30',
-        'totalDuration': 60,
-        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
-        'videonames': ['video1','video2'],
-        'duration':[25,35],
-        'specificDuration':[[10,8,5,2],[10,5,15,5]]
-    },
-    {
-        'date': '2023-08-31',
-        'totalTime': 45,
-        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
-        'videonames': ['video1'],
-        'duration':[45],
-        'specificDuration':[[40, 0, 5, 0]]
-    }
-]
+#    data = [
+#    {
+#        'date': '2023-07-30',
+#        'totalDuration': 60,
+#        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
+#        'videonames': ['video1','video2'],
+#        'duration':[25,35],
+#        'specificDuration':[[10,8,5,2],[10,5,15,5]]
+#    },
+#    {
+#        'date': '2023-08-31', check
+#        'totalDuration': 45,
+#        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],check
+#        'videonames': ['video1'], check
+#        'duration':[45],
+#        'specificDuration':[[40, 0, 5, 0]],check
+#    }
+#]
     evaluations = Evaluation.objects.all().order_by('last_update_time')
-    # data = []
-    #for evaluation in evaluations:
-    #    date = timezone.localtime(evaluation.last_update_time).date()
-    #    if date in data.keys():
-    #        if evaluation.mission_type in data[date].categories:
-    #            sub_subtitle = SubSubtitle.objects.get(id=evaluation.sub_subtitle_id)
-    #            videoname = Youtube.objects.get(id=sub_subtitle.youtube_id)
-    #            if videoname in data[date]['videos']
+    data = []
+    # Extract all dates
+    dates = [timezone.localtime(evaluation.last_update_time).date() for evaluation in evaluations]
 
+    # Convert list to set to remove duplicates and then convert it back to list
+    unique_dates = list(set(dates))
+    for unique_date in unique_dates:
+        # Create datetime objects for the start and end of the day
+        start_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.min))
+        end_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.max))
+
+        # Use the datetime objects to filter the evaluations
+        evaluations_on_date = Evaluation.objects.filter(last_update_time__range=(start_of_day, end_of_day))
+        categories = ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation']
+        videonames = []
+        for evaluation_on_date in evaluations_on_date:
+            youtube_id = SubSubtitle.objects.get(id = evaluation_on_date.sub_subtitle_id)
+            youtube_name = Youtube.objects.get(youtube_id = youtube_id)
+            videonames.append(youtube_name[7:][:-16])
+        videonames = list(set(videonames))
+        specificDuration=[[0] * 4 for _ in range(len(videonames))]
+        for videoname in videonames:
+            for category in categories:
+                filtered_evaluations = evaluations_on_date.filter(videoname=videoname, mission_type=category)
+                # Convert the queryset to a list
+                filtered_evaluations_list = list(filtered_evaluations)
+
+                time_difference = timedelta()
+
+                # Loop through the evaluations, comparing each one to the next
+                for current_eval, next_eval in zip(filtered_evaluations_list, filtered_evaluations_list[1:]):
+                    diff = next_eval.last_update_time - current_eval.last_update_time
+                    if diff <= timedelta(hours=1):
+                        time_difference += diff
+                specificDuration[videonames.index(videoname)][categories.index(category)] = int((time_difference + timedelta(minutes=3)).total_seconds() / 60)
+        duration = [0] * len(videonames)
+        for i in range(len(videonames)):
+            duration[i] = sum(specificDuration[i])
+        totalDuration = sum(duration)
+        data.append({
+            'date':unique_date,
+            'totalDuration':totalDuration,
+            'categories':categories,
+            'videonames':videonames,
+            'duration':duration,
+            'specificDuration':specificDuration
+        })
     return Response({"data": data}, status=200)
 
 
