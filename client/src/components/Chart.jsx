@@ -62,7 +62,8 @@ const Chart = ({ type, data, title, categories, seriesNames, yAxisTitle }) => {
       min: 0,
       title: {
         text: yAxisTitle,
-        align: 'high'
+        align: 'high',
+        //textAlign: 'center'
       },
       labels: {
         overflow: 'justify'

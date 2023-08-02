@@ -16,6 +16,8 @@ from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark
 from django.utils import timezone
 import requests
 from django.http import FileResponse
+from django.db.models import Sum, Min, Max
+from django.db.models.functions import ExtractDay
 
 
 # 加载模型和处理器
@@ -314,38 +316,72 @@ def select_all_bookmarks(request):
 
 @api_view(['POST'])
 def get_statistic(request):
-    data = [
-        {
-            'date': '2023-07-30',
-            'totalTime': 60,
-            'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
-            'videos': [
-                {
-                    'videoname': 'video1',
-                    'time': 25,
-                    'data': [10, 8, 5, 2],
-                },
-                {
-                    'videoname': 'video2',
-                    'time': 35,
-                    'data': [10, 5, 15, 5],
-                }
-            ]
-        },
-        {
-            'date': '2023-08-31',
-            'totalTime': 45,
-            'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
-            'videos': [
-                {
-                    'videoname': 'video1',
-                    'time': 45,
-                    'data': [40, 0, 5, 0],
-                },
-            ]
-        }
-    ]
+    subsubtitles = SubSubtitle.objects.values('youtube_id').annotate(min_time=Min('last_update_time'), max_time=Max('last_update_time')).order_by('last_update_time')
+
+    data = []
+    for subsubtitle in subsubtitles:
+        youtube_id = subsubtitle['youtube_id']
+        day_records = Record.objects.filter(sub_subtitle_id=youtube_id).annotate(day=ExtractDay('created_time')).values('day', 'sub_subtitle_id', 'attempt_times').annotate(duration_sum=Sum('duration'))
+
+        videos = []
+        for record in day_records:
+            mission_types = Evaluation.objects.filter(sub_subtitle_id=record['sub_subtitle_id']).values('mission_type').annotate(sum=Sum('score'))
+
+            categories = [mission_type['mission_type'] for mission_type in mission_types]
+            data_values = [mission_type['sum'] for mission_type in mission_types]
+
+            video = {
+                'videoname': youtube_id,
+                'time': record['duration_sum'],
+                'data': data_values,
+            }
+            videos.append(video)
+
+        date = subsubtitle['min_time'].strftime('%Y-%m-%d')
+        totalTime = (subsubtitle['max_time'] - subsubtitle['min_time']).total_seconds() / 60
+        if totalTime > 5:
+            totalTime -= 5
+
+        data.append({
+            'date': date,
+            'totalTime': totalTime,
+            'categories': categories,
+            'videos': videos,
+        })
+
     return Response({"data": data}, status=200)
+    #data = [
+    #    {
+    #        'date': '2023-07-30',
+    #        'totalTime': 60,
+    #        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
+    #        'videos': [
+    #            {
+    #                'videoname': 'video1',
+    #                'time': 25,
+    #                'data': [10, 8, 5, 2],
+    #            },
+    #            {
+    #                'videoname': 'video2',
+    #                'time': 35,
+    #                'data': [10, 5, 15, 5],
+    #            }
+    #        ]
+    #    },
+    #    {
+    #        'date': '2023-08-31',
+    #        'totalTime': 45,
+    #        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
+    #        'videos': [
+    #            {
+    #                'videoname': 'video1',
+    #                'time': 45,
+    #                'data': [40, 0, 5, 0],
+    #            },
+    #        ]
+    #    }
+    #]
+    # return Response({"data": data}, status=200)
 
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)

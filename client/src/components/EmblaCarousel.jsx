@@ -16,7 +16,7 @@ import { getStatistic } from '../utils/connect.js'
 
 const ChartContainer1 = styled.div`
     height: 56vh; 
-    width: 32vw;
+    width: 36vw;
     margin-top:1vh;
     margin-left:1vw;
     margin-right:1vw;
