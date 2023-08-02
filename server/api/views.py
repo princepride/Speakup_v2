@@ -312,6 +312,41 @@ def select_all_bookmarks(request):
 
     return Response(response, status=200)
 
+@api_view(['POST'])
+def get_statistic(request):
+    data = [
+        {
+            'date': '2023-07-30',
+            'totalTime': 60,
+            'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
+            'videos': [
+                {
+                    'videoname': 'video1',
+                    'time': 25,
+                    'data': [10, 8, 5, 2],
+                },
+                {
+                    'videoname': 'video2',
+                    'time': 35,
+                    'data': [10, 5, 15, 5],
+                }
+            ]
+        },
+        {
+            'date': '2023-08-31',
+            'totalTime': 45,
+            'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
+            'videos': [
+                {
+                    'videoname': 'video1',
+                    'time': 45,
+                    'data': [40, 0, 5, 0],
+                },
+            ]
+        }
+    ]
+    return Response({"data": data}, status=200)
+
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     return FileResponse(open(file_path, 'rb'), content_type='application/x-mpegURL')

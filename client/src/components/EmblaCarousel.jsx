@@ -11,9 +11,7 @@ import '../style/embla.css'
 import Chart from '../components/Chart'
 import GitHubActivityGraph from '../components/GitHubActivityGraph'
 import {dateFormat} from '../utils/timeConvert'
-
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official';
+import { getStatistic } from '../utils/connect.js'
 
 
 const ChartContainer1 = styled.div`
@@ -26,18 +24,6 @@ const ChartContainer1 = styled.div`
     border-radius: 40px;
     overflow: hidden;
 `;
-
-function randomn(n) {
-    let rnd = [];
-    for (let i = 0; i < n; i++) {
-        rnd.push({
-        date: new Date(Date.now() - i * 24 * 60 * 60 * 1000),
-        count: Math.floor(Math.random() * 4),
-        });
-    }
-    return rnd;
-}
-
 const EmblaPrevButton = styled.div`
     position: absolute;
     top: 50%;
@@ -62,35 +48,21 @@ const EmblaCarousel = (props) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(options);
     const [date, setDate] = useState(new Date('2023-08-31'))
 
-    const [data,setData] = useState(
-        [{
-            date:'2023-07-30',
-            totalTime:60,
-            categories:['paraphraseTime', 'sequeTime', 'zhEnTime','conversation'],
-            videos:[
-                {
-                    videoname:"video1",
-                    time:25,
-                    data:[10,8,5,2],
-                },
-                {
-                    videoname:"video2",
-                    time:35,
-                    data:[10,5,15,5],
-                }
-            ]
-        },{
-            date:'2023-08-31',
-            totalTime:45,
-            categories:['paraphraseTime', 'sequeTime', 'zhEnTime','conversation'],
-            videos:[
-                {
-                    videoname:"video1",
-                    time:45,
-                    data:[40,0,5,0],
-                },
-            ]
-        }]);
+    const [data,setData] = useState([]);
+
+    useEffect(() => {
+        const fetchStatisticData = async () => {
+            try {
+                const StatisticData = await getStatistic();
+                console.log(StatisticData)
+                setData(StatisticData.data);
+                console.log(data)
+            } catch(error) {
+                console.error(error);
+            }
+        };
+        fetchStatisticData();
+    }, []);
 
     const onButtonClick = useCallback((emblaApi) => {
         const { autoplay } = emblaApi.plugins()

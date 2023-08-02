@@ -118,3 +118,14 @@ export const selectAllBookmarks = async () => {
     }
 }
 
+export const getStatistic = async () => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/get_statistic'
+    const data = {}
+    try {
+        const response = await Axios.post(url, data)
+        return response.data
+    } catch(error) {
+        throw new Error(error.message);
+    }
+}
+
