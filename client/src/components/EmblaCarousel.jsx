@@ -78,10 +78,10 @@ const EmblaCarousel = (props) => {
     } = usePrevNextButtons(emblaApi, onButtonClick)
 
     let currentData = data.filter(item => item.date === dateFormat(date));
-    let pieData = currentData.length > 0 ? currentData[0].videos.map(item => ({name:item.videoname, y:item.time})) : [];
-    let barData = currentData.length > 0 ? currentData[0].videos.map(item => (item.data)) : [];
+    let pieData = currentData.length > 0 ? currentData[0].videonames.map((item,index) => ({name:item, y:currentData[0].duration[index]})) : [];
+    let barData = currentData.length > 0 ? currentData[0].specificDuration : [];
     let categories = currentData.length > 0 ? currentData[0].categories : [];
-    let seriesNames = currentData.length > 0 ? currentData[0].videos.map(item => (item.videoname)) : [];
+    let seriesNames = currentData.length > 0 ? currentData[0].videonames : [];
 
     return (
 
