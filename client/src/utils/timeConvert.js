@@ -36,5 +36,16 @@ const stringToSecond = (string) => {
   
     return `${paddedHours}:${paddedMinutes}:${paddedSeconds}`;
   }
+
+  const dateFormat = (dateObject ) => {
+    // 提取年、月和日
+    const year = dateObject.getFullYear();
+    const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要加1，并确保两位数输出
+    const day = String(dateObject.getDate()).padStart(2, '0'); // 确保两位数输出
+
+    // 组合成特定格式的字符串
+    const formattedDate = `${year}-${month}-${day}`;
+    return formattedDate
+  }
   
-  export { stringToSecond, secondToString, secondToString2 };
+  export { stringToSecond, secondToString, secondToString2, dateFormat };
