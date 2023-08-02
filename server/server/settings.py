@@ -117,9 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
-
 USE_I18N = True
+
+TIME_ZONE = 'Asia/Singapore'
 
 USE_TZ = True
 
@@ -138,7 +138,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #    'http://localhost:3000',  # 允许的前端应用地址
 #    json_data["NGROK"]
 #]
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')

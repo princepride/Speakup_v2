@@ -46,7 +46,7 @@ const EmblaCarousel = (props) => {
     const { slides, options } = props
     // const [emblaRef, emblaApi] = useEmblaCarousel(options, [EmblaCarouselAutoplay()])
     const [emblaRef, emblaApi] = useEmblaCarousel(options);
-    const [date, setDate] = useState(new Date('2023-08-31'))
+    const [date, setDate] = useState(new Date())
 
     const [data,setData] = useState([]);
 
@@ -89,7 +89,7 @@ const EmblaCarousel = (props) => {
         <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
                 <div className="embla__slide">
-                    <GitHubActivityGraph values={data.map(item=>({date: new Date(item.date),count:Math.ceil(item.totalTime/15)}))} setDate={setDate}/>
+                    <GitHubActivityGraph values={data.map(item=>({date: new Date(item.date),count:Math.ceil(item.totalDuration/15)}))} setDate={setDate}/>
                     <div style={{display:"flex",flexDirection:"row"}}>
                         <ChartContainer1>
                             <Chart 
