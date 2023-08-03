@@ -98,7 +98,7 @@ function VideoCard(props) {
     }
 
     return (
-        <Card sx={{ maxWidth: 345 }}>
+        <Card sx={{ maxWidth: 345 }} style={{boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)", border: "2px solid #ccc",borderRadius: "20px"}}>
             <CardActionArea onClick={navigateToMain}>
                 <CardMedia
                 component="img"

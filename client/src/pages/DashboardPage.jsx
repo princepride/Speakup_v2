@@ -89,7 +89,7 @@ const DashboardPage = () => {
                         </Tooltip>
                     </NavigationItem>
                     <NavigationItem component={Link} to="/bookmarks">
-                        <Tooltip title="Favourite">
+                        <Tooltip title="Bookmarks">
                             <IconButton style={{ color : location.pathname === '/bookmarks' ? "#45CFDD" : "gray" }}>
                                 <BookmarksIcon />
                             </IconButton>

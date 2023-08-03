@@ -20,7 +20,7 @@ const UserCardContainer = styled.div`
     margin-top:1vh;
     margin-left:1vw;
     margin-right:1vw;
-    border: 2px solid #aaa;
+    border: 1px solid #ccc;
     border-radius: 40px;
     overflow: hidden;
     display: flex;
@@ -28,6 +28,7 @@ const UserCardContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     //background-image: linear-gradient(to right, white, transparent), url('https://img.win3000.com/m00/d6/f0/39de3b0c924e419833db0c8aab402dd6.jpg');
     //background-size: cover;
 `
@@ -38,7 +39,7 @@ const SummaryContainer = styled.div`
     margin-top:2vh;
     margin-left:1vw;
     margin-right:1vw;
-    border: 2px solid #aaa;
+    border: 1px solid #ccc;
     border-radius: 40px;
     overflow: hidden;
     display: flex;
@@ -46,6 +47,7 @@ const SummaryContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
     //background-image: linear-gradient(to right, white, transparent), url('https://sjbz-fd.zol-img.com.cn/t_s208x312c/g7/M00/05/0D/ChMkLGPZ9ISIebRWABrMut1pQzsAAMWYAAAAAAAGszS971.jpg');
     //background-size: cover;
 `
@@ -53,6 +55,11 @@ const ImageContainer = styled.div`
     height: 80vh; 
     border-radius: 40px;
     overflow: hidden;
+    > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 `
 
 const TopDiv = styled.div`
@@ -77,9 +84,10 @@ const ChartContainer1 = styled.div`
     margin-top:1vh;
     margin-left:1vw;
     margin-right:1vw;
-    border: 2px solid #aaa;
+    border: 1px solid #ccc;
     border-radius: 40px;
     overflow: hidden;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 `;
 const EmblaPrevButton = styled.div`
     position: absolute;
