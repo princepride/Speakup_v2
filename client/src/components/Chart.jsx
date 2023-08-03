@@ -9,7 +9,7 @@ const Chart = ({ type, data, title, categories, seriesNames, yAxisTitle }) => {
     },
     title: {
       text: title,
-      align: 'left'
+      align: 'center'
     },
     plotOptions: {
       bar: {

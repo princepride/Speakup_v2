@@ -12,7 +12,63 @@ import Chart from '../components/Chart'
 import GitHubActivityGraph from '../components/GitHubActivityGraph'
 import {dateFormat} from '../utils/timeConvert'
 import { getStatistic } from '../utils/connect.js'
+import { calculateExpEn } from '../utils/algorithm'
 
+const UserCardContainer = styled.div`
+    height: 35vh; 
+    margin-top:1vh;
+    margin-left:1vw;
+    margin-right:1vw;
+    border: 2px solid #aaa;
+    border-radius: 40px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-image: linear-gradient(to right, white, transparent), url('https://img.win3000.com/m00/d6/f0/39de3b0c924e419833db0c8aab402dd6.jpg');
+    background-size: cover;
+`
+
+const SummaryContainer = styled.div`
+    height: 36vh; 
+    width: 36vw;
+    margin-top:2vh;
+    margin-left:1vw;
+    margin-right:1vw;
+    border: 2px solid #aaa;
+    border-radius: 40px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-image: linear-gradient(to right, white, transparent), url('https://sjbz-fd.zol-img.com.cn/t_s208x312c/g7/M00/05/0D/ChMkLGPZ9ISIebRWABrMut1pQzsAAMWYAAAAAAAGszS971.jpg');
+    background-size: cover;
+`
+const ImageContainer = styled.div`
+    height: 80vh; 
+    border-radius: 40px;
+    overflow: hidden;
+`
+
+const TopDiv = styled.div`
+    font-size: 36px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+`
+
+const BottomDiv = styled.div`
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+`
 
 const ChartContainer1 = styled.div`
     height: 56vh; 
@@ -40,6 +96,12 @@ const EmblaNextButton = styled.div`
     @media screen and (max-width: 1080px) {
         top: 60%;
     }
+`
+const TextStyle = styled.div`
+    background-image: linear-gradient(90deg,#2e4f8b 0%,#3e589d 35%,#8f619b 60%,#d0718f 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent
 `
 
 const EmblaCarousel = (props) => {
@@ -82,12 +144,48 @@ const EmblaCarousel = (props) => {
     let barData = currentData.length > 0 ? currentData[0].specificDuration : [];
     let categories = currentData.length > 0 ? currentData[0].categories : [];
     let seriesNames = currentData.length > 0 ? currentData[0].videonames : [];
+    let totalMinutes = data.reduce((total, item) => total + item.totalDuration, 0);
 
+    const totalDuration = (data) => {
+        const totalDurationMinutes = data.reduce((total, item) => total + item.totalDuration, 0);
+
+        // Convert total duration to "xx h xx min" format
+        const hours = Math.floor(totalDurationMinutes / 60);
+        const minutes = totalDurationMinutes % 60;
+
+        const formattedDuration = `${hours} h ${minutes} min`;
+        return formattedDuration
+    }
     return (
 
         <div className="embla">
         <div className="embla__viewport" ref={emblaRef}>
             <div className="embla__container">
+                <div className="embla__slide">
+                    <UserCardContainer>
+                        <TopDiv>
+                            <TextStyle>称号： {calculateExpEn(totalMinutes)}</TextStyle>
+                        </TopDiv>
+                    </UserCardContainer>
+                    <div style={{display:"flex",flexDirection:"row"}}>
+                        <SummaryContainer>
+                        <TopDiv>
+                            <TextStyle>{totalDuration(data)}</TextStyle>
+                        </TopDiv>
+                        <BottomDiv>
+                            <TextStyle>Total Active Time</TextStyle>
+                        </BottomDiv>
+                        </SummaryContainer>
+                        <SummaryContainer>
+                            <TopDiv>
+                                <TextStyle>{data.length} Day</TextStyle>
+                            </TopDiv>
+                            <BottomDiv>
+                                <TextStyle>Total Active Days</TextStyle>
+                            </BottomDiv>
+                        </SummaryContainer>
+                    </div>
+                </div>
                 <div className="embla__slide">
                     <GitHubActivityGraph values={data.map(item=>({date: new Date(item.date),count:Math.ceil(item.totalDuration/15)}))} setDate={setDate}/>
                     <div style={{display:"flex",flexDirection:"row"}}>
@@ -112,8 +210,9 @@ const EmblaCarousel = (props) => {
                     </div>
                 </div>
                 <div className="embla__slide">
-                </div>
-                <div className="embla__slide">
+                    <ImageContainer>
+                    <img src="https://i.hexuexiao.cn/up/01/2d/40/2e5974a878e6d2e3bceaa6d0d4402d01.jpg"></img>
+                    </ImageContainer>
                 </div>
             </div>
         </div>
