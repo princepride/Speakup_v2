@@ -14,6 +14,20 @@ const StyledContainer = styled.div`
     margin-right: 2rem;
 `;
 
+const TextStyle = styled.div`
+    background-image: linear-gradient(90deg,#2e4f8b 0%,#3e589d 35%,#8f619b 60%,#d0718f 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 36px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    margin-top:2vh;
+`
+
 function BookmarksPage() {
 
     const [bookMarks, setBookMarks] = useState([]);
@@ -32,9 +46,9 @@ function BookmarksPage() {
 
     return (
         <>
-        <Typography variant="h4" style={{marginLeft: "30px", color: "#333333"}}>
+        <TextStyle>
             Bookmarks
-        </Typography>
+        </TextStyle>
         <StyledContainer maxWidth="lg">
             <Grid container spacing={2}>
                 {bookMarks.map((bookmark, index) => (
