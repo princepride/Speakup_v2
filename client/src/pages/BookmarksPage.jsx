@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import styled from "@emotion/styled";
 import { Grid } from "@mui/material";
 import VideoCard from '../components/VideoCard';
-import Typography from '@mui/material/Typography';
 import { selectAllBookmarks } from '../utils/connect'
 import { secondToString2 } from '../utils/timeConvert'
 

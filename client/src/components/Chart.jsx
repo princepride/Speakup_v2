@@ -24,7 +24,8 @@ const Chart = ({ type, data, title, categories, seriesNames, yAxisTitle }) => {
         cursor: 'pointer',
         dataLabels: {
           enabled: true,
-          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          format: '<b>{point.name}</b>: ({point.percentage:.1f} %)'
+
         }
       }
     },
@@ -72,11 +73,10 @@ const Chart = ({ type, data, title, categories, seriesNames, yAxisTitle }) => {
       },
       gridLineWidth: 0
     };
-    options.tooltip = {
-      valueSuffix: ' millions'
-    };
   }
-
+    options.tooltip = {
+      valueSuffix: ' minutes'
+    };
   return (
     <HighchartsReact highcharts={Highcharts} options={options} />
   );

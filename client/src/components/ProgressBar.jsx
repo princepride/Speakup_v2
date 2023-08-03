@@ -22,12 +22,13 @@ const ProgressText = styled.div`
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 12px;
+    font-weight: bold;
 `;
 
-const ProgressBar = ({ completed, total }) => (
+const ProgressBar = ({ completed, total, unit }) => (
     <ProgressBarContainer>
         <Progress completed={completed} total={total} />
-        <ProgressText>{`${completed}/${total} EXP`}</ProgressText>
+        <ProgressText>{`${completed}/${total} ${unit}`}</ProgressText>
     </ProgressBarContainer>
 );
 

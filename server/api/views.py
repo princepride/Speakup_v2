@@ -16,7 +16,7 @@ from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark
 from django.utils import timezone
 import requests
 from django.http import FileResponse
-from util.algorithms import isExistKey
+from util.algorithm import isExistKey
 from datetime import datetime, timedelta
 from datetime import time as dt_time
 

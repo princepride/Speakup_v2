@@ -178,7 +178,7 @@ const EmblaCarousel = (props) => {
                         <TopDiv>
                             <TextStyle>称号： {calculateExpEn(totalExp).title}</TextStyle>
                         </TopDiv>
-                        <ProgressBar completed={totalExp} total={calculateExpEn(totalExp).expNeed} />
+                        <ProgressBar completed={totalExp} total={calculateExpEn(totalExp).expNeed} unit="EXP"/>
                     </UserCardContainer>
                     <div style={{display:"flex",flexDirection:"row"}}>
                         <SummaryContainer>
