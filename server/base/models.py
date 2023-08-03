@@ -26,7 +26,7 @@ class SubSubtitle(models.Model):
 
     class Meta:
         verbose_name = "Sub Subtitle"
-        verbose_name_plural = "Sub Subtitle"
+        verbose_name_plural = "Sub Subtitles"
 
     def __str__(self):
         return str(self.youtube_id)+' '+str(self.start_time)+' '+str(self.end_time)+' '+str(self.text)+' '+str(self.condition)
@@ -41,7 +41,7 @@ class Record(models.Model):
 
     class Meta:
         verbose_name = "Record"
-        verbose_name_plural = "Record"
+        verbose_name_plural = "Records"
 
     def __str__(self):
         return str(self.sub_subtitle_id)+' '+str(self.text)+' '+str(self.attempt_times)+' '+str(self.duration)
@@ -57,7 +57,7 @@ class Evaluation(models.Model):
     last_update_time = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name = "Evaluation"
-        verbose_name_plural = "Evaluation"
+        verbose_name_plural = "Evaluations"
 
     def __str__(self):
         return str(self.sub_subtitle_id)+' '+str(self.mission_type)+' '+str(self.model)+' '+str(self.text)+' '+str(self.score)+' '+str(self.difficulty)
@@ -69,8 +69,25 @@ class Bookmark(models.Model):
 
     class Meta:
         verbose_name = "Bookmark"
-        verbose_name_plural = "Bookmark"
+        verbose_name_plural = "Bookmarks"
 
     def __str__(self):
         return str(self.youtube_id)
     
+
+class Task(models.Model):
+    task_id = models.CharField(max_length=10)
+    name_en = models.CharField(max_length=255)
+    name_zh = models.CharField(max_length=255)
+    description_en = models.TextField()
+    description_zh = models.TextField()
+    exp = models.IntegerField()
+    created_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Task"
+        verbose_name_plural = "Tasks"
+
+    def __str__(self):
+        return str(self.task_id) + ' ' + self.name_en + ' ' + self.name_zh + ' ' + self.description_en + ' ' + self.description_zh + ' ' + str(self.exp)

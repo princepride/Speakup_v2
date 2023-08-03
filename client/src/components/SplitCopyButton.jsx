@@ -100,7 +100,7 @@ const handleClick = async () => {
     setOpen(false);
   };
 //
-  return (
+return (
     <StyledContainer>
     {
         userSubSubtitles[subSubtitlesIndex] !== "" &&
