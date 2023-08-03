@@ -48,48 +48,48 @@ export const calculateExpZh = (exp) => {
 
 export const calculateExpEn = (exp) => {
     if(exp < 180) {
-        return "Novice"
+        return {title:"Novice", expNeed:180}
     }
     else if(exp < 600) {
-        return "Apprentice"
+        return {title:"Apprentice", expNeed:600}
     }
     else if(exp < 1800) {
-        return "Journeyman"
+        return {title:"Journeyman", expNeed:1800}
     }
     else if(exp < 3600) {
-        return "Adept"
+        return {title:"Adept", expNeed:3600}
     }
     else if(exp < 6000) {
-        return "Veteran"
+        return {title:"Veteran", expNeed:6000}
     }
     else if(exp < 9000) {
-        return "Elite"
+        return {title:"Elite", expNeed:9000}
     }
     else if(exp < 18000) {
-        return "Champion"
+        return {title:"Champion", expNeed:18000}
     }
     else if(exp < 30000) {
-        return "Master"
+        return {title:"Master", expNeed:30000}
     }
     else if(exp < 48000) {
-        return "Grandmaster"
+        return {title:"Grandmaster", expNeed:48000}
     }
     else if(exp < 72000) {
-        return "Hero"
+        return {title:"Hero", expNeed:72000}
     }
     else if(exp < 120000) {
-        return "Legend"
+        return {title:"Legend", expNeed:120000}
     }
     else if(exp < 192000) {
-        return "Demigod"
+        return {title:"Demigod", expNeed:192000}
     }
     else if(exp < 300000) {
-        return "Mythic"
+        return {title:"Mythic", expNeed:300000}
     }
     else if(exp < 600000) {
-        return "Divine"
+        return {title:"Divine", expNeed:600000}
     }
     else {
-        return "Eternal"
+        return {title:"Eternal", expNeed:Infinity}
     }
 }

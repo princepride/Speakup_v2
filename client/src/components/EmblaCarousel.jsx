@@ -13,6 +13,7 @@ import GitHubActivityGraph from '../components/GitHubActivityGraph'
 import {dateFormat} from '../utils/timeConvert'
 import { getStatistic } from '../utils/connect.js'
 import { calculateExpEn } from '../utils/algorithm'
+import ProgressBar from '../components/ProgressBar'
 
 const UserCardContainer = styled.div`
     height: 35vh; 
@@ -27,8 +28,8 @@ const UserCardContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-image: linear-gradient(to right, white, transparent), url('https://img.win3000.com/m00/d6/f0/39de3b0c924e419833db0c8aab402dd6.jpg');
-    background-size: cover;
+    //background-image: linear-gradient(to right, white, transparent), url('https://img.win3000.com/m00/d6/f0/39de3b0c924e419833db0c8aab402dd6.jpg');
+    //background-size: cover;
 `
 
 const SummaryContainer = styled.div`
@@ -45,8 +46,8 @@ const SummaryContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    background-image: linear-gradient(to right, white, transparent), url('https://sjbz-fd.zol-img.com.cn/t_s208x312c/g7/M00/05/0D/ChMkLGPZ9ISIebRWABrMut1pQzsAAMWYAAAAAAAGszS971.jpg');
-    background-size: cover;
+    //background-image: linear-gradient(to right, white, transparent), url('https://sjbz-fd.zol-img.com.cn/t_s208x312c/g7/M00/05/0D/ChMkLGPZ9ISIebRWABrMut1pQzsAAMWYAAAAAAAGszS971.jpg');
+    //background-size: cover;
 `
 const ImageContainer = styled.div`
     height: 80vh; 
@@ -106,8 +107,7 @@ const TextStyle = styled.div`
 
 const EmblaCarousel = (props) => {
     const { slides, options } = props
-    // const [emblaRef, emblaApi] = useEmblaCarousel(options, [EmblaCarouselAutoplay()])
-    const [emblaRef, emblaApi] = useEmblaCarousel(options);
+    const [emblaRef, emblaApi] = useEmblaCarousel(options, [EmblaCarouselAutoplay()])
     const [date, setDate] = useState(new Date())
 
     const [data,setData] = useState([]);
@@ -139,12 +139,16 @@ const EmblaCarousel = (props) => {
         onNextButtonClick
     } = usePrevNextButtons(emblaApi, onButtonClick)
 
+    const sumExp = (data) => {
+        return data.reduce((total, item) => total + item.totalDuration, 0);
+    }
+
     let currentData = data.filter(item => item.date === dateFormat(date));
     let pieData = currentData.length > 0 ? currentData[0].videonames.map((item,index) => ({name:item, y:currentData[0].duration[index]})) : [];
     let barData = currentData.length > 0 ? currentData[0].specificDuration : [];
     let categories = currentData.length > 0 ? currentData[0].categories : [];
     let seriesNames = currentData.length > 0 ? currentData[0].videonames : [];
-    let totalMinutes = data.reduce((total, item) => total + item.totalDuration, 0);
+    let totalExp = sumExp(data);
 
     const totalDuration = (data) => {
         const totalDurationMinutes = data.reduce((total, item) => total + item.totalDuration, 0);
@@ -164,8 +168,9 @@ const EmblaCarousel = (props) => {
                 <div className="embla__slide">
                     <UserCardContainer>
                         <TopDiv>
-                            <TextStyle>称号： {calculateExpEn(totalMinutes)}</TextStyle>
+                            <TextStyle>称号： {calculateExpEn(totalExp).title}</TextStyle>
                         </TopDiv>
+                        <ProgressBar completed={totalExp} total={calculateExpEn(totalExp).expNeed} />
                     </UserCardContainer>
                     <div style={{display:"flex",flexDirection:"row"}}>
                         <SummaryContainer>

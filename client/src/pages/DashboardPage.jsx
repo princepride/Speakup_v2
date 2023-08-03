@@ -7,6 +7,8 @@ import BookmarksPage from './BookmarksPage';
 import SpeakUpIcon from '@mui/icons-material/SettingsVoice';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import StatisticIcon from '@mui/icons-material/Equalizer';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import TasksPage from './TasksPage';
 
 const MainContainer = styled(Box)`
     display: flex;
@@ -35,6 +37,12 @@ const NavigationList = styled(List)`
     margin-top: 50px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    height: 90%;
+
+    > div.autoFill {
+        flex-grow: 1;
+    }
 
     @media screen and (max-width: 1080px) {
         flex-direction: row;
@@ -94,6 +102,14 @@ const DashboardPage = () => {
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
+                    <div className="autoFill" />
+                    <NavigationItem component={Link} to="/tasks">
+                        <Tooltip title="tasks">
+                            <IconButton style={{ color : location.pathname === '/tasks' ? "#45CFDD" : "gray" }}>
+                                <TaskAltIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </NavigationItem>
                 </NavigationList>
             </NavigationContainer>
             <ContentContainer>
@@ -102,6 +118,7 @@ const DashboardPage = () => {
                     <Route path="/" element={<MainPage />} />
                     <Route path="/bookmarks" element={<BookmarksPage />} />
                     <Route path="/statistic" element={<StatisticPage />} />
+                    <Route path='/tasks' element={<TasksPage />} />
                 </Routes>
             </ContentContainer>
         </MainContainer>
