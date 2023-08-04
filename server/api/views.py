@@ -529,10 +529,13 @@ def get_tasks(request):
     new_daily_tasks.append(daily_task000)
     new_weekly_task = []
     for weekly_task in weekly_tasks:
-        weekly_task["completed"] = 0
-        weekly_task["total"] = 7
-        weekly_task["isFinish"] = False
-        new_weekly_task.append(weekly_task)
+        if weekly_task["isFinish"]:
+            weekly_task["completed"] = weekly_task["total"]
+            new_weekly_task.append(weekly_task)
+        else:
+            weekly_task["total"] = 7
+            weekly_task["isFinish"] = False
+            new_weekly_task.append(weekly_task)
     return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_task}}, status=200)
 
 

@@ -29,8 +29,6 @@ const UserCardContainer = styled.div`
     align-items: center;
     padding: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-    //background-image: linear-gradient(to right, white, transparent), url('https://img.win3000.com/m00/d6/f0/39de3b0c924e419833db0c8aab402dd6.jpg');
-    //background-size: cover;
 `
 
 const SummaryContainer = styled.div`
@@ -48,8 +46,6 @@ const SummaryContainer = styled.div`
     align-items: center;
     padding: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-    //background-image: linear-gradient(to right, white, transparent), url('https://sjbz-fd.zol-img.com.cn/t_s208x312c/g7/M00/05/0D/ChMkLGPZ9ISIebRWABrMut1pQzsAAMWYAAAAAAAGszS971.jpg');
-    //background-size: cover;
 `
 const ImageContainer = styled.div`
     height: 80vh; 
