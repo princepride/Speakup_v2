@@ -12,12 +12,13 @@ import torch
 import torchaudio
 import math
 import json
-from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark
+from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
 from django.utils import timezone
 import requests
 from django.http import FileResponse
 from datetime import datetime, timedelta
 from datetime import time as dt_time
+from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 
 # 加载模型和处理器
@@ -342,12 +343,13 @@ def get_statistic(request):
     # Convert list to set to remove duplicates and then convert it back to list
     unique_dates = list(set(dates))
     for unique_date in unique_dates:
-        # Create datetime objects for the start and end of the day
-        start_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.min))
-        end_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.max))
+        ## Create datetime objects for the start and end of the day
+        #start_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.min))
+        #end_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.max))
 
-        # Use the datetime objects to filter the evaluations
-        evaluations_on_date = Evaluation.objects.filter(last_update_time__range=(start_of_day, end_of_day))
+        ## Use the datetime objects to filter the evaluations
+        #evaluations_on_date = Evaluation.objects.filter(last_update_time__range=(start_of_day, end_of_day))
+        evaluations_on_date = Evaluation.objects.filter(last_update_time__date=unique_date)
         categories = ['Paraphrase', 'Seque', 'Zh-En', 'Conversation']
         videonames = []
         for evaluation_on_date in evaluations_on_date:
@@ -377,6 +379,7 @@ def get_statistic(request):
                     diff = next_eval.last_update_time - current_eval.last_update_time
                     if diff <= timedelta(minutes=5):
                         time_difference += diff
+                # print(unique_date, category, filtered_evaluations_list)
                 specificDuration[videonames.index(videoname)][categories.index(category)] = int((time_difference + (timedelta(minutes=1) if len(filtered_evaluations_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
         duration = [0] * len(videonames)
         for i in range(len(videonames)):
@@ -395,18 +398,108 @@ def get_statistic(request):
 
 @api_view(['POST'])
 def get_tasks(request):
-    tasks = {
-        "dailyTasks":[
-            {"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":7, "total": 15, "isFinish":False},
-            {"task_id": "D001", "name_en": "Paraphrase Oracle", "name_zh": "释义神谕", "description_en": "15 minutes of Paraphrase practice", "description_zh": "练习Paraphrase 15分钟", "exp": 5, "completed":7, "total": 15, "isFinish":False},
-            {"task_id": "D002", "name_en": "Seque Sorcery", "name_zh": "顺接巫术", "description_en": "15 minutes of Seque practice", "description_zh": "练习Seque 15分钟", "exp": 5, "completed":15, "total": 15, "isFinish":True},
-        ],
-        "weeklyTasks":[
-            {"task_id": "W000", "name_en": "Week of the Phoenix", "name_zh": "凤凰之周", "description_en": "Practicing every day of the week", "description_zh": "一周每天都练习过", "exp": 30, "completed":2, "total": 7, "isFinish":False},
-            {"task_id": "W001", "name_en": "Gauntlet of the Griffin", "name_zh": "狮鹫试炼", "description_en": "Completing all daily tasks in a week", "description_zh": "完成一周所有的每日任务", "exp": 100, "completed":7, "total": 21, "isFinish":False},
-        ]
-    }
-    return Response({"tasks":tasks}, status=200)
+    #tasks = {
+    #    "dailyTasks":[
+    #        {"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":7, "total": 15, "isFinish":False},
+    #        {"task_id": "D001", "name_en": "Paraphrase Oracle", "name_zh": "释义神谕", "description_en": "15 minutes of Paraphrase practice", "description_zh": "练习Paraphrase 15分钟", "exp": 5, "completed":7, "total": 15, "isFinish":False},
+    #        {"task_id": "D002", "name_en": "Seque Sorcery", "name_zh": "顺接巫术", "description_en": "15 minutes of Seque practice", "description_zh": "练习Seque 15分钟", "exp": 5, "completed":15, "total": 15, "isFinish":True},
+    #    ],
+    #    "weeklyTasks":[
+    #        {"task_id": "W000", "name_en": "Week of the Phoenix", "name_zh": "凤凰之周", "description_en": "Practicing every day of the week", "description_zh": "一周每天都练习过", "exp": 30, "completed":2, "total": 7, "isFinish":False},
+    #        {"task_id": "W001", "name_en": "Gauntlet of the Griffin", "name_zh": "狮鹫试炼", "description_en": "Completing all daily tasks in a week", "description_zh": "完成一周所有的每日任务", "exp": 100, "completed":7, "total": 21, "isFinish":False},
+    #    ]
+    #}
+    def get_or_create_daily_tasks(n):
+        date_today = timezone.now().date()
+        daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
+
+        if not daily_tasks.exists():
+            generated_tasks = generate_daily_tasks(n)
+            for task in generated_tasks:
+                DailyTask.objects.create(
+                    task_id=task["task_id"],
+                    name_en=task["name_en"],
+                    name_zh=task["name_zh"],
+                    description_en=task["description_en"],
+                    description_zh=task["description_zh"],
+                    exp=task["exp"]
+                )
+        daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
+        return [model_to_dict(task) for task in daily_tasks]
+
+    def get_or_create_weekly_tasks():
+        date_today = timezone.now().date()
+        start_week = date_today - timedelta(date_today.weekday())
+        end_week = start_week + timedelta(6)
+        weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
+
+        if not weekly_tasks.exists():
+            generated_tasks = generate_weekly_tasks()
+            for task in generated_tasks:
+                WeeklyTask.objects.create(
+                    task_id=task["task_id"],
+                    name_en=task["name_en"],
+                    name_zh=task["name_zh"],
+                    description_en=task["description_en"],
+                    description_zh=task["description_zh"],
+                    exp=task["exp"]
+                )
+        weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
+        return [model_to_dict(task) for task in weekly_tasks]
+        
+    weekly_tasks = get_or_create_weekly_tasks()
+    daily_tasks = get_or_create_daily_tasks(2)
+    def get_daily_task_process(mission_type):
+        date_today = timezone.now().date()
+        evals = Evaluation.objects.filter(last_update_time__date=date_today)
+        filterd_daily_tasks = evals.filter(mission_type=mission_type).order_by('last_update_time')
+        filtered_daily_list = list(filterd_daily_tasks)
+        time_difference = timedelta()
+        for current_eval, next_eval in zip(filtered_daily_list, filtered_daily_list[1:]):
+                    diff = next_eval.last_update_time - current_eval.last_update_time
+                    if diff <= timedelta(minutes=5):
+                        time_difference += diff
+        return int((time_difference + (timedelta(minutes=1) if len(filtered_daily_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
+    new_daily_tasks = []
+    for daily_task in daily_tasks:
+
+        if daily_task["task_id"] == "D001":
+            durations = get_daily_task_process('Paraphrase') 
+            daily_task["completed"] = durations if durations < 15 else 15
+            daily_task["total"] = 15
+            daily_task["isFinish"] = False if durations < 15 else True
+            new_daily_tasks.append(daily_task)
+        elif daily_task["task_id"] == "D002":
+            durations = get_daily_task_process('Seque') 
+            daily_task["completed"] = durations if durations < 15 else 15
+            daily_task["total"] = 15
+            daily_task["isFinish"] = False if durations < 15 else True
+            new_daily_tasks.append(daily_task)
+        elif daily_task["task_id"] == "D003":
+            durations = get_daily_task_process('Zh-En') 
+            daily_task["completed"] = durations if durations < 15 else 15
+            daily_task["total"] = 15
+            daily_task["isFinish"] = False if durations < 15 else True
+            new_daily_tasks.append(daily_task)
+        elif daily_task["task_id"] == "D004":
+            durations = get_daily_task_process('Conversation') 
+            daily_task["completed"] = durations if durations < 15 else 15
+            daily_task["total"] = 15
+            daily_task["isFinish"] = False if durations < 15 else True
+            new_daily_tasks.append(daily_task)
+    first_use = False
+    for new_daily_task in new_daily_tasks:
+        if new_daily_task["completed"] > 0:
+            first_use = True
+            break
+    new_daily_tasks.append({"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":(1 if first_use else 0), "total":1, "isFinish":first_use})
+    new_weekly_task = []
+    for weekly_task in weekly_tasks:
+        weekly_task["completed"] = 0
+        weekly_task["total"] = 7
+        weekly_task["isFinish"] = False
+        new_weekly_task.append(weekly_task)
+    return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_task}}, status=200)
 
 
 def stream_video(request, path):

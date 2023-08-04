@@ -23,8 +23,9 @@ achievement=[
 ]
 
 def generate_daily_tasks(n):
-    daily_tasks = [{"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5}]
-    return daily_tasks + get_random_elements(dailyTasks, n)
+    #daily_tasks = [{"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5}]
+    #return daily_tasks + get_random_elements(dailyTasks, n)
+    return get_random_elements(dailyTasks, n)
 
 def generate_weekly_tasks():
     return weeklyTasks

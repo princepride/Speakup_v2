@@ -48,7 +48,7 @@ const ButtonWrapper = styled.div`
 
 function TaskBlock(props) {
     const navigate = useNavigate();
-    const { title, text, completed, total, exp, isFinish } = props;
+    const { title, text, completed, total, exp, isFinish, unit } = props;
     const handleClick = (isFinish) => {
         if(!isFinish) {
             navigate("/");
@@ -61,7 +61,7 @@ function TaskBlock(props) {
             <Typography>{text}</Typography>
         </TaskContent>
         <ProgressContent>
-            <ProgressBar  completed={completed} total={total} unit="minutes"/>
+            <ProgressBar  completed={completed} total={total} unit={unit}/>
         </ProgressContent>
         <ExpContent>
             <Typography variant="h8">{exp} EXP</Typography>

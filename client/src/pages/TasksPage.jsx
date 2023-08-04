@@ -21,7 +21,7 @@ const MainContainer = styled.div`
 
 const TasksPage = () => {
     const [value, setValue] = useState(0);
-    const language = 'Zh';
+    const language = 'En';
     const [tasks, setTasks] = useState({
         //dailyTasks:[
         //    {"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":7, "total": 15, "isFinish":false},
@@ -59,21 +59,28 @@ const TasksPage = () => {
         </Tabs>
         {value === 0 && <div>
             {tasks.dailyTasks && tasks.dailyTasks.map((item, index) => {
+                let unit = "minutes"
+                if(item.task_id === "D000") {
+                    unit=""
+                }
                 if(language == 'Zh') {
-                    return <TaskBlock key={index} title={item.name_zh} text={item.description_zh} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish}/>
+                    return <TaskBlock key={index} title={item.name_zh} text={item.description_zh} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit={unit}/>
+                }
+                else if(language == 'En'){
+                    return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit={unit}/>
                 }
                 else {
-                    return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish}/>
+                    return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit={unit}/>
                 }
             })}
             </div>}
         {value === 1 && <div>
             {tasks.weeklyTasks && tasks.weeklyTasks.map((item, index) => {
                 if(language == 'Zh') {
-                    return <TaskBlock key={index} title={item.name_zh} text={item.description_zh} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish}/>
+                    return <TaskBlock key={index} title={item.name_zh} text={item.description_zh} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit=""/>
                 }
                 else {
-                    return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish}/>
+                    return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit=""/>
                 }
             })}
             </div>}
