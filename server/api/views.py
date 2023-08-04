@@ -18,6 +18,7 @@ import requests
 from django.http import FileResponse
 from datetime import datetime, timedelta
 from datetime import time as dt_time
+from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 
 # 加载模型和处理器
 processor = AutoProcessor.from_pretrained("openai/whisper-medium.en")
@@ -391,6 +392,21 @@ def get_statistic(request):
         })
     print(data)
     return Response({"data": data}, status=200)
+
+@api_view(['POST'])
+def get_tasks(request):
+    tasks = {
+        "dailyTasks":[
+            {"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":7, "total": 15, "isFinish":False},
+            {"task_id": "D001", "name_en": "Paraphrase Oracle", "name_zh": "释义神谕", "description_en": "15 minutes of Paraphrase practice", "description_zh": "练习Paraphrase 15分钟", "exp": 5, "completed":7, "total": 15, "isFinish":False},
+            {"task_id": "D002", "name_en": "Seque Sorcery", "name_zh": "顺接巫术", "description_en": "15 minutes of Seque practice", "description_zh": "练习Seque 15分钟", "exp": 5, "completed":15, "total": 15, "isFinish":True},
+        ],
+        "weeklyTasks":[
+            {"task_id": "W000", "name_en": "Week of the Phoenix", "name_zh": "凤凰之周", "description_en": "Practicing every day of the week", "description_zh": "一周每天都练习过", "exp": 30, "completed":2, "total": 7, "isFinish":False},
+            {"task_id": "W001", "name_en": "Gauntlet of the Griffin", "name_zh": "狮鹫试炼", "description_en": "Completing all daily tasks in a week", "description_zh": "完成一周所有的每日任务", "exp": 100, "completed":7, "total": 21, "isFinish":False},
+        ]
+    }
+    return Response({"tasks":tasks}, status=200)
 
 
 def stream_video(request, path):

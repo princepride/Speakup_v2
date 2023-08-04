@@ -75,7 +75,7 @@ class Bookmark(models.Model):
         return str(self.youtube_id)
     
 
-class Task(models.Model):
+class DailyTask(models.Model):
     task_id = models.CharField(max_length=10)
     name_en = models.CharField(max_length=255)
     name_zh = models.CharField(max_length=255)
@@ -86,8 +86,25 @@ class Task(models.Model):
     last_update_time = models.DateTimeField(auto_now_add=True)
     
     class Meta:
-        verbose_name = "Task"
-        verbose_name_plural = "Tasks"
+        verbose_name = "Daily Task"
+        verbose_name_plural = "Daily Tasks"
+
+    def __str__(self):
+        return str(self.task_id) + ' ' + self.name_en + ' ' + self.name_zh + ' ' + self.description_en + ' ' + self.description_zh + ' ' + str(self.exp)
+    
+class WeeklyTask(models.Model):
+    task_id = models.CharField(max_length=10)
+    name_en = models.CharField(max_length=255)
+    name_zh = models.CharField(max_length=255)
+    description_en = models.TextField()
+    description_zh = models.TextField()
+    exp = models.IntegerField()
+    created_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        verbose_name = "Weekly Task"
+        verbose_name_plural = "Weekly Tasks"
 
     def __str__(self):
         return str(self.task_id) + ' ' + self.name_en + ' ' + self.name_zh + ' ' + self.description_en + ' ' + self.description_zh + ' ' + str(self.exp)

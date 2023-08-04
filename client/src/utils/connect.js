@@ -130,3 +130,14 @@ export const getStatistic = async () => {
     }
 }
 
+export const getTasks = async () => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/get_tasks'
+    const data = {}
+    try {
+        const response = await Axios.post(url, data)
+        return response.data
+    } catch(error) {
+        throw new Error(error.message);
+    }
+}
+
