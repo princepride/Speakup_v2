@@ -511,32 +511,51 @@ def get_tasks(request):
                     tempTask.isFinish = True
                     tempTask.save()
             elif daily_task["task_id"] == "D000":
-                daily_task000 = daily_task
-    first_use = False
-    for new_daily_task in new_daily_tasks:
-        if new_daily_task["completed"] > 0:
-            first_use = True
-            break
-    if first_use:
-        daily_task000["completed"] = 1
-        daily_task000["isFinish"] = True
-        print("daily_task000", daily_task000)
-        tempTask = DailyTask.objects.get(id = daily_task000["id"])
-        tempTask.isFinish = True
-        tempTask.save()
-    else:
-        daily_task000["completed"] = 0
-    new_daily_tasks.append(daily_task000)
-    new_weekly_task = []
+                filter_tasks = Evaluation.objects.filter(last_update_time__date=timezone.now().date())
+                if len(filter_tasks) > 0:
+                    daily_task["completed"] = 1
+                    daily_task["isFinish"] = True
+                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+                else:
+                    daily_task["completed"] = 0
+                new_daily_tasks.append(daily_task)
+    new_weekly_tasks = []
     for weekly_task in weekly_tasks:
         if weekly_task["isFinish"]:
             weekly_task["completed"] = weekly_task["total"]
-            new_weekly_task.append(weekly_task)
+            new_weekly_tasks.append(weekly_task)
         else:
-            weekly_task["total"] = 7
-            weekly_task["isFinish"] = False
-            new_weekly_task.append(weekly_task)
-    return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_task}}, status=200)
+            start_week = timezone.now().date() - timedelta(timezone.now().date().weekday())
+            end_week = timezone.now().date()
+            filter_daily_tasks = DailyTask.objects.filter(created_time__date__range=[start_week, end_week])
+            if weekly_task["task_id"] == "W001":
+                count = 0
+                for task in filter_daily_tasks:
+                    if task.isFinish == True:
+                        count += 1
+                weekly_task["completed"] = count
+                if weekly_task["completed"] == weekly_task["total"]:
+                    weekly_task["isFinish"] = True
+                    tempTask = WeeklyTask.objects.get(id = weekly_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+            elif weekly_task["task_id"] == "W000":
+                count = 0
+                while start_week < end_week:
+                    tempTask = filter_daily_tasks.filter(created_time__date=start_week, task_id="D000")
+                    if len(tempTask) > 0 and tempTask[0].isFinish == True:
+                        count += 1
+                    start_week += timedelta(1)
+                weekly_task["completed"] = count
+                if weekly_task["completed"] == weekly_task["total"]:
+                    weekly_task["isFinish"] = True
+                    tempTask = WeeklyTask.objects.get(id = weekly_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+            new_weekly_tasks.append(weekly_task)
+    return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_tasks}}, status=200)
 
 
 def stream_video(request, path):
