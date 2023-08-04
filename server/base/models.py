@@ -82,6 +82,8 @@ class DailyTask(models.Model):
     description_en = models.TextField()
     description_zh = models.TextField()
     exp = models.IntegerField()
+    total = models.IntegerField()
+    isFinish = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now_add=True)
     
@@ -99,6 +101,8 @@ class WeeklyTask(models.Model):
     description_en = models.TextField()
     description_zh = models.TextField()
     exp = models.IntegerField()
+    total = models.IntegerField()
+    isFinish = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now_add=True)
     

@@ -422,7 +422,9 @@ def get_tasks(request):
                     name_zh=task["name_zh"],
                     description_en=task["description_en"],
                     description_zh=task["description_zh"],
-                    exp=task["exp"]
+                    exp=task["exp"],
+                    total = task["total"],
+                    isFinish = task["isFinish"],
                 )
         daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
         return [model_to_dict(task) for task in daily_tasks]
@@ -442,7 +444,9 @@ def get_tasks(request):
                     name_zh=task["name_zh"],
                     description_en=task["description_en"],
                     description_zh=task["description_zh"],
-                    exp=task["exp"]
+                    exp=task["exp"],
+                    total = task["total"],
+                    isFinish = task["isFinish"],
                 )
         weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
         return [model_to_dict(task) for task in weekly_tasks]
@@ -461,38 +465,67 @@ def get_tasks(request):
                         time_difference += diff
         return int((time_difference + (timedelta(minutes=1) if len(filtered_daily_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
     new_daily_tasks = []
+    daily_task000={}
     for daily_task in daily_tasks:
-
-        if daily_task["task_id"] == "D001":
-            durations = get_daily_task_process('Paraphrase') 
-            daily_task["completed"] = durations if durations < 15 else 15
-            daily_task["total"] = 15
-            daily_task["isFinish"] = False if durations < 15 else True
+        if daily_task["isFinish"] == True:
+            daily_task["completed"] = daily_task["total"]
             new_daily_tasks.append(daily_task)
-        elif daily_task["task_id"] == "D002":
-            durations = get_daily_task_process('Seque') 
-            daily_task["completed"] = durations if durations < 15 else 15
-            daily_task["total"] = 15
-            daily_task["isFinish"] = False if durations < 15 else True
-            new_daily_tasks.append(daily_task)
-        elif daily_task["task_id"] == "D003":
-            durations = get_daily_task_process('Zh-En') 
-            daily_task["completed"] = durations if durations < 15 else 15
-            daily_task["total"] = 15
-            daily_task["isFinish"] = False if durations < 15 else True
-            new_daily_tasks.append(daily_task)
-        elif daily_task["task_id"] == "D004":
-            durations = get_daily_task_process('Conversation') 
-            daily_task["completed"] = durations if durations < 15 else 15
-            daily_task["total"] = 15
-            daily_task["isFinish"] = False if durations < 15 else True
-            new_daily_tasks.append(daily_task)
+        else:
+            if daily_task["task_id"] == "D001":
+                durations = get_daily_task_process('Paraphrase') 
+                daily_task["completed"] = durations if durations < 15 else 15
+                daily_task["isFinish"] = False if durations < 15 else True
+                new_daily_tasks.append(daily_task)
+                if durations >= 15:
+                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+            elif daily_task["task_id"] == "D002":
+                durations = get_daily_task_process('Seque') 
+                daily_task["completed"] = durations if durations < 15 else 15
+                daily_task["total"] = 15
+                daily_task["isFinish"] = False if durations < 15 else True
+                new_daily_tasks.append(daily_task)
+                if durations >= 15:
+                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+            elif daily_task["task_id"] == "D003":
+                durations = get_daily_task_process('Zh-En') 
+                daily_task["completed"] = durations if durations < 15 else 15
+                daily_task["total"] = 15
+                daily_task["isFinish"] = False if durations < 15 else True
+                new_daily_tasks.append(daily_task)
+                if durations >= 15:
+                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+            elif daily_task["task_id"] == "D004":
+                durations = get_daily_task_process('Conversation') 
+                daily_task["completed"] = durations if durations < 15 else 15
+                daily_task["total"] = 15
+                daily_task["isFinish"] = False if durations < 15 else True
+                new_daily_tasks.append(daily_task)
+                if durations >= 15:
+                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask.isFinish = True
+                    tempTask.save()
+            elif daily_task["task_id"] == "D000":
+                daily_task000 = daily_task
     first_use = False
     for new_daily_task in new_daily_tasks:
         if new_daily_task["completed"] > 0:
             first_use = True
             break
-    new_daily_tasks.append({"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":(1 if first_use else 0), "total":1, "isFinish":first_use})
+    if first_use:
+        daily_task000["completed"] = 1
+        daily_task000["isFinish"] = True
+        tempTask = DailyTask.objects.get(id = daily_task000["id"])
+        tempTask.isFinish = True
+        tempTask.save()
+    else:
+        daily_task000["completed"] = 1
+    new_daily_tasks.append(daily_task000)
     new_weekly_task = []
     for weekly_task in weekly_tasks:
         weekly_task["completed"] = 0
