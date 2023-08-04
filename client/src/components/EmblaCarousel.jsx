@@ -120,9 +120,7 @@ const EmblaCarousel = (props) => {
         const fetchStatisticData = async () => {
             try {
                 const StatisticData = await getStatistic();
-                console.log(StatisticData)
                 setData(StatisticData.data);
-                console.log(data)
             } catch(error) {
                 console.error(error);
             }
@@ -152,6 +150,7 @@ const EmblaCarousel = (props) => {
     let barData = currentData.length > 0 ? currentData[0].specificDuration : [];
     let categories = currentData.length > 0 ? currentData[0].categories : [];
     let seriesNames = currentData.length > 0 ? currentData[0].videonames : [];
+
     let totalExp = sumExp(data);
 
     const totalDuration = (data) => {
@@ -203,7 +202,7 @@ const EmblaCarousel = (props) => {
                                 type="pie" 
                                 data = {[pieData]}
                                 title='Pie chart of daily practice categories'
-                                seriesNames={['Series 1']} 
+                                seriesNames={[""]} 
                             />
                         </ChartContainer1>
                         <ChartContainer1>
