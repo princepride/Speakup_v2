@@ -368,7 +368,7 @@ def get_statistic(request):
                 sub_subtitle_ids = SubSubtitle.objects.filter(youtube_id=youtube_id).values_list('id', flat=True)
 
                 # 最后，根据sub_subtitle_id和mission_type过滤Evaluation对象
-                filtered_evaluations = Evaluation.objects.filter(sub_subtitle_id__in=sub_subtitle_ids, mission_type=category)
+                filtered_evaluations = evaluations_on_date.filter(sub_subtitle_id__in=sub_subtitle_ids, mission_type=category)
                 # Convert the queryset to a list
                 filtered_evaluations_list = list(filtered_evaluations)
 
@@ -520,11 +520,12 @@ def get_tasks(request):
     if first_use:
         daily_task000["completed"] = 1
         daily_task000["isFinish"] = True
+        print("daily_task000", daily_task000)
         tempTask = DailyTask.objects.get(id = daily_task000["id"])
         tempTask.isFinish = True
         tempTask.save()
     else:
-        daily_task000["completed"] = 1
+        daily_task000["completed"] = 0
     new_daily_tasks.append(daily_task000)
     new_weekly_task = []
     for weekly_task in weekly_tasks:
