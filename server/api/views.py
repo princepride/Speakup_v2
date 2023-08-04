@@ -411,8 +411,9 @@ def get_tasks(request):
     #}
     def get_or_create_daily_tasks(n):
         date_today = timezone.now().date()
+        print('date_today',date_today)
         daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
-
+        print('daily_tasks',daily_tasks)
         if not daily_tasks.exists():
             generated_tasks = generate_daily_tasks(n)
             for task in generated_tasks:

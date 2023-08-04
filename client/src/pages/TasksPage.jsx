@@ -19,6 +19,19 @@ const MainContainer = styled.div`
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 `
 
+const FooterContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 12vh;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    font-style: italic;
+    color: #aaaaaa
+`
+
 const TasksPage = () => {
     const [value, setValue] = useState(0);
     const language = 'En';
@@ -73,6 +86,9 @@ const TasksPage = () => {
                     return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit={unit}/>
                 }
             })}
+            <FooterContainer>
+                Update tasks every day at 8 a.m
+            </FooterContainer>
             </div>}
         {value === 1 && <div>
             {tasks.weeklyTasks && tasks.weeklyTasks.map((item, index) => {
@@ -83,6 +99,9 @@ const TasksPage = () => {
                     return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit=""/>
                 }
             })}
+            <FooterContainer>
+            Update tasks every Monday at 8 a.m.
+            </FooterContainer>
             </div>}
         </MainContainer>
     );

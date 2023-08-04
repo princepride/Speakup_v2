@@ -6,7 +6,7 @@ class Youtube(models.Model):
     youtube_duration = models.IntegerField()
     subtitle_name = models.CharField(max_length=255)
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "YouTube Video"
@@ -22,7 +22,7 @@ class SubSubtitle(models.Model):
     text = models.TextField()
     condition = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Sub Subtitle"
@@ -37,7 +37,7 @@ class Record(models.Model):
     attempt_times = models.IntegerField()
     duration = models.FloatField()
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Record"
@@ -54,7 +54,7 @@ class Evaluation(models.Model):
     score = models.FloatField(null=True)
     difficulty = models.FloatField(null=True)
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
     class Meta:
         verbose_name = "Evaluation"
         verbose_name_plural = "Evaluations"
@@ -65,7 +65,7 @@ class Evaluation(models.Model):
 class Bookmark(models.Model):
     youtube_id = models.CharField(max_length=255)
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Bookmark"
@@ -85,7 +85,7 @@ class DailyTask(models.Model):
     total = models.IntegerField()
     isFinish = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name = "Daily Task"
@@ -104,7 +104,7 @@ class WeeklyTask(models.Model):
     total = models.IntegerField()
     isFinish = models.BooleanField()
     created_time = models.DateTimeField(auto_now_add=True)
-    last_update_time = models.DateTimeField(auto_now_add=True)
+    last_update_time = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name = "Weekly Task"
