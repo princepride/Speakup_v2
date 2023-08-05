@@ -14,6 +14,7 @@ import math
 import json
 from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
 from django.utils import timezone
+from django.db.models import Sum
 import requests
 from django.http import FileResponse
 from datetime import datetime, timedelta
@@ -394,7 +395,14 @@ def get_statistic(request):
             'specificDuration':specificDuration
         })
     print(data)
-    return Response({"data": data}, status=200)
+    extraExp = 0
+    filter_daily_tasks = DailyTask.objects.filter(isFinish = True)
+    exp_daily = filter_daily_tasks.aggregate(Sum('exp'))['exp__sum']
+    extraExp += exp_daily if exp_daily is not None else 0
+    filter_weekly_tasks = WeeklyTask.objects.filter(isFinish = True)
+    exp_weekly = filter_weekly_tasks.aggregate(Sum('exp'))['exp__sum']
+    extraExp += exp_weekly if exp_weekly is not None else 0
+    return Response({"data": data, "extraExp": extraExp}, status=200)
 
 @api_view(['POST'])
 def get_tasks(request):

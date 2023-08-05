@@ -115,12 +115,14 @@ const EmblaCarousel = (props) => {
     const [date, setDate] = useState(new Date())
 
     const [data,setData] = useState([]);
+    const [extraExp, setExtraExp] = useState(0);
 
     useEffect(() => {
         const fetchStatisticData = async () => {
             try {
                 const StatisticData = await getStatistic();
                 setData(StatisticData.data);
+                setExtraExp(StatisticData.extraExp);
             } catch(error) {
                 console.error(error);
             }
@@ -141,8 +143,8 @@ const EmblaCarousel = (props) => {
         onNextButtonClick
     } = usePrevNextButtons(emblaApi, onButtonClick)
 
-    const sumExp = (data) => {
-        return data.reduce((total, item) => total + item.totalDuration, 0);
+    const sumExp = (data, extraExp) => {
+        return data.reduce((total, item) => total + item.totalDuration, 0) + extraExp;
     }
 
     let currentData = data.filter(item => item.date === dateFormat(date));
@@ -151,7 +153,7 @@ const EmblaCarousel = (props) => {
     let categories = currentData.length > 0 ? currentData[0].categories : [];
     let seriesNames = currentData.length > 0 ? currentData[0].videonames : [];
 
-    let totalExp = sumExp(data);
+    let totalExp = sumExp(data, extraExp);
 
     const totalDuration = (data) => {
         const totalDurationMinutes = data.reduce((total, item) => total + item.totalDuration, 0);
