@@ -15,7 +15,6 @@ import json
 from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
 from django.utils import timezone
 from django.db.models import Sum
-import requests
 from django.http import FileResponse
 from datetime import datetime, timedelta
 from datetime import time as dt_time
@@ -418,7 +417,14 @@ def get_tasks(request):
     #    ]
     #}
     def get_or_create_daily_tasks(n):
-        date_today = timezone.now().date()
+        # Get current time in UTC
+        now_utc = timezone.now()
+
+        # Convert to local time
+        now_local = timezone.localtime(now_utc)
+
+        # Get the date part
+        date_today = now_local.date()
         print('date_today',date_today)
         daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
         print('daily_tasks',daily_tasks)
@@ -439,7 +445,14 @@ def get_tasks(request):
         return [model_to_dict(task) for task in daily_tasks]
 
     def get_or_create_weekly_tasks():
-        date_today = timezone.now().date()
+        # Get current time in UTC
+        now_utc = timezone.now()
+
+        # Convert to local time
+        now_local = timezone.localtime(now_utc)
+
+        # Get the date part
+        date_today = now_local.date()
         start_week = date_today - timedelta(date_today.weekday())
         end_week = start_week + timedelta(6)
         weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
@@ -463,18 +476,46 @@ def get_tasks(request):
     weekly_tasks = get_or_create_weekly_tasks()
     daily_tasks = get_or_create_daily_tasks(2)
     def get_daily_task_process(mission_type):
-        date_today = timezone.now().date()
-        evals = Evaluation.objects.filter(last_update_time__date=date_today)
-        filterd_daily_tasks = evals.filter(mission_type=mission_type).order_by('last_update_time')
-        filtered_daily_list = list(filterd_daily_tasks)
-        time_difference = timedelta()
-        for current_eval, next_eval in zip(filtered_daily_list, filtered_daily_list[1:]):
-                    diff = next_eval.last_update_time - current_eval.last_update_time
-                    if diff <= timedelta(minutes=5):
-                        time_difference += diff
-        return int((time_difference + (timedelta(minutes=1) if len(filtered_daily_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
+        # Get current time in UTC
+        now_utc = timezone.now()
+        # Convert to local time
+        now_local = timezone.localtime(now_utc)
+        # Get the date part
+        date_today = now_local.date()
+        filterd_daily_tasks = Evaluation.objects.filter(last_update_time__date=date_today, mission_type=mission_type)
+        # filterd_daily_tasks = evals.filter(mission_type=mission_type).order_by('last_update_time')
+        videonames = []
+        for evaluation_on_date in filterd_daily_tasks:
+            youtube_id = SubSubtitle.objects.get(id = evaluation_on_date.sub_subtitle_id).youtube_id
+            youtube_name = Youtube.objects.get(youtube_id = youtube_id).youtube_name
+            #videonames.append(youtube_name[7:][:-16])
+            videonames.append(youtube_name)
+        videonames = list(set(videonames))
+        res = 0
+        for videoname in videonames:
+            # 首先根据给定的youtube_name获取对应的youtube_id
+            youtube_id = Youtube.objects.get(youtube_name=videoname).youtube_id
+            # 然后，根据获取的youtube_id，查找SubSubtitle对象的id
+            sub_subtitle_ids = SubSubtitle.objects.filter(youtube_id=youtube_id).values_list('id', flat=True)
+            # 最后，根据sub_subtitle_id过滤Evaluation对象
+            filtered_evaluations = filterd_daily_tasks.filter(sub_subtitle_id__in=sub_subtitle_ids).order_by('last_update_time')
+            # Convert the queryset to a list
+            filtered_evaluations_list = list(filtered_evaluations)
+            time_difference = timedelta()
+            # Loop through the evaluations, comparing each one to the next
+            for current_eval, next_eval in zip(filtered_evaluations_list, filtered_evaluations_list[1:]):
+                diff = next_eval.last_update_time - current_eval.last_update_time
+                if diff <= timedelta(minutes=5):
+                    time_difference += diff
+            res += int((time_difference + (timedelta(minutes=1) if len(filtered_evaluations_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
+        return res
+        #time_difference = timedelta()
+        #for current_eval, next_eval in zip(filtered_daily_list, filtered_daily_list[1:]):
+        #            diff = next_eval.last_update_time - current_eval.last_update_time
+        #            if diff <= timedelta(minutes=5):
+        #                time_difference += diff
+        #return int((time_difference + (timedelta(minutes=1) if len(filtered_daily_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
     new_daily_tasks = []
-    daily_task000={}
     for daily_task in daily_tasks:
         if daily_task["isFinish"] == True:
             daily_task["completed"] = daily_task["total"]
@@ -520,7 +561,7 @@ def get_tasks(request):
                     tempTask.isFinish = True
                     tempTask.save()
             elif daily_task["task_id"] == "D000":
-                filter_tasks = Evaluation.objects.filter(last_update_time__date=timezone.now().date())
+                filter_tasks = Evaluation.objects.filter(last_update_time__date=timezone.localtime(timezone.now()).date())
                 if len(filter_tasks) > 0:
                     daily_task["completed"] = 1
                     daily_task["isFinish"] = True
@@ -536,8 +577,8 @@ def get_tasks(request):
             weekly_task["completed"] = weekly_task["total"]
             new_weekly_tasks.append(weekly_task)
         else:
-            start_week = timezone.now().date() - timedelta(timezone.now().date().weekday())
-            end_week = timezone.now().date()
+            start_week = timezone.localtime(timezone.now()).date() - timedelta(timezone.localtime(timezone.now()).date().weekday())
+            end_week = timezone.localtime(timezone.now()).date()
             filter_daily_tasks = DailyTask.objects.filter(created_time__date__range=[start_week, end_week])
             if weekly_task["task_id"] == "W001":
                 count = 0
