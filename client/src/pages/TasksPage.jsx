@@ -87,7 +87,7 @@ const TasksPage = () => {
                 }
             })}
             <FooterContainer>
-                Update tasks every day at 8 a.m
+                Update tasks every day at 0:00 a.m.
             </FooterContainer>
             </div>}
         {value === 1 && <div>
@@ -100,7 +100,7 @@ const TasksPage = () => {
                 }
             })}
             <FooterContainer>
-            Update tasks every Monday at 8 a.m.
+            Update tasks every Monday at 0:00 a.m.
             </FooterContainer>
             </div>}
         </MainContainer>
