@@ -12,5 +12,6 @@ urlpatterns = [
     path('select_all_bookmarks',views.select_all_bookmarks),
     path('get_statistic', views.get_statistic),
     path('get_tasks', views.get_tasks),
+    path('shut_down', views.shut_down),
     path('stream/<str:path>', views.stream_video, name='stream_video'),
 ]

@@ -607,6 +607,9 @@ def get_tasks(request):
             new_weekly_tasks.append(weekly_task)
     return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_tasks}}, status=200)
 
+@api_view(['POST'])
+def shut_down(request):
+    os.system("shutdown /s /t 1") 
 
 def stream_video(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)

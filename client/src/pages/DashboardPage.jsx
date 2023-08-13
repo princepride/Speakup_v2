@@ -8,7 +8,9 @@ import SpeakUpIcon from '@mui/icons-material/SettingsVoice';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import StatisticIcon from '@mui/icons-material/Equalizer';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import TasksPage from './TasksPage';
+import { shutDown } from '../utils/connect'
 
 const MainContainer = styled(Box)`
     display: flex;
@@ -102,11 +104,18 @@ const DashboardPage = () => {
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>
-                    <div className="autoFill" />
                     <NavigationItem component={Link} to="/tasks">
-                        <Tooltip title="tasks">
+                        <Tooltip title="Tasks">
                             <IconButton style={{ color : location.pathname === '/tasks' ? "#45CFDD" : "gray" }}>
                                 <TaskAltIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </NavigationItem>
+                    <div className="autoFill" />
+                    <NavigationItem>
+                        <Tooltip title="Shut down">
+                            <IconButton style={{ color : "#F31559" }} onClick={shutDown}>
+                                <PowerSettingsNewIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>

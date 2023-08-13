@@ -15,6 +15,8 @@ sqlite3 db.sqlite3 "DELETE FROM base_evaluation;"
 sqlite3 db.sqlite3 "DELETE FROM base_subsubtitle;"
 sqlite3 db.sqlite3 "DELETE FROM base_youtube;"
 sqlite3 db.sqlite3 "DELETE FROM base_bookmark;"
+sqlite3 db.sqlite3 "DELETE FROM base_dailytask;"
+sqlite3 db.sqlite3 "DELETE FROM base_weeklytask;"
 
 echo 数据已删除。
 

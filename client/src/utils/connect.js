@@ -141,3 +141,14 @@ export const getTasks = async () => {
     }
 }
 
+export const shutDown = async () => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/shut_down'
+    const data = {}
+    try {
+        const response = await Axios.post(url, data)
+        return response.data
+    } catch(error) {
+        throw new Error(error.message);
+    }
+}
+
