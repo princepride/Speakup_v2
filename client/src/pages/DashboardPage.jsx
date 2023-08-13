@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
-import { Box, List, ListItem, Tooltip, IconButton } from '@mui/material';
+import { useState } from 'react';
+import { Box, List, ListItem, Tooltip, IconButton, Button } from '@mui/material';
 import { Routes, Route, Outlet, Link, useLocation } from 'react-router-dom';
 import MainPage from './MainPage';
 import StatisticPage from './StatisticPage';
@@ -77,9 +78,59 @@ const ContentContainer = styled(Box)`
     flex-grow: 1;
 `;
 
+const Overlay = styled.div`
+    background-color: rgba(128, 128, 128, 0.3);
+    height: 97vh;
+    width: 99vw;
+    position: absolute;
+    z-index: 1200;
+    overflow: hidden;
+`;
+
+const ShutDownCard = styled.div`
+    background-color: white;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 200px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+`;
+
+const ShutDownButton = styled(Button)`
+    border: 1px solid;
+    padding: 8px 16px;
+    border-radius: 8px;
+    margin-top:50px;
+    margin-bottom:50px;
+    margin-left:80px;
+    margin-right:80px;
+`;
+
+const CenterButtonGroup = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
 const DashboardPage = () => {
     const location = useLocation();
+    const [shutDownSelectorVisible, setShutDownSelectorVisible] = useState(false);
     return (
+        <>
+        {
+            shutDownSelectorVisible && 
+            <Overlay onClick={event => event.stopPropagation()}>
+                    <ShutDownCard>
+                        <h1 style={{"marginLeft":"20px"}}>SHUT DOWN YOUR SYSTEM?</h1>
+                        <CenterButtonGroup>
+                        <ShutDownButton style={{"backgroundColor":"#F31559", "color":"white"}} onClick={shutDown}>CONFIRM</ShutDownButton>
+                        <ShutDownButton onClick={() => {setShutDownSelectorVisible(false)}}>CANCEL</ShutDownButton>
+                        </CenterButtonGroup>
+                    </ShutDownCard>
+            </Overlay>
+        }
         <MainContainer>
             <NavigationContainer>
                 <NavigationList>
@@ -114,7 +165,8 @@ const DashboardPage = () => {
                     <div className="autoFill" />
                     <NavigationItem>
                         <Tooltip title="Shut down">
-                            <IconButton style={{ color : "#F31559" }} onClick={shutDown}>
+                            {/*<IconButton style={{ color : "#F31559" }} onClick={shutDown}>*/}
+                            <IconButton style={{ color : "#F31559" }} onClick = {() => setShutDownSelectorVisible(true)}>
                                 <PowerSettingsNewIcon />
                             </IconButton>
                         </Tooltip>
@@ -131,6 +183,7 @@ const DashboardPage = () => {
                 </Routes>
             </ContentContainer>
         </MainContainer>
+        </>
     )
 }
 
