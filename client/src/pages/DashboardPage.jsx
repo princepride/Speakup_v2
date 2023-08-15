@@ -54,19 +54,6 @@ const NavigationList = styled(List)`
     }
 `;
 
-//const NavigationItem = styled(ListItem)`
-//    cursor: pointer;
-
-//    //&:hover {
-//    //    background-color: #CCC;
-//    //    border-radius: 20px;
-//    //}
-
-//    & .MuiIconButton-root {
-//        margin-left: -14px; 
-//    }
-//`;
-
 const NavigationItem = styled(ListItem)`
     display: flex; 
     justify-content: center;
