@@ -20,6 +20,7 @@ from datetime import datetime, timedelta
 from datetime import time as dt_time
 from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
+import openai
 
 # 加载模型和处理器
 processor = AutoProcessor.from_pretrained("openai/whisper-medium.en")
@@ -45,6 +46,27 @@ def read_file(file_path):
     with open(full_path, 'r', encoding='utf-8') as file:
         file_text = file.read()
     return file_text
+
+class FinalChatGPT:
+    def __init__(self, type) -> None:
+        self.type = type
+
+    def response(self, model, prompt) -> str:
+        if self.type == 'access_token':
+            chatGPT = ChatGPT(access_tokens=settings.JSON_DATA["ACCESS_TOKENS"])
+            result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
+            last_item = None
+            # 遍历生成器并保存最后一个元素
+            for item in result[2]:
+                last_item = item
+            return last_item['message']['content']['parts'][0]
+        elif self.type == 'api_key':
+            openai.api_key = settings.JSON_DATA["OPENAI_API_KEY"]
+            result = openai.ChatCompletion.create(model=model,messages=[{"role": "user", "content": prompt}],temperature=0.3,max_tokens=1024)
+            return result["choices"][0]["message"]["content"]
+        else:
+            return "unknown error"
+        
 
 @api_view(['POST'])
 def download_youtube(request):
@@ -217,34 +239,30 @@ def speech_recognition(request):
 # model: gpt-4, gpt-3.5-turbo, text-moderation-playground
 @api_view(['POST'])
 def chatGPT(request):
-    chatGPT = ChatGPT(access_tokens=settings.JSON_DATA["ACCESS_TOKENS"])
+    # chatGPT = ChatGPT(access_tokens=settings.JSON_DATA["ACCESS_TOKENS"])
+    chatGPT = FinalChatGPT(settings.JSON_DATA["CHATGPT_TYPE"])
     request_type = request.data.get('request_type', None)
     id = request.data.get('id', None)
     sub_subtitle_id = request.data.get('sub_subtitle_id', None)
     mission_type = request.data.get('mission_type', None)
     prompt = request.data.get('prompt', None)
     model = request.data.get('model', None)
+    result = chatGPT.response(model=model, prompt=prompt)
+    # result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
 
-    result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
-    # 遍历生成器并保存最后一个元素
-    last_item = None
-    for item in result[2]:
-        last_item = item
-    print(last_item)
-    text = last_item['message']['content']['parts'][0]
     if request_type == 'update':
         evaluation = Evaluation.objects.get(id=id)
         evaluation.sub_subtitle_id = sub_subtitle_id
         evaluation.mission_type = mission_type
         evaluation.model = model
-        evaluation.text = text
+        evaluation.text = result
         evaluation.last_update_time = timezone.now()
         evaluation.save()
-        return Response({"id": evaluation.id, "text": text}, status=200)
+        return Response({"id": evaluation.id, "text": result}, status=200)
     elif request_type == 'insert':
-        evaluation = Evaluation(sub_subtitle_id=sub_subtitle_id, mission_type=mission_type, model=model, text=text)
+        evaluation = Evaluation(sub_subtitle_id=sub_subtitle_id, mission_type=mission_type, model=model, text=result)
         evaluation.save()
-        return Response({ "id": evaluation.id, "text": text}, status=200)
+        return Response({ "id": evaluation.id, "text": result}, status=200)
 
 @api_view(['POST'])
 def insert_sub_subtitle(request):

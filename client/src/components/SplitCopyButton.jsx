@@ -45,7 +45,7 @@ const handleClick = async () => {
         targetText = tempTargetText+"\n\n";
     }
     else {
-        targetText = `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text}`;
+        targetText = `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text}\n\n`;
     }
     let promptText = `${originalText}${targetText}${copy_button_config[selectedIndex].prompts}`;
     // model: gpt-4, gpt-3.5-turbo, text-moderation-playground
