@@ -21,6 +21,7 @@ from datetime import time as dt_time
 from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 import openai
+import wave
 
 with open(r'config.json') as file:
     json_data = json.load(file)
@@ -50,13 +51,25 @@ def read_file(file_path):
         file_text = file.read()
     return file_text
 
+def calculate_duration(file_path):
+    # Open the audio file using the wave module
+    with wave.open(file_path, "rb") as audio:
+        # Get the total number of frames in the audio file
+        n_frames = audio.getnframes()
+        # Get the sample rate of the audio file
+        sample_rate = audio.getframerate()
+        # Calculate the duration
+        duration = n_frames / sample_rate
+    return duration
+
 class FinalChatGPT:
     def __init__(self, type) -> None:
         self.type = type
 
     def response(self, model, prompt) -> str:
         if self.type == 'access_token':
-            chatGPT = ChatGPT(access_tokens=settings.JSON_DATA["ACCESS_TOKENS"])
+            # print(settings.JSON_DATA["ACCESS_TOKENS"])
+            chatGPT = ChatGPT(json_data["ACCESS_TOKENS"])
             result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
             last_item = None
             # 遍历生成器并保存最后一个元素
@@ -193,6 +206,7 @@ def speech_recognition(request):
     full_transcription = ""
     if settings.JSON_DATA["SPEECH_RECOGNITION_TYPE"] == "api_key":
         audio_file= open("sounds/speech_fixed.wav", "rb")
+        duration = calculate_duration("sounds/speech_fixed.wav")
         transcript = openai.Audio.transcribe("whisper-1", audio_file)
         full_transcription = transcript["text"]
     elif settings.JSON_DATA["SPEECH_RECOGNITION_TYPE"] == "local_model":

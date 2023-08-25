@@ -55,7 +55,7 @@ class API:
         result = b''
         async for line in resp.aiter_bytes():
             result += line
-
+        print('utf-8', result.decode('utf-8'))
         return json.loads(result.decode('utf-8'))
 
     @staticmethod
