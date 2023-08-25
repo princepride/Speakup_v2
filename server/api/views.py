@@ -22,20 +22,23 @@ from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 import openai
 
-# 加载模型和处理器
-processor = AutoProcessor.from_pretrained("openai/whisper-medium.en")
-model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-medium.en")
-# 初始化设备
-device = "cuda:0" if torch.cuda.is_available() else "cpu"
-model.to(device)
-
 with open(r'config.json') as file:
     json_data = json.load(file)
 
-# 将模型和处理器保存为全局变量
-settings.MODEL = model
-settings.PROCESSOR = processor
+
 settings.JSON_DATA = json_data
+openai.api_key = json_data["OPENAI_API_KEY"]
+
+if json_data["SPEECH_RECOGNITION_TYPE"] == "local_model":
+    # 加载模型和处理器
+    processor = AutoProcessor.from_pretrained("openai/whisper-medium.en")
+    model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-medium.en")
+    # 初始化设备
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    model.to(device)
+    # 将模型和处理器保存为全局变量
+    settings.MODEL = model
+    settings.PROCESSOR = processor
 
 def read_file(file_path):
     # 获取脚本的父路径
@@ -61,7 +64,6 @@ class FinalChatGPT:
                 last_item = item
             return last_item['message']['content']['parts'][0]
         elif self.type == 'api_key':
-            openai.api_key = settings.JSON_DATA["OPENAI_API_KEY"]
             result = openai.ChatCompletion.create(model=model,messages=[{"role": "user", "content": prompt}],temperature=0.3,max_tokens=1024)
             return result["choices"][0]["message"]["content"]
         else:
@@ -188,40 +190,46 @@ def speech_recognition(request):
     # Fix wav file
     os.system('ffmpeg -y -i sounds/speech.wav -vn -acodec pcm_s16le -ar 16000 -ac 1 sounds/speech_fixed.wav')
     # Load the wav file
-    waveform, sample_rate = torchaudio.load("sounds/speech_fixed.wav")
-    duration = float(waveform.shape[1]) / sample_rate
-    # Retrieve the model and processor from the settings
-    model = settings.MODEL
-    processor = settings.PROCESSOR
+    full_transcription = ""
+    if settings.JSON_DATA["SPEECH_RECOGNITION_TYPE"] == "api_key":
+        audio_file= open("sounds/speech_fixed.wav", "rb")
+        transcript = openai.Audio.transcribe("whisper-1", audio_file)
+        full_transcription = transcript["text"]
+    elif settings.JSON_DATA["SPEECH_RECOGNITION_TYPE"] == "local_model":
+        waveform, sample_rate = torchaudio.load("sounds/speech_fixed.wav")
+        duration = float(waveform.shape[1]) / sample_rate
+        # Retrieve the model and processor from the settings
+        model = settings.MODEL
+        processor = settings.PROCESSOR
 
-    # Convert the waveform to mono and normalize for processing
-    waveform = waveform.mean(dim=0)
-    waveform = waveform / torch.max(torch.abs(waveform))
+        # Convert the waveform to mono and normalize for processing
+        waveform = waveform.mean(dim=0)
+        waveform = waveform / torch.max(torch.abs(waveform))
 
-    # Compute the number of chunks
-    duration_in_seconds = waveform.shape[0] / float(sample_rate)
-    chunk_length_in_seconds = 30  # the model can handle 30 seconds at a time
-    num_chunks = math.ceil(duration_in_seconds / chunk_length_in_seconds)
+        # Compute the number of chunks
+        duration_in_seconds = waveform.shape[0] / float(sample_rate)
+        chunk_length_in_seconds = 30  # the model can handle 30 seconds at a time
+        num_chunks = math.ceil(duration_in_seconds / chunk_length_in_seconds)
 
-    # Process each chunk
-    transcriptions = []
-    for chunk_idx in range(num_chunks):
-        chunk_start = int(chunk_idx * chunk_length_in_seconds * sample_rate)
-        chunk_end = int((chunk_idx + 1) * chunk_length_in_seconds * sample_rate)
-        chunk_waveform = waveform[chunk_start:chunk_end]
+        # Process each chunk
+        transcriptions = []
+        for chunk_idx in range(num_chunks):
+            chunk_start = int(chunk_idx * chunk_length_in_seconds * sample_rate)
+            chunk_end = int((chunk_idx + 1) * chunk_length_in_seconds * sample_rate)
+            chunk_waveform = waveform[chunk_start:chunk_end]
 
-        # Convert the audio chunk to input features
-        inputs = processor(chunk_waveform.numpy(), sampling_rate=sample_rate, return_tensors="pt").to(device)
-        
-        # Generate the transcription for the chunk
-        generated_ids = model.generate(inputs.input_features)
-        transcription = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+            # Convert the audio chunk to input features
+            inputs = processor(chunk_waveform.numpy(), sampling_rate=sample_rate, return_tensors="pt").to(device)
+            
+            # Generate the transcription for the chunk
+            generated_ids = model.generate(inputs.input_features)
+            transcription = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-        # Append the transcription of the chunk
-        transcriptions.append(transcription)
+            # Append the transcription of the chunk
+            transcriptions.append(transcription)
 
-    # Combine the transcriptions
-    full_transcription = ' '.join(transcriptions)
+        # Combine the transcriptions
+        full_transcription = ' '.join(transcriptions)
 
     if request_type == 'update':
         record = Record.objects.get(id=id)
