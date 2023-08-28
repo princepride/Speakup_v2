@@ -86,7 +86,6 @@ class FinalChatGPT:
 @api_view(['POST'])
 def download_youtube(request):
     youtube_url = request.data.get('youtube_url', None)
-    print(youtube_url)
 
     if youtube_url is None:
         return Response({"error": "URL not provided"}, status=400)
@@ -96,7 +95,7 @@ def download_youtube(request):
             'format': 'best',
             'writesubtitles': True,
             'writeautomaticsub': True,  # Download auto-generated subtitles
-            'subtitleslangs': ['en', 'zh'],  # Only download English subtitles
+            'subtitleslangs': ['en', 'zh', 'zh-TW'],  # Only download English subtitles
             'outtmpl': 'videos/%(title)s-%(id)s.%(ext)s',
         }
 
@@ -110,13 +109,13 @@ def download_youtube(request):
 
             subtitle_file_en = ydl.prepare_filename(info).rpartition('.')[0] + ".en.vtt"
             subtitle_file_zh = ydl.prepare_filename(info).rpartition('.')[0] + ".zh.vtt"
+            subtitle_file_zh_TW = ydl.prepare_filename(info).rpartition('.')[0] + ".zh-TW.vtt"
         # Wait for the download to finish
-        while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh):
+        while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh) and not os.path.exists(subtitle_file_zh_TW):
             time.sleep(1)
-
+        print("check", os.path.exists(subtitle_file_zh_TW))
         if os.path.exists(subtitle_file_en):
             filename = ydl.prepare_filename(info)
-            print(filename.replace('videos\\','videos/'))
             command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
                 input_file=filename.replace('videos\\','videos/'),
                 output_file="media/" + filename[7:-4] + ".m3u8"
@@ -142,13 +141,12 @@ def download_youtube(request):
 
         elif os.path.exists(subtitle_file_zh):
             filename = ydl.prepare_filename(info)
-            print(filename.replace('videos\\','videos/'))
             command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
                 input_file=filename.replace('videos\\','videos/'),
                 output_file="media/" + filename[7:-4] + ".m3u8"
             )
             os.system(command)
-            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), subtitle_name=subtitle_file_zh)
+            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
             with open(subtitle_file_zh, 'r', encoding='utf-8', errors='replace') as f:
@@ -165,9 +163,33 @@ def download_youtube(request):
 
             # Delete original subtitle file
             os.remove(srt_file)
+        elif os.path.exists(subtitle_file_zh_TW):
+            filename = ydl.prepare_filename(info)
+            command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
+                input_file=filename.replace('videos\\','videos/'),
+                output_file="media/" + filename[7:-4] + ".m3u8"
+            )
+            os.system(command)
+            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh_TW)
+            new_youtube_video.save()
+            # Convert ZH VTT to ZH SRT
+            with open(subtitle_file_zh_TW, 'r', encoding='utf-8', errors='replace') as f:
+                captions = WebVTTReader().read(f.read().replace('\ufffd', ' '))
+
+            srt_file = subtitle_file_zh_TW.replace('.vtt', '.srt')
+            with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
+                print(captions)
+                f.write(SRTWriter().write(captions))
+
+            os.remove(subtitle_file_zh_TW)
+
+            process_subtitle(srt_file, srt_file.replace(".zh-TW.srt", " processed.zh-TW.srt"))
+
+            # Delete original subtitle file
+            os.remove(srt_file)
     youtube = Youtube.objects.get(youtube_id=youtube_url[-11:])
     video_url = "http://localhost:8000/stream/"+youtube.youtube_name[7:-4] + ".m3u8"
-    subtitle = read_file(youtube.subtitle_name.replace(".en.vtt", " processed.en.srt").replace(".zh.vtt", " processed.zh.srt"))
+    subtitle = read_file(youtube.subtitle_name.replace(".en.vtt", " processed.en.srt").replace(".zh.vtt", " processed.zh.srt").replace(".zh-TW.vtt", " processed.zh-TW.srt"))
     youtube_id = youtube.youtube_id
     sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True)
     sub_subtitle_data = [{'id':sub_subtitle_result.id, 'startTime': sub_subtitle_result.start_time, 'endTime': sub_subtitle_result.end_time, 'text': sub_subtitle_result.text} for sub_subtitle_result in sub_subtitle_results]

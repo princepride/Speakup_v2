@@ -17,7 +17,7 @@
         {
             "button_name":"Zh-En",
             "output_key_words":"Chinese to English Translation",
-            "prompts":"Please provide a score for the Chinese to English translation, and explain your rating considering various dimensions such as fidelity to the original text, linguistic intricacy, and overall fluency. After that, you should give me some advice. 请全部用中文回答问题",
+            "prompts":"Please provide a score for the Chinese to English translation, and explain your rating considering various dimensions such as fidelity to the original text, linguistic intricacy, and overall fluency. After that, you should give me some advice. finally you should give me the English version translate of it, 除了翻译部分，请全部用中文回答问题",
             "has_memory":false,
             "use_original_text":true
         },
