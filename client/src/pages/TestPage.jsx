@@ -2,6 +2,7 @@ import React from 'react'
 import SuperInput from '../components/SuperInput.jsx'
 import GitHubActivityGraph from '../components/GitHubActivityGraph'
 import TaskBlock from '../components/TaskBlock'
+import YoutubePlayer from '../components/YoutubePlayer'
 
 function randomn(n) {
     let rnd = [];
@@ -18,10 +19,11 @@ function TestPage() {
     return (
         <>
         <div style={{border:'2px solid #91C8E4', padding:'4px', width:'400px',borderRadius:'4px'}}>
-            <SuperInput />
+           <SuperInput />
         </div>
         <GitHubActivityGraph values={randomn(365)}/>
         <TaskBlock title={'熟能生巧'} text={'练习Paraphrase 15分钟'} exp={5} isFinish={true}/>
+        <YoutubePlayer />
         </>
     )
 }
