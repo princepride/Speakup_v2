@@ -67,7 +67,6 @@ useEffect(() => {
   }
 }, [tabIndex, subSubtitlesIndex, subSubtitles]);
 
-
 useEffect(() => {
   const video = videoRef.current;
 

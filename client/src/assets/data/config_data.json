@@ -24,8 +24,8 @@
         {
             "button_name":"Conversation",
             "output_key_words":"My Response",
-            "prompts":"I want to practice English conversation with you, I say a sentence, and you say a sentence. You will role-play a character and dialogue with me, or start a discussion about a particular thing, all in English. Now you need to decide a suitable role for yourself based on what I said, then chat with me",
-            "has_memory":true,
+            "prompts":"I want to practice English conversation with you, I say a sentence, and you say a sentence. You will role-play a character and dialogue with me, or start a discussion about a particular thing, all in English. Now you need to decide a suitable role for yourself based on the conversation history I provide above, then directly talk with me",
+            "has_memory":true,  
             "use_original_text":false
         }
     ]

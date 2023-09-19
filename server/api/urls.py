@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('download-youtube', views.download_youtube),
@@ -14,4 +15,5 @@ urlpatterns = [
     path('get_tasks', views.get_tasks),
     path('shut_down', views.shut_down),
     path('stream/<str:path>', views.stream_video, name='stream_video'),
+    path('', TemplateView.as_view(template_name='/frontend/index.html')),
 ]

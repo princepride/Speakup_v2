@@ -76,10 +76,10 @@ const TasksPage = () => {
                 if(item.task_id === "D000") {
                     unit=""
                 }
-                if(language == 'Zh') {
+                if(language === 'Zh') {
                     return <TaskBlock key={index} title={item.name_zh} text={item.description_zh} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit={unit}/>
                 }
-                else if(language == 'En'){
+                else if(language === 'En'){
                     return <TaskBlock key={index} title={item.name_en} text={item.description_en} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit={unit}/>
                 }
                 else {
@@ -92,7 +92,7 @@ const TasksPage = () => {
             </div>}
         {value === 1 && <div>
             {tasks.weeklyTasks && tasks.weeklyTasks.map((item, index) => {
-                if(language == 'Zh') {
+                if(language === 'Zh') {
                     return <TaskBlock key={index} title={item.name_zh} text={item.description_zh} completed={item.completed} total={item.total} exp={item.exp} isFinish={item.isFinish} unit=""/>
                 }
                 else {
