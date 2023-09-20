@@ -7,7 +7,7 @@ const RoutePage = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/login" element={(<LoginPage />)} />
+                <Route path="" element={(<LoginPage />)} />
                 <Route path="/*" element={(<DashboardPage />)} />
                 <Route path="/test" element={(<TestPage />)} />
             </Routes>

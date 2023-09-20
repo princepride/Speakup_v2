@@ -88,7 +88,7 @@ function VideoCard(props) {
             }
 
             // 进行页面跳转
-            navigate("/");
+            navigate("/main");
         })
         .catch(error => {
             console.error(error);

@@ -8,3 +8,4 @@ yt_dlp==2023.3.4
 django-cors-headers==4.0.0
 soundfile==0.12.1
 ffmpeg-python==0.2.0
+Openai
