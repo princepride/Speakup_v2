@@ -310,7 +310,7 @@ const DashboardPage = () => {
             <ContentContainer>
                 <Outlet />
                 <Routes>
-                    <Route path="/" element={<MainPage />} />
+                    <Route path="/main" element={<MainPage />} />
                     <Route path="/bookmarks" element={<BookmarksPage />} />
                     <Route path="/statistic" element={<StatisticPage />} />
                     <Route path='/tasks' element={<TasksPage />} />

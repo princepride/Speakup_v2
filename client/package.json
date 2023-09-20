@@ -27,6 +27,7 @@
     "react-router-dom": "^6.11.2",
     "react-scripts": "5.0.1",
     "react-youtube": "^10.1.0",
+    "sass": "^1.67.0",
     "url": "^0.11.1",
     "web-vitals": "^2.1.4"
   },
