@@ -15,7 +15,7 @@ const YoutubePlayer = () => {
     height: '520',
     width: '860',
     playerVars: {
-      autoplay: 1,
+      autoplay: 0,
     },
   };
 

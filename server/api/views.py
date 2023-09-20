@@ -7,17 +7,11 @@ import time
 import os
 from util.process_subtitle import process_subtitle
 from util.api import ChatGPT
-from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
-import torch
-import torchaudio
-import math
 import json
 from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
 from django.utils import timezone
 from django.db.models import Sum
-from django.http import FileResponse
-from datetime import datetime, timedelta
-from datetime import time as dt_time
+from datetime import timedelta
 from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 import openai
@@ -29,17 +23,6 @@ with open(r'config.json') as file:
 
 settings.JSON_DATA = json_data
 openai.api_key = json_data["OPENAI_API_KEY"]
-
-if json_data["SPEECH_RECOGNITION_TYPE"] == "local_model":
-    # 加载模型和处理器
-    processor = AutoProcessor.from_pretrained("openai/whisper-medium.en")
-    model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-medium.en")
-    # 初始化设备
-    device = "cuda:0" if torch.cuda.is_available() else "cpu"
-    model.to(device)
-    # 将模型和处理器保存为全局变量
-    settings.MODEL = model
-    settings.PROCESSOR = processor
 
 def read_file(file_path):
     # 获取脚本的父路径
@@ -92,11 +75,11 @@ def download_youtube(request):
     
     if not Youtube.objects.filter(youtube_id=youtube_url[-11:]).exists():
         ydl_opts = {
-            'format': 'best',
             'writesubtitles': True,
             'writeautomaticsub': True,  # Download auto-generated subtitles
             'subtitleslangs': ['en', 'zh', 'zh-TW'],  # Only download English subtitles
             'outtmpl': 'videos/%(title)s-%(id)s.%(ext)s',
+            'skip_download': True,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -115,12 +98,6 @@ def download_youtube(request):
             time.sleep(1)
         print("check", os.path.exists(subtitle_file_zh_TW))
         if os.path.exists(subtitle_file_en):
-            filename = ydl.prepare_filename(info)
-            command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
-                input_file=filename.replace('videos\\','videos/'),
-                output_file="media/" + filename[7:-4] + ".m3u8"
-            )
-            os.system(command)
             new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en)
             new_youtube_video.save()
             # Convert EN VTT to EN SRT
@@ -140,12 +117,6 @@ def download_youtube(request):
             os.remove(srt_file)
 
         elif os.path.exists(subtitle_file_zh):
-            filename = ydl.prepare_filename(info)
-            command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
-                input_file=filename.replace('videos\\','videos/'),
-                output_file="media/" + filename[7:-4] + ".m3u8"
-            )
-            os.system(command)
             new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
@@ -164,12 +135,6 @@ def download_youtube(request):
             # Delete original subtitle file
             os.remove(srt_file)
         elif os.path.exists(subtitle_file_zh_TW):
-            filename = ydl.prepare_filename(info)
-            command = 'ffmpeg -i "{input_file}" -g 60 -hls_time 2 -hls_list_size 0 -hls_segment_size 500000 "{output_file}"'.format(
-                input_file=filename.replace('videos\\','videos/'),
-                output_file="media/" + filename[7:-4] + ".m3u8"
-            )
-            os.system(command)
             new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh_TW)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
@@ -230,41 +195,6 @@ def speech_recognition(request):
         duration = calculate_duration("sounds/speech_fixed.wav")
         transcript = openai.Audio.transcribe("whisper-1", audio_file)
         full_transcription = transcript["text"]
-    elif settings.JSON_DATA["SPEECH_RECOGNITION_TYPE"] == "local_model":
-        waveform, sample_rate = torchaudio.load("sounds/speech_fixed.wav")
-        duration = float(waveform.shape[1]) / sample_rate
-        # Retrieve the model and processor from the settings
-        model = settings.MODEL
-        processor = settings.PROCESSOR
-
-        # Convert the waveform to mono and normalize for processing
-        waveform = waveform.mean(dim=0)
-        waveform = waveform / torch.max(torch.abs(waveform))
-
-        # Compute the number of chunks
-        duration_in_seconds = waveform.shape[0] / float(sample_rate)
-        chunk_length_in_seconds = 30  # the model can handle 30 seconds at a time
-        num_chunks = math.ceil(duration_in_seconds / chunk_length_in_seconds)
-
-        # Process each chunk
-        transcriptions = []
-        for chunk_idx in range(num_chunks):
-            chunk_start = int(chunk_idx * chunk_length_in_seconds * sample_rate)
-            chunk_end = int((chunk_idx + 1) * chunk_length_in_seconds * sample_rate)
-            chunk_waveform = waveform[chunk_start:chunk_end]
-
-            # Convert the audio chunk to input features
-            inputs = processor(chunk_waveform.numpy(), sampling_rate=sample_rate, return_tensors="pt").to(device)
-            
-            # Generate the transcription for the chunk
-            generated_ids = model.generate(inputs.input_features)
-            transcription = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
-
-            # Append the transcription of the chunk
-            transcriptions.append(transcription)
-
-        # Combine the transcriptions
-        full_transcription = ' '.join(transcriptions)
 
     if request_type == 'update':
         record = Record.objects.get(id=id)
@@ -378,24 +308,6 @@ def select_all_bookmarks(request):
 
 @api_view(['POST'])
 def get_statistic(request):
-    #data = [
-    #    {
-    #        'date': '2023-07-30',
-    #        'totalDuration': 60,
-    #        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
-    #        'videonames': ['video1','video2'],
-    #        'duration':[25,35],
-    #        'specificDuration':[[10,8,5,2],[10,5,15,5]]
-    #    },
-    #    {
-    #        'date': '2023-08-31',
-    #        'totalDuration': 45,
-    #        'categories': ['paraphraseTime', 'sequeTime', 'zhEnTime', 'conversation'],
-    #        'videonames': ['video1'], 
-    #        'duration':[45],
-    #        'specificDuration':[[40, 0, 5, 0]],
-    #    }
-    #]
     evaluations = Evaluation.objects.all().order_by('last_update_time')
     data = []
     # Extract all dates
@@ -404,12 +316,6 @@ def get_statistic(request):
     # Convert list to set to remove duplicates and then convert it back to list
     unique_dates = list(set(dates))
     for unique_date in unique_dates:
-        ## Create datetime objects for the start and end of the day
-        #start_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.min))
-        #end_of_day = timezone.make_aware(datetime.combine(unique_date, dt_time.max))
-
-        ## Use the datetime objects to filter the evaluations
-        #evaluations_on_date = Evaluation.objects.filter(last_update_time__range=(start_of_day, end_of_day))
         evaluations_on_date = Evaluation.objects.filter(last_update_time__date=unique_date)
         categories = ['Paraphrase', 'Seque', 'Zh-En', 'Conversation']
         videonames = []
@@ -466,17 +372,6 @@ def get_statistic(request):
 
 @api_view(['POST'])
 def get_tasks(request):
-    #tasks = {
-    #    "dailyTasks":[
-    #        {"task_id": "D000", "name_en": "Dawn's Blessing", "name_zh": "黎明祝福", "description_en": "First practice of the day", "description_zh": "每日第一次练习", "exp": 5, "completed":7, "total": 15, "isFinish":False},
-    #        {"task_id": "D001", "name_en": "Paraphrase Oracle", "name_zh": "释义神谕", "description_en": "15 minutes of Paraphrase practice", "description_zh": "练习Paraphrase 15分钟", "exp": 5, "completed":7, "total": 15, "isFinish":False},
-    #        {"task_id": "D002", "name_en": "Seque Sorcery", "name_zh": "顺接巫术", "description_en": "15 minutes of Seque practice", "description_zh": "练习Seque 15分钟", "exp": 5, "completed":15, "total": 15, "isFinish":True},
-    #    ],
-    #    "weeklyTasks":[
-    #        {"task_id": "W000", "name_en": "Week of the Phoenix", "name_zh": "凤凰之周", "description_en": "Practicing every day of the week", "description_zh": "一周每天都练习过", "exp": 30, "completed":2, "total": 7, "isFinish":False},
-    #        {"task_id": "W001", "name_en": "Gauntlet of the Griffin", "name_zh": "狮鹫试炼", "description_en": "Completing all daily tasks in a week", "description_zh": "完成一周所有的每日任务", "exp": 100, "completed":7, "total": 21, "isFinish":False},
-    #    ]
-    #}
     def get_or_create_daily_tasks(n):
         # Get current time in UTC
         now_utc = timezone.now()
@@ -570,12 +465,6 @@ def get_tasks(request):
                     time_difference += diff
             res += int((time_difference + (timedelta(minutes=1) if len(filtered_evaluations_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
         return res
-        #time_difference = timedelta()
-        #for current_eval, next_eval in zip(filtered_daily_list, filtered_daily_list[1:]):
-        #            diff = next_eval.last_update_time - current_eval.last_update_time
-        #            if diff <= timedelta(minutes=5):
-        #                time_difference += diff
-        #return int((time_difference + (timedelta(minutes=1) if len(filtered_daily_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
     new_daily_tasks = []
     for daily_task in daily_tasks:
         if daily_task["isFinish"] == True:
@@ -672,8 +561,5 @@ def get_tasks(request):
 def shut_down(request):
     os.system("shutdown /s /t 1") 
 
-def stream_video(request, path):
-    file_path = os.path.join(settings.MEDIA_ROOT, path)
-    return FileResponse(open(file_path, 'rb'), content_type='application/x-mpegURL')
 
 

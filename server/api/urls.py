@@ -14,6 +14,5 @@ urlpatterns = [
     path('get_statistic', views.get_statistic),
     path('get_tasks', views.get_tasks),
     path('shut_down', views.shut_down),
-    path('stream/<str:path>', views.stream_video, name='stream_video'),
     path('', TemplateView.as_view(template_name='/frontend/index.html')),
 ]

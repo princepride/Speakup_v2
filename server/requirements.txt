@@ -4,9 +4,6 @@ djangorestframework==3.14.0
 httpx==0.24.1
 pycaption==2.1.1
 Requests==2.31.0
-torch==2.0.0+cu118
-torchaudio==2.0.0
-transformers==4.27.4
 yt_dlp==2023.3.4
 django-cors-headers==4.0.0
 soundfile==0.12.1
