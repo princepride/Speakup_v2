@@ -1,5 +1,4 @@
 import React from "react";
-import VideoPlayer from './VideoPlayer'
 import YoutubePlayer from "./YoutubePlayer";
 // import Subtitles from './Subtitles'
 import SubtitleTabs from './SubtitleTabs'

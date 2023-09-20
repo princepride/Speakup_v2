@@ -22,8 +22,6 @@ function SelectorArea() {
     const { 
         isMainLiked,
         setIsMainLiked,
-        setVideoUrl, 
-        videoUrl,
         youtubeId, 
         setYoutubeId, 
         setSubtitle, 
@@ -58,8 +56,6 @@ function SelectorArea() {
             downloadYoutube(url)
             .then(data => {
                 setVisible(false)
-                console.log(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
-                setVideoUrl(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
                 setSubSubtitles(data.subSubtitle)
                 setUserSubSubtitles(data.record)
                 setChatGPTResponse(data.evaluation)
@@ -117,18 +113,18 @@ function SelectorArea() {
                         style={{
                             fontSize: "36px",
                             color: "red",
-                            cursor: videoUrl === "" ? "default" : "pointer",
+                            cursor: youtubeId === "" ? "default" : "pointer",
                         }}
-                        onClick={videoUrl === "" ? null : handleHeartClick}
+                        onClick={youtubeId === "" ? null : handleHeartClick}
                     />
                     ) : (
                         <FavoriteBorderIcon
                         style={{
                             fontSize: "36px",
                             color: "#45CFDD",
-                            cursor: videoUrl ===""?"default" : "pointer",
+                            cursor: youtubeId ===""?"default" : "pointer",
                         }}
-                        onClick={videoUrl === "" ? null : handleHeartClick}
+                        onClick={youtubeId === "" ? null : handleHeartClick}
                         />
                     )}
                 </Grid>

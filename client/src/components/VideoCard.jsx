@@ -18,8 +18,7 @@ function VideoCard(props) {
     const { youtube_id, youtube_name, youtube_duration } = props
     const [isLiked, setIsLiked] = useState(true);
     const { 
-        setIsMainLiked,
-        setVideoUrl, 
+        setIsMainLiked, 
         youtubeId,
         setYoutubeId, 
         setSubtitle, 
@@ -64,7 +63,6 @@ function VideoCard(props) {
         downloadYoutube(youtube_id)
         .then(data => {
             setVisible(false)
-            setVideoUrl(data.videoUrl.replace('http://localhost:8000',process.env.REACT_APP_BACKEND_URL))
             setSubSubtitles(data.subSubtitle)
             setUserSubSubtitles(data.record)
             setChatGPTResponse(data.evaluation)

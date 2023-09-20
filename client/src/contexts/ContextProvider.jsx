@@ -7,8 +7,6 @@ const StateContext = createContext();
 export const ContextProvider = ({ children }) => {
 
     const [isMainLiked, setIsMainLiked] = useState(false)
-
-    const [videoUrl, setVideoUrl] = useState('');
     const [youtubeId, setYoutubeId] = useState('');
     const [subtitle, setSubtitle] = useState([]);
     const [currentTime, setCurrentTime] = useState(0);
@@ -27,7 +25,7 @@ export const ContextProvider = ({ children }) => {
     const [timeInterval, setTimeInterval] = useState(1000);
     const [loopIndex, setLoopIndex] = useState(0);
     return (
-        <StateContext.Provider value={{videoUrl, setVideoUrl, youtubeId, setYoutubeId
+        <StateContext.Provider value={{youtubeId, setYoutubeId
         , subtitle, setSubtitle, currentTime, setCurrentTime
         , isSelectSubtitle, setIsSelectSubtitle, subSubtitles
         , setSubSubtitles, subSubtitlesIndex, setSubSubtitlesIndex

@@ -188,7 +188,6 @@ def download_youtube(request):
             # Delete original subtitle file
             os.remove(srt_file)
     youtube = Youtube.objects.get(youtube_id=youtube_url[-11:])
-    video_url = "http://localhost:8000/stream/"+youtube.youtube_name[7:-4] + ".m3u8"
     subtitle = read_file(youtube.subtitle_name.replace(".en.vtt", " processed.en.srt").replace(".zh.vtt", " processed.zh.srt").replace(".zh-TW.vtt", " processed.zh-TW.srt"))
     youtube_id = youtube.youtube_id
     sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True)
@@ -206,7 +205,7 @@ def download_youtube(request):
     bookmark = Bookmark.objects.filter(youtube_id=youtube_id)
     if bookmark.exists():
         is_bookmark = True
-    return Response({"videoUrl":video_url,"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle, "isBookmark":is_bookmark}, status=200)
+    return Response({"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle, "isBookmark":is_bookmark}, status=200)
 
 @api_view(['POST'])
 def speech_recognition(request):
