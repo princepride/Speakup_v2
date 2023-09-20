@@ -16,6 +16,7 @@ from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 import openai
 import wave
+from pydub import AudioSegment
 
 with open(r'config.json') as file:
     json_data = json.load(file)
