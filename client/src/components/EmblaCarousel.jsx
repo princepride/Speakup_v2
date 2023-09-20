@@ -197,7 +197,7 @@ const EmblaCarousel = (props) => {
                     </div>
                 </div>
                 <div className="embla__slide">
-                    <GitHubActivityGraph values={data.map(item=>({date: new Date(item.date),count:Math.ceil(item.totalDuration/15)}))} setDate={setDate}/>
+                    <GitHubActivityGraph values={data.map(item=>({date: new Date(item.date),totalDuration:item.totalDuration}))} setDate={setDate}/>
                     <div style={{display:"flex",flexDirection:"row"}}>
                         <ChartContainer1>
                             <Chart 
