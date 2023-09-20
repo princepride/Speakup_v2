@@ -51,7 +51,6 @@ class FinalChatGPT:
 
     def response(self, model, prompt) -> str:
         if self.type == 'access_token':
-            # print(settings.JSON_DATA["ACCESS_TOKENS"])
             chatGPT = ChatGPT(json_data["ACCESS_TOKENS"])
             result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
             last_item = None
@@ -96,7 +95,6 @@ def download_youtube(request):
         # Wait for the download to finish
         while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh) and not os.path.exists(subtitle_file_zh_TW):
             time.sleep(1)
-        print("check", os.path.exists(subtitle_file_zh_TW))
         if os.path.exists(subtitle_file_en):
             new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en)
             new_youtube_video.save()
@@ -106,7 +104,6 @@ def download_youtube(request):
 
             srt_file = subtitle_file_en.replace('.vtt', '.srt')
             with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
-                print(captions)
                 f.write(SRTWriter().write(captions))
 
             os.remove(subtitle_file_en)
@@ -125,7 +122,6 @@ def download_youtube(request):
 
             srt_file = subtitle_file_zh.replace('.vtt', '.srt')
             with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
-                print(captions)
                 f.write(SRTWriter().write(captions))
 
             os.remove(subtitle_file_zh)
@@ -143,7 +139,6 @@ def download_youtube(request):
 
             srt_file = subtitle_file_zh_TW.replace('.vtt', '.srt')
             with open(srt_file, 'w', encoding='utf-8', errors='replace') as f:
-                print(captions)
                 f.write(SRTWriter().write(captions))
 
             os.remove(subtitle_file_zh_TW)
@@ -161,9 +156,7 @@ def download_youtube(request):
     evaluation_data = []
     for data in sub_subtitle_data:
         record_results = Record.objects.filter(sub_subtitle_id=data['id'])
-        # print(record_results)
         evaluation_results = Evaluation.objects.filter(sub_subtitle_id=data['id'])
-        # print(evaluation_results)
         record_data.append([{'id':record_result.id, 'text':record_result.text} for record_result in record_results])
         evaluation_data.append([{'id':evaluation_result.id, 'text':evaluation_result.text} for evaluation_result in evaluation_results])
     is_bookmark = False
@@ -250,7 +243,6 @@ def insert_sub_subtitle(request):
 @api_view(['POST'])
 def delete_sub_subtitle(request):
     sub_subtitle_id = request.data.get('sub_subtitle_id')
-    print(sub_subtitle_id)
     if not sub_subtitle_id:
         return Response({"error": "No id provided"}, status=400)
 
@@ -346,7 +338,6 @@ def get_statistic(request):
                     diff = next_eval.last_update_time - current_eval.last_update_time
                     if diff <= timedelta(minutes=5):
                         time_difference += diff
-                # print(unique_date, category, filtered_evaluations_list)
                 specificDuration[videonames.index(videoname)][categories.index(category)] = int((time_difference + (timedelta(minutes=1) if len(filtered_evaluations_list) > 0 else timedelta(minutes=0))).total_seconds() / 60)
         duration = [0] * len(videonames)
         for i in range(len(videonames)):
@@ -360,7 +351,6 @@ def get_statistic(request):
             'duration':duration,
             'specificDuration':specificDuration
         })
-    print(data)
     extraExp = 0
     filter_daily_tasks = DailyTask.objects.filter(isFinish = True)
     exp_daily = filter_daily_tasks.aggregate(Sum('exp'))['exp__sum']
@@ -381,9 +371,7 @@ def get_tasks(request):
 
         # Get the date part
         date_today = now_local.date()
-        print('date_today',date_today)
         daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
-        print('daily_tasks',daily_tasks)
         if not daily_tasks.exists():
             generated_tasks = generate_daily_tasks(n)
             for task in generated_tasks:

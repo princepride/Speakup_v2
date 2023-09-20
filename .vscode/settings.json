@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/2a789873-1de3-4cbf-a2b6-9239e9335a9f/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/speak-up-online",
+    "appService.deploySubpath": "server"
+}
