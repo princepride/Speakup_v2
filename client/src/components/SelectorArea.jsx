@@ -20,6 +20,7 @@ function SelectorArea() {
     const [url, setUrl] = useState("");
 
     const { 
+        userId,
         isMainLiked,
         setIsMainLiked,
         youtubeId, 
@@ -35,10 +36,10 @@ function SelectorArea() {
 
         const handleHeartClick = () => {
             if(isMainLiked) {
-                removeBookmark(youtubeId)
+                removeBookmark(userId, youtubeId)
             }
             else {
-                addBookmark(youtubeId)
+                addBookmark(userId, youtubeId)
             }
             setIsMainLiked((prevIsLiked) => !prevIsLiked);
         };
@@ -53,7 +54,7 @@ function SelectorArea() {
             setVisible(true);
             setLoopBody(["Downloading","Downloading.","Downloading..","Downloading..."]);
             setLoopIndex(0);
-            downloadYoutube(url)
+            downloadYoutube(userId, url)
             .then(data => {
                 setVisible(false)
                 setSubSubtitles(data.subSubtitle)

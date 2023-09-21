@@ -5,6 +5,7 @@ import { insertSubSubtitle } from '../utils/connect.js'
 
 function SelectSubtitleButton() {
     const {
+        userId,
         isSelectSubtitle, 
         setIsSelectSubtitle,
         subtitle , 
@@ -42,7 +43,7 @@ function SelectSubtitleButton() {
                     endTime = tempSubtitle[i].endTime
                 }
             }
-            insertSubSubtitle(youtubeId, startTime, endTime, text)
+            insertSubSubtitle(userId, youtubeId, startTime, endTime, text)
             .then(data => {
                 setSubSubtitles([...subSubtitles,{"id":data.id, "startTime": data.startTime, "endTime": data.endTime,"text": data.text}])
                 setUserSubSubtitles([...userSubSubtitles, []])

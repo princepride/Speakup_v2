@@ -51,7 +51,7 @@ function TaskBlock(props) {
     const { title, text, completed, total, exp, isFinish, unit } = props;
     const handleClick = (isFinish) => {
         if(!isFinish) {
-            navigate("/");
+            navigate("/main");
         }
     }
     return (

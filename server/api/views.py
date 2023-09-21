@@ -86,7 +86,7 @@ def login(request):
 @permission_classes([IsAuthenticated])
 def download_youtube(request):
     youtube_url = request.data.get('youtube_url', None)
-
+    user_id = request.data.get('user_id', None)
     if youtube_url is None:
         return Response({"error": "URL not provided"}, status=400)
     
@@ -114,7 +114,7 @@ def download_youtube(request):
         while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh) and not os.path.exists(subtitle_file_zh_TW):
             time.sleep(1)
         if os.path.exists(subtitle_file_en):
-            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en)
+            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en, user_id=user_id)
             new_youtube_video.save()
             # Convert EN VTT to EN SRT
             with open(subtitle_file_en, 'r', encoding='utf-8', errors='replace') as f:
@@ -132,7 +132,7 @@ def download_youtube(request):
             os.remove(srt_file)
 
         elif os.path.exists(subtitle_file_zh):
-            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh)
+            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh, user_id=user_id)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
             with open(subtitle_file_zh, 'r', encoding='utf-8', errors='replace') as f:
@@ -149,7 +149,7 @@ def download_youtube(request):
             # Delete original subtitle file
             os.remove(srt_file)
         elif os.path.exists(subtitle_file_zh_TW):
-            new_youtube_video = Youtube.objects.create(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh_TW)
+            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh_TW, user_id=user_id)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
             with open(subtitle_file_zh_TW, 'r', encoding='utf-8', errors='replace') as f:
@@ -190,6 +190,7 @@ def speech_recognition(request):
     request_type = request.data.get('request_type', None)
     sub_subtitle_id = request.data.get('sub_subtitle_id', None)
     id = request.data.get('id', None)
+    user_id = request.data.get('user_id', None)
     if 'audio' not in request.FILES:
             return Response({'error': 'No audio file provided'}, status=400)
         
@@ -218,7 +219,7 @@ def speech_recognition(request):
         record.last_update_time = timezone.now()
         record.save()
     elif request_type == 'insert':
-        record = Record(sub_subtitle_id=sub_subtitle_id, text=full_transcription, attempt_times=1, duration=duration)
+        record = Record(sub_subtitle_id=sub_subtitle_id, text=full_transcription, attempt_times=1, duration=duration, user_id = user_id)
         record.save()
     return Response({'transcription': full_transcription, 'id': record.id}, status=200)
 
@@ -235,6 +236,7 @@ def chatGPT(request):
     mission_type = request.data.get('mission_type', None)
     prompt = request.data.get('prompt', None)
     model = request.data.get('model', None)
+    user_id = request.data.get('user_id', None)
     result = chatGPT.response(model=model, prompt=prompt)
     # result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
 
@@ -248,7 +250,7 @@ def chatGPT(request):
         evaluation.save()
         return Response({"id": evaluation.id, "text": result}, status=200)
     elif request_type == 'insert':
-        evaluation = Evaluation(sub_subtitle_id=sub_subtitle_id, mission_type=mission_type, model=model, text=result)
+        evaluation = Evaluation(sub_subtitle_id=sub_subtitle_id, mission_type=mission_type, model=model, text=result, user_id=user_id)
         evaluation.save()
         return Response({ "id": evaluation.id, "text": result}, status=200)
 
@@ -260,7 +262,8 @@ def insert_sub_subtitle(request):
     start_time = request.data.get('start_time')
     end_time = request.data.get('end_time')
     text = request.data.get('text')
-    sub_subtitle = SubSubtitle(youtube_id=youtube_id, start_time=start_time, end_time=end_time, text=text, condition=True)
+    user_id = request.data.get('user_id')
+    sub_subtitle = SubSubtitle(youtube_id=youtube_id, start_time=start_time, end_time=end_time, text=text, condition=True, user_id = user_id)
     sub_subtitle.save()
     return Response({ "id": sub_subtitle.id, "startTime":start_time, "endTime":end_time, "text": text}, status=200)
 
@@ -299,12 +302,12 @@ def remove_bookmark(request):
 @permission_classes([IsAuthenticated])
 def add_bookmark(request):
     youtube_id = request.data.get('youtube_id')
-    
+    user_id = request.data.get('user_id')
     if not youtube_id:
         return Response({"error": "Youtube ID is required"}, status=400)
     
     try:
-        bookmark = Bookmark.objects.create(youtube_id=youtube_id)
+        bookmark = Bookmark.objects.create(youtube_id=youtube_id, user_id=user_id)
         return Response({"success": f"Bookmark with id {bookmark.youtube_id} has been created"}, status=200)
     except Exception as e:
         return Response({"error": str(e)}, status=500)
@@ -398,6 +401,7 @@ def get_statistic(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_tasks(request):
+    user_id = request.data.get('user_id')
     def get_or_create_daily_tasks(n):
         # Get current time in UTC
         now_utc = timezone.now()
@@ -420,6 +424,7 @@ def get_tasks(request):
                     exp=task["exp"],
                     total = task["total"],
                     isFinish = task["isFinish"],
+                    user_id = user_id
                 )
         daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
         return [model_to_dict(task) for task in daily_tasks]
@@ -449,6 +454,7 @@ def get_tasks(request):
                     exp=task["exp"],
                     total = task["total"],
                     isFinish = task["isFinish"],
+                    user_id = user_id
                 )
         weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
         return [model_to_dict(task) for task in weekly_tasks]

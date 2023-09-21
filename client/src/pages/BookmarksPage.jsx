@@ -4,6 +4,7 @@ import { Grid } from "@mui/material";
 import VideoCard from '../components/VideoCard';
 import { selectAllBookmarks } from '../utils/connect'
 import { secondToString2 } from '../utils/timeConvert'
+import { useStateContext } from '../contexts/ContextProvider';
 
 const StyledContainer = styled.div`
     display: 'flex';
@@ -30,11 +31,12 @@ const TextStyle = styled.div`
 function BookmarksPage() {
 
     const [bookMarks, setBookMarks] = useState([]);
+    const { userId } = useStateContext();
 
     useEffect(() => {
         const fetchBookmarks = async () => {
             try {
-                const bookmarksData = await selectAllBookmarks();
+                const bookmarksData = await selectAllBookmarks(userId);
                 setBookMarks(bookmarksData);
             } catch(error) {
                 console.error(error);

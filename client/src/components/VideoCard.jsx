@@ -18,6 +18,7 @@ function VideoCard(props) {
     const { youtube_id, youtube_name, youtube_duration } = props
     const [isLiked, setIsLiked] = useState(true);
     const { 
+        userId,
         setIsMainLiked, 
         youtubeId,
         setYoutubeId, 
@@ -45,13 +46,13 @@ function VideoCard(props) {
 
     const handleHeartClick = () => {
         if(isLiked) {
-            removeBookmark(youtube_id)
+            removeBookmark(userId, youtube_id)
             if(youtube_id === youtubeId) {
                 setIsMainLiked(false)
             }
         }
         else {
-            addBookmark(youtube_id)
+            addBookmark(userId, youtube_id)
             if(youtube_id === youtubeId) {
                 setIsMainLiked(true)
             }
@@ -60,7 +61,7 @@ function VideoCard(props) {
     };
 
     const navigateToMain = () => {
-        downloadYoutube(youtube_id)
+        downloadYoutube(userId, youtube_id)
         .then(data => {
             setVisible(false)
             setSubSubtitles(data.subSubtitle)

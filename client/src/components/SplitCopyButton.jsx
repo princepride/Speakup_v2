@@ -18,6 +18,7 @@ export default function SplitButton() {
   const anchorRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const {
+    userId,
     subSubtitles, 
     subSubtitlesIndex, 
     userSubSubtitles, 
@@ -56,7 +57,7 @@ const handleClick = async () => {
         //const id = chatGPTResponse[subSubtitlesIndex][chatGPTResponse[subSubtitlesIndex].length-1].id
         const sub_subtitle_id = subSubtitles[subSubtitlesIndex].id
         const mission_type = copy_button_config[selectedIndex].button_name
-        chatGPT('insert', 0, sub_subtitle_id, mission_type, model, promptText)
+        chatGPT(userId, 'insert', 0, sub_subtitle_id, mission_type, model, promptText)
         .then(data => {
             setVisible(false);
             const newChatGPTResponse = [...chatGPTResponse]
@@ -71,7 +72,7 @@ const handleClick = async () => {
         const id = chatGPTResponse[subSubtitlesIndex][chatGPTResponse[subSubtitlesIndex].length-1].id
         const sub_subtitle_id = subSubtitles[subSubtitlesIndex].id
         const mission_type = copy_button_config[selectedIndex].button_name
-        chatGPT('update', id, sub_subtitle_id, mission_type, model, promptText)
+        chatGPT(userId, 'update', id, sub_subtitle_id, mission_type, model, promptText)
         .then(data => {
             setVisible(false);
             const newChatGPTResponse = [...chatGPTResponse]

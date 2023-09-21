@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import login_video from "../assets/videos/login_video.mp4";
@@ -7,11 +7,16 @@ import './LoginPage.sass';
 
 function LoginPage() {
     const listElement = useRef(null);
-    const { setLogin } = useStateContext();
+    const { setUserId } = useStateContext();
     const navigate = useNavigate();
     const registerText = "hello1";
     const loginText = "Salute to the great Wang Zhipeng.";
-    const dashboardUrl = "";
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+    });
 
     const handleSignup = () => {
         listElement.current.classList.remove('bounceRight');
@@ -35,11 +40,11 @@ function LoginPage() {
         .then(data => {
             document.querySelector('#login-username').value=""
             document.querySelector('#login-password').value=""
-            if(data == "error") {
+            if(data === "error") {
                 alert("Wrong username or password!")
             }
             else {
-                const id = data
+                setUserId(data)
                 navigate('/main');
             }
         })
@@ -52,17 +57,21 @@ function LoginPage() {
 
     return (
         <section className="user">
-            <div style={{ position: 'relative', width: '100%', height: '100%' }}>
-                <video
-                    src={login_video}
-                    type="video/mp4"
-                    loop
-                    controls={false}
-                    muted
-                    autoPlay
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-            </div>
+            {
+                (!isMobile) &&
+                <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+                    <video
+                        src={login_video}
+                        type="video/mp4"
+                        loop
+                        controls={false}
+                        muted
+                        autoPlay
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                </div>
+            }
+
             <div className="user_options-container">
                 <div className="user_options-text">
                     <div className="user_options-unregistered">

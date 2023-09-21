@@ -11,10 +11,11 @@ const getHeaders = () => {
     return headers
 }
 
-export const downloadYoutube = async (youtube_url) => 
+export const downloadYoutube = async (user_id, youtube_url) => 
 {
     const url = process.env.REACT_APP_BACKEND_URL + '/download-youtube';
     const data = {
+        user_id: user_id,
         youtube_url: youtube_url,
     };
     try {
@@ -25,7 +26,7 @@ export const downloadYoutube = async (youtube_url) =>
     }
 }
 
-export const speechRecognition = (audioBlob, request_type, sub_subtitle_id, id) =>
+export const speechRecognition = (user_id, audioBlob, request_type, sub_subtitle_id, id) =>
 {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -36,6 +37,7 @@ export const speechRecognition = (audioBlob, request_type, sub_subtitle_id, id) 
     const formData = new FormData();
     formData.append('audio', audioBlob);
     formData.append('request_type', request_type);
+    formData.append('user_id', user_id)
     formData.append('sub_subtitle_id', sub_subtitle_id);
     formData.append('id', id);
     return Axios.post(url, formData, {
@@ -51,9 +53,10 @@ export const speechRecognition = (audioBlob, request_type, sub_subtitle_id, id) 
         });
 }
 
-export const chatGPT = (request_type, id, sub_subtitle_id, mission_type, model, prompt) => {
+export const chatGPT = (user_id, request_type, id, sub_subtitle_id, mission_type, model, prompt) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/chatGPT';
     const data = {
+        user_id: user_id,
         request_type: request_type,
         id: id,
         sub_subtitle_id: sub_subtitle_id,
@@ -70,9 +73,10 @@ export const chatGPT = (request_type, id, sub_subtitle_id, mission_type, model, 
         });
     }
 
-export const insertSubSubtitle = async (youtube_id, start_time, end_time, text) => {
+export const insertSubSubtitle = async (user_id, youtube_id, start_time, end_time, text) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/insert-sub-subtitle'
     const data = {
+        user_id: user_id,
         youtube_id: youtube_id,
         start_time: start_time,
         end_time: end_time,
@@ -86,9 +90,10 @@ export const insertSubSubtitle = async (youtube_id, start_time, end_time, text) 
     }
 }
 
-export const deleteSubSubtitle = async (sub_subtitle_id) => {
+export const deleteSubSubtitle = async (user_id, sub_subtitle_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/delete-sub-subtitle'
     const data = {
+        user_id: user_id,
         sub_subtitle_id: sub_subtitle_id,
     }
     try {
@@ -99,9 +104,10 @@ export const deleteSubSubtitle = async (sub_subtitle_id) => {
     }
 }
 
-export const removeBookmark = async (youtube_id) => {
+export const removeBookmark = async (user_id, youtube_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/remove_bookmark'
     const data = {
+        user_id: user_id,
         youtube_id: youtube_id
     }
     try {
@@ -112,9 +118,10 @@ export const removeBookmark = async (youtube_id) => {
     }
 }
 
-export const addBookmark = async (youtube_id) => {
+export const addBookmark = async (user_id, youtube_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/add_bookmark'
     const data = {
+        user_id: user_id,
         youtube_id: youtube_id
     }
     try {
@@ -125,9 +132,11 @@ export const addBookmark = async (youtube_id) => {
     }
 }
 
-export const selectAllBookmarks = async () => {
+export const selectAllBookmarks = async (user_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/select_all_bookmarks'
-    const data = {}
+    const data = {
+        user_id: user_id,
+    }
     try {
         const response = await Axios.post(url, data, {headers: getHeaders()})
         return response.data
@@ -136,9 +145,11 @@ export const selectAllBookmarks = async () => {
     }
 }
 
-export const getStatistic = async () => {
+export const getStatistic = async (user_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/get_statistic'
-    const data = {}
+    const data = {
+        user_id: user_id,
+    }
     try {
         const response = await Axios.post(url, data, {headers: getHeaders()})
         return response.data
@@ -147,9 +158,11 @@ export const getStatistic = async () => {
     }
 }
 
-export const getTasks = async () => {
+export const getTasks = async (user_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/get_tasks'
-    const data = {}
+    const data = {
+        user_id: user_id
+    }
     try {
         const response = await Axios.post(url, data, {headers: getHeaders()})
         return response.data

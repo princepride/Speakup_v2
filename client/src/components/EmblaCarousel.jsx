@@ -14,6 +14,7 @@ import {dateFormat} from '../utils/timeConvert'
 import { getStatistic } from '../utils/connect.js'
 import { calculateExpEn } from '../utils/algorithm'
 import ProgressBar from '../components/ProgressBar'
+import { useStateContext } from '../contexts/ContextProvider';
 
 const UserCardContainer = styled.div`
     height: 35vh; 
@@ -113,14 +114,14 @@ const EmblaCarousel = (props) => {
     const { slides, options } = props
     const [emblaRef, emblaApi] = useEmblaCarousel(options, [EmblaCarouselAutoplay()])
     const [date, setDate] = useState(new Date())
-
+    const { userId } = useStateContext();
     const [data,setData] = useState([]);
     const [extraExp, setExtraExp] = useState(0);
 
     useEffect(() => {
         const fetchStatisticData = async () => {
             try {
-                const StatisticData = await getStatistic();
+                const StatisticData = await getStatistic(userId);
                 setData(StatisticData.data);
                 setExtraExp(StatisticData.extraExp);
             } catch(error) {

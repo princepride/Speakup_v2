@@ -29,6 +29,7 @@ function Recorder() {
     const [audioUrl, setAudioUrl] = useState(null);
     const audioPlayerRef = useRef(null);
     const { 
+      userId,
       tabIndex, 
       subSubtitles, 
       subSubtitlesIndex, 
@@ -63,7 +64,7 @@ function Recorder() {
             if(userSubSubtitles[subSubtitlesIndex].length > chatGPTResponse[subSubtitlesIndex].length) {
               const sub_subtitle_id = subSubtitles[subSubtitlesIndex].id
               const id = userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].id
-              speechRecognition(audioBlob, 'update', sub_subtitle_id, id)
+              speechRecognition(userId, audioBlob, 'update', sub_subtitle_id, id)
               .then(data => {
                 setVisible(false);
                 let newArray = [...userSubSubtitles]; 
@@ -77,7 +78,7 @@ function Recorder() {
             else {
               const sub_subtitle_id = subSubtitles[subSubtitlesIndex].id
               //const id = userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].id
-              speechRecognition(audioBlob, 'insert', sub_subtitle_id, 0)
+              speechRecognition(userId, audioBlob, 'insert', sub_subtitle_id, 0)
               .then(data => {
                 setVisible(false);
                 let newArray = [...userSubSubtitles];

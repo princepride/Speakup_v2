@@ -6,6 +6,7 @@ import { deleteSubSubtitle } from '../utils/connect.js'
 function DeleteSubSubtitleButton() {
     const [buttonText, setButtonText] = useState('Delete');
     const {
+        userId,
         subSubtitles, 
         setSubSubtitles, 
         subSubtitlesIndex, 
@@ -24,7 +25,7 @@ function DeleteSubSubtitleButton() {
                 setButtonText('Delete');
             }, 3000);
         } else {
-            deleteSubSubtitle(subSubtitles[subSubtitlesIndex].id)
+            deleteSubSubtitle(userId, subSubtitles[subSubtitlesIndex].id)
             .then(data => {
                 console.log(data)
             })
