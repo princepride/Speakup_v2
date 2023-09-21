@@ -22,10 +22,13 @@ const UserSubSubtitleButton = (props) => {
     const [editedText, setEditedText] = useState(text);
 
     const textToSpeech = (text) => {
+        const match = text.match(/^[^\u4e00-\u9fa5]*/);
+        const newText = match ? match[0] : '';
+    
         var msg = new SpeechSynthesisUtterance();
         var voices = window.speechSynthesis.getVoices();
         msg.voice = voices[0]; // 注意: 一些浏览器可能需要稍微等待语音列表加载完毕
-        msg.text = text;
+        msg.text = newText;
         speechSynthesis.speak(msg);
     }
 

@@ -18,7 +18,7 @@ import SettingsPage from './SettingsPage'
 const MainContainer = styled(Box)`
     display: flex;
     flex-direction: row;
-    height: 97vh;
+    height: 100vh;
 
     @media screen and (max-width: 1080px) {
         flex-direction: column;
@@ -30,7 +30,7 @@ const NavigationContainer = styled(Box)`
     background-repeat: no-repeat;
     background-position: center;
     color: #fff;
-    width: 3%;
+    width: 3vw;
 
     @media screen and (max-width: 1080px) {
         width: 100%;

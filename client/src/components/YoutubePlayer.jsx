@@ -5,6 +5,13 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 20px;
+  height: 80vh;
+  width: 80vw;
+
+  @media screen and (max-width: 1080px) {
+    width: 92vw;
+    height: 25vh;
+}
 `;
 
 const YoutubePlayer = () => {
@@ -12,8 +19,8 @@ const YoutubePlayer = () => {
   const playerRef = useRef(null);
 
   const opts = {
-    height: '520',
-    width: '860',
+    height: '100%',
+    width: '100%',
     playerVars: {
       autoplay: 0,
     },
@@ -51,12 +58,13 @@ const YoutubePlayer = () => {
 
   return (
     <Container>
-    <YouTube 
-      videoId={youtubeId}
-      opts={opts}
-      onReady={handleReady}
-      onStateChange={handleStateChange}
-    />
+        <YouTube 
+          style={{height:"inherit"}}
+          videoId={youtubeId}
+          opts={opts}
+          onReady={handleReady}
+          onStateChange={handleStateChange}
+        />
     </Container>
   );
 };

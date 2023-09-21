@@ -6,15 +6,17 @@ import Subtitle from "./Subtitle";
 import SubtitleSelector from "./SubtitleSelector";
 
 const StyledContainer = styled.div`
-    width: 40%;
+    width: 17vw;
+    height: 80vh;
 
     @media screen and (max-width: 1080px) {
-        width: 100%;
-        height: 52vh;
+        margin-top: 20px;
+        width: 92vw;
+        height: 56vh;
     }
 `;
 
-function Subtitles() {
+const SubtitleTabs = () => {
     const { subtitle, tabIndex, setTabIndex, subSubtitles } = useStateContext();
 
     const handleTabChange = (event, newValue) => {
@@ -34,4 +36,4 @@ function Subtitles() {
 
 }
 
-export default Subtitles
+export default SubtitleTabs

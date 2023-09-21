@@ -5,9 +5,15 @@ import Recorder from './Recorder';
 import SelectSubtitleButton from "./SelectSubtitleButton"
 
 const StyledContainer = styled.div`
-    margin-top: 1rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
+  display: 'flex';
+  align-items: 'center';
+  margin-top: 2rem;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  width: 96vw;
+  @media screen and (max-width: 1080px) {
+      width: 92vw;
+  }
 `;
 
 

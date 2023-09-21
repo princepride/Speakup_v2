@@ -9,7 +9,6 @@ const StyledContainer = styled.div`
     margin-top: 1rem;
     margin-left: 2rem;
     margin-right: 2rem;
-    height: 540px;
 
     @media screen and (max-width: 1080px) {
       flex-direction: column;
