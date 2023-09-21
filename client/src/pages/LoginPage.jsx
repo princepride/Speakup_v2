@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import login_video from "../assets/videos/login_video.mp4";
+import { login } from "../utils/connect.js"
 import './LoginPage.sass';
 
 function LoginPage() {
@@ -26,12 +27,22 @@ function LoginPage() {
         listElement.current.classList.add('bounceRight');
     };
 
-    const sumbitLoginForm = (event) => {
+    const sumbitLoginForm = async (event) => {
         event.preventDefault();
-        const loginEmail = document.querySelector('#login-email').value;
-        const loginPassword = document.querySelector('#login-password').value;
-        setLogin(true);
-        navigate('/'+dashboardUrl);
+        const username = document.querySelector('#login-username').value;
+        const password = document.querySelector('#login-password').value;
+        await login(username, password)
+        .then(data => {
+            document.querySelector('#login-username').value=""
+            document.querySelector('#login-password').value=""
+            if(data == "error") {
+                alert("Wrong username or password!")
+            }
+            else {
+                const id = data
+                navigate('/main');
+            }
+        })
     };
 
     const sumbitSignupForm = () => {
@@ -73,7 +84,7 @@ function LoginPage() {
                         <form className="forms_form">
                         <fieldset className="forms_fieldset">
                             <div className="forms_field">
-                            <input placeholder="Email / User Name" className="forms_field-input" id="login-email" required autoFocus />
+                            <input placeholder="User Name" className="forms_field-input" id="login-username" required autoFocus />
                             </div>
                             <div className="forms_field">
                             <input type="password" placeholder="Password" className="forms_field-input" id="login-password" required />

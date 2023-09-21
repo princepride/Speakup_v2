@@ -46,9 +46,17 @@ INSTALLED_APPS = [
 
     #'sslserver',
     "rest_framework",
+    "rest_framework.authtoken",
     "corsheaders",
     "base",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  # <-- 这里
+    ],
+}
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -143,6 +151,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOW_HEADERS = [
     'content-type',
     'ngrok-skip-browser-warning',
+    'authorization',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

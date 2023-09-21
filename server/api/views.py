@@ -8,7 +8,8 @@ import os
 from util.process_subtitle import process_subtitle
 from util.api import ChatGPT
 import json
-from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask, UserInformation
+from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
+from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Sum
 from rest_framework.authtoken.models import Token
@@ -17,6 +18,9 @@ from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
 import openai
 import wave
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
 
 with open(r'config.json') as file:
     json_data = json.load(file)
@@ -70,14 +74,16 @@ def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
     # 验证用户名和密码
-    user = UserInformation.objects.filter(username=username, password=password).first()
+    user = User.objects.filter(username=username, password=password).first()
     if user:
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'id':user['id']}, status=200)
+        return Response({'token': token.key, 'userId': user.id}, status=200)
     else:
         return Response({"error": "User name or password error!"}, status=400)
     
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def download_youtube(request):
     youtube_url = request.data.get('youtube_url', None)
 
@@ -178,6 +184,8 @@ def download_youtube(request):
     return Response({"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle, "isBookmark":is_bookmark}, status=200)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def speech_recognition(request):
     request_type = request.data.get('request_type', None)
     sub_subtitle_id = request.data.get('sub_subtitle_id', None)
@@ -216,6 +224,8 @@ def speech_recognition(request):
 
 # model: gpt-4, gpt-3.5-turbo, text-moderation-playground
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def chatGPT(request):
     # chatGPT = ChatGPT(access_tokens=settings.JSON_DATA["ACCESS_TOKENS"])
     chatGPT = FinalChatGPT(settings.JSON_DATA["CHATGPT_TYPE"])
@@ -243,6 +253,8 @@ def chatGPT(request):
         return Response({ "id": evaluation.id, "text": result}, status=200)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def insert_sub_subtitle(request):
     youtube_id = request.data.get('youtube_id')
     start_time = request.data.get('start_time')
@@ -253,6 +265,8 @@ def insert_sub_subtitle(request):
     return Response({ "id": sub_subtitle.id, "startTime":start_time, "endTime":end_time, "text": text}, status=200)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def delete_sub_subtitle(request):
     sub_subtitle_id = request.data.get('sub_subtitle_id')
     if not sub_subtitle_id:
@@ -269,6 +283,8 @@ def delete_sub_subtitle(request):
         return Response({"error": "SubSubtitle with this id does not exist"}, status=404)
     
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def remove_bookmark(request):
     youtube_id = request.data.get('youtube_id')
     bookmarks = Bookmark.objects.filter(youtube_id=youtube_id)
@@ -279,6 +295,8 @@ def remove_bookmark(request):
         return Response({"error": "Bookmark with this id does not exist"}, status=404)
     
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def add_bookmark(request):
     youtube_id = request.data.get('youtube_id')
     
@@ -292,6 +310,8 @@ def add_bookmark(request):
         return Response({"error": str(e)}, status=500)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def select_all_bookmarks(request):
     bookmarks = Bookmark.objects.all()
     response = []
@@ -311,6 +331,8 @@ def select_all_bookmarks(request):
     return Response(response, status=200)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_statistic(request):
     evaluations = Evaluation.objects.all().order_by('last_update_time')
     data = []
@@ -373,6 +395,8 @@ def get_statistic(request):
     return Response({"data": data, "extraExp": extraExp}, status=200)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def get_tasks(request):
     def get_or_create_daily_tasks(n):
         # Get current time in UTC
@@ -558,6 +582,8 @@ def get_tasks(request):
     return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_tasks}}, status=200)
 
 @api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def shut_down(request):
     os.system("shutdown /s /t 1") 
 

@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path('login', views.login),
     path('download-youtube', views.download_youtube),
     path('speech-recognition', views.speech_recognition),
     path('chatGPT', views.chatGPT),
