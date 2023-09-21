@@ -1,10 +1,16 @@
 from django.db import models
 
+class UserInformation(models.Model):
+    user_id = models.IntegerField(primary_key=True)
+    user_name = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    password = models.CharField(max_length=255)
 class Youtube(models.Model): 
     youtube_id = models.CharField(max_length=255,primary_key=True)
     youtube_name = models.CharField(max_length=255)
     youtube_duration = models.IntegerField()
     subtitle_name = models.CharField(max_length=255)
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -21,6 +27,7 @@ class SubSubtitle(models.Model):
     end_time = models.FloatField()
     text = models.TextField()
     condition = models.BooleanField()
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -36,6 +43,7 @@ class Record(models.Model):
     text = models.TextField()
     attempt_times = models.IntegerField()
     duration = models.FloatField()
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -53,6 +61,7 @@ class Evaluation(models.Model):
     text = models.TextField()
     score = models.FloatField(null=True)
     difficulty = models.FloatField(null=True)
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
     class Meta:
@@ -64,6 +73,7 @@ class Evaluation(models.Model):
     
 class Bookmark(models.Model):
     youtube_id = models.CharField(max_length=255)
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
@@ -84,6 +94,7 @@ class DailyTask(models.Model):
     exp = models.IntegerField()
     total = models.IntegerField()
     isFinish = models.BooleanField()
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
     
@@ -103,6 +114,7 @@ class WeeklyTask(models.Model):
     exp = models.IntegerField()
     total = models.IntegerField()
     isFinish = models.BooleanField()
+    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
     

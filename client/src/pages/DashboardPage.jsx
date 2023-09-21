@@ -9,9 +9,11 @@ import SpeakUpIcon from '@mui/icons-material/SettingsVoice';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import StatisticIcon from '@mui/icons-material/Equalizer';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import SettingsIcon from '@mui/icons-material/Settings';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import TasksPage from './TasksPage';
 import { shutDown } from '../utils/connect'
+import SettingsPage from './SettingsPage'
 
 const MainContainer = styled(Box)`
     display: flex;
@@ -297,9 +299,15 @@ const DashboardPage = () => {
                         </Tooltip>
                     </NavigationItem>
                     <div className="autoFill" />
+                    <NavigationItem component={Link} to="/settings">
+                        <Tooltip title="Settings">
+                            <IconButton style={{ color : location.pathname === '/settings' ? "#45CFDD" : "gray" }}>
+                                <SettingsIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </NavigationItem>
                     <NavigationItem>
                         <Tooltip title="Shut down">
-                            {/*<IconButton style={{ color : "#F31559" }} onClick={shutDown}>*/}
                             <IconButton style={{ color : "#F31559" }} onClick = {() => setShutDownSelectorVisible(true)}>
                                 <PowerSettingsNewIcon />
                             </IconButton>
@@ -310,10 +318,11 @@ const DashboardPage = () => {
             <ContentContainer>
                 <Outlet />
                 <Routes>
-                    <Route path="/main" element={<MainPage />} />
+                    <Route path="/" element={<MainPage />} />
                     <Route path="/bookmarks" element={<BookmarksPage />} />
                     <Route path="/statistic" element={<StatisticPage />} />
                     <Route path='/tasks' element={<TasksPage />} />
+                    <Route path='/settings' element={<SettingsPage />} />
                 </Routes>
             </ContentContainer>
         </MainContainer>

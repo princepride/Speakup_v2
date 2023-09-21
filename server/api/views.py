@@ -8,9 +8,10 @@ import os
 from util.process_subtitle import process_subtitle
 from util.api import ChatGPT
 import json
-from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
+from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask, UserInformation
 from django.utils import timezone
 from django.db.models import Sum
+from rest_framework.authtoken.models import Token
 from datetime import timedelta
 from django.forms.models import model_to_dict
 from util.algorithm import generate_daily_tasks,generate_weekly_tasks
@@ -64,7 +65,18 @@ class FinalChatGPT:
         else:
             return "unknown error"
         
-
+@api_view(['POST'])
+def login(request):
+    username = request.data.get('username')
+    password = request.data.get('password')
+    # 验证用户名和密码
+    user = UserInformation.objects.filter(username=username, password=password).first()
+    if user:
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({'token': token.key, 'id':user['id']}, status=200)
+    else:
+        return Response({"error": "User name or password error!"}, status=400)
+    
 @api_view(['POST'])
 def download_youtube(request):
     youtube_url = request.data.get('youtube_url', None)
