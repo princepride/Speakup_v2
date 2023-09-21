@@ -24,7 +24,7 @@
         {
             "button_name":"Conversation",
             "output_key_words":"My Response",
-            "prompts":"I want to practice English conversation with you, I say a sentence, and you say a sentence. You will role-play a character and dialogue with me, or start a discussion about a particular thing, all in English. Now you need to decide a suitable role for yourself based on the conversation history I provide above, then directly talk with me",
+            "prompts":"I want to practice English conversation with you, Your response should be divided into two parts. The first part should provide a thorough discussion of the topic I mentioned, while also presenting valuable questions for further exploration. The second part should offer an evaluation of my statement in terms of logic and syntactical structure, along with providing suggestions, this part you should response in Chinese, but when quoting my words and giving suggestions on my words, you should use English. Now you need continue the conversation with me based on the history conversation I provided above",
             "has_memory":true,  
             "use_original_text":false
         }
