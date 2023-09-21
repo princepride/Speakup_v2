@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
-import enterprise from "../assets/videos/enterprise.mp4";
+import login_video from "../assets/videos/login_video.mp4";
 import './LoginPage.sass';
 
 function LoginPage() {
@@ -43,7 +43,7 @@ function LoginPage() {
         <section className="user">
             <div style={{ position: 'relative', width: '100%', height: '100%' }}>
                 <video
-                    src={enterprise}
+                    src={login_video}
                     type="video/mp4"
                     loop
                     controls={false}

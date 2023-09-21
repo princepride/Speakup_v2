@@ -270,9 +270,9 @@ const DashboardPage = () => {
         <MainContainer>
             <NavigationContainer>
                 <NavigationList>
-                    <NavigationItem component={Link} to="/">
+                    <NavigationItem component={Link} to="/main">
                         <Tooltip title="Speak Up">
-                            <IconButton style={{ color : location.pathname === '/' ? "#45CFDD" : "gray" }}>
+                            <IconButton style={{ color : location.pathname === '/main' ? "#45CFDD" : "gray" }}>
                                 <SpeakUpIcon />
                             </IconButton>
                         </Tooltip>
