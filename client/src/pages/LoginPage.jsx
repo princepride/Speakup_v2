@@ -15,7 +15,7 @@ function LoginPage() {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        setIsMobile(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent));
+        setIsMobile(window.innerWidth < 1080);
     });
 
     const handleSignup = () => {
