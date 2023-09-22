@@ -14,6 +14,8 @@ import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import TasksPage from './TasksPage';
 import { shutDown } from '../utils/connect'
 import SettingsPage from './SettingsPage'
+import { useStateContext } from '../contexts/ContextProvider'
+import { useNavigate } from "react-router-dom";
 
 const MainContainer = styled(Box)`
     display: flex;
@@ -238,8 +240,10 @@ function DynamicLine() {
 }
 
 const DashboardPage = () => {
+    const navigate = useNavigate();
     const location = useLocation();
     const [shutDownSelectorVisible, setShutDownSelectorVisible] = useState(false);
+    const {userId} = useStateContext();
 
     useEffect(() => {
         let cleanupFunction;
@@ -253,6 +257,12 @@ const DashboardPage = () => {
             if (cleanupFunction) cleanupFunction();
         };
     }, [shutDownSelectorVisible]);
+
+    useEffect(() => {
+        if(userId === -1 ) {
+            navigate("/");
+        }
+    }, [])
     return (
         <>
         {

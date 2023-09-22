@@ -1,10 +1,5 @@
 from django.db import models
 
-class UserInformation(models.Model):
-    user_id = models.IntegerField(primary_key=True)
-    user_name = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
-    password = models.CharField(max_length=255)
 class Youtube(models.Model): 
     youtube_id = models.CharField(max_length=255,primary_key=True)
     youtube_name = models.CharField(max_length=255)
