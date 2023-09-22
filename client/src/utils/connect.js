@@ -53,7 +53,7 @@ export const speechRecognition = (user_id, audioBlob, request_type, sub_subtitle
         });
 }
 
-export const chatGPT = (user_id, request_type, id, sub_subtitle_id, mission_type, model, prompt) => {
+export const chatGPT = async(user_id, request_type, id, sub_subtitle_id, mission_type, model, prompt) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/chatGPT';
     const data = {
         user_id: user_id,

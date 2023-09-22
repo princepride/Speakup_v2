@@ -64,7 +64,7 @@ class FinalChatGPT:
                 last_item = item
             return last_item['message']['content']['parts'][0]
         elif self.type == 'api_key':
-            result = openai.ChatCompletion.create(model=model,messages=[{"role": "user", "content": prompt}],temperature=0.3,max_tokens=1024)
+            result = openai.ChatCompletion.create(model=model,messages=prompt,temperature=0.3,max_tokens=1024)
             return result["choices"][0]["message"]["content"]
         else:
             return "unknown error"
@@ -235,6 +235,7 @@ def chatGPT(request):
     sub_subtitle_id = request.data.get('sub_subtitle_id', None)
     mission_type = request.data.get('mission_type', None)
     prompt = request.data.get('prompt', None)
+    print(prompt)
     model = request.data.get('model', None)
     user_id = request.data.get('user_id', None)
     result = chatGPT.response(model=model, prompt=prompt)

@@ -30,25 +30,42 @@ export default function SplitButton() {
     setLoopIndex} = useStateContext()
 
 const handleClick = async () => {
-    let originalText = "";
-    if(copy_button_config[selectedIndex].use_original_text) {
-        originalText = `Original Text: ${subSubtitles[subSubtitlesIndex].text}\n\n`;
-    }
-    let targetText = "";
+    let systemContent = copy_button_config[selectedIndex].prompts;
+    // let targetText = "";
+    // if(copy_button_config[selectedIndex].has_memory){
+    //     let tempTargetText = ""
+    //     for(let i = 0; i < userSubSubtitles[subSubtitlesIndex].length; i++) {
+    //         tempTargetText += `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][i].text}\n`;
+    //         if(i < userSubSubtitles[subSubtitlesIndex].length - 1) {
+    //             tempTargetText += `${chatGPTResponse[subSubtitlesIndex][i].text}\n`;
+    //         }
+    //     }
+    //     targetText = tempTargetText+"\n\n";
+    // }
+    // else {
+    //     targetText = `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text}\n\n`;
+    // }
+    // let promptText = `${originalText}${targetText}${copy_button_config[selectedIndex].prompts}`;
+
+    let promptText = [
+        {"role": "system", "content": systemContent},
+    ]
     if(copy_button_config[selectedIndex].has_memory){
-        let tempTargetText = ""
         for(let i = 0; i < userSubSubtitles[subSubtitlesIndex].length; i++) {
-            tempTargetText += `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][i].text}\n`;
+            promptText.push({"role": "user", "content": userSubSubtitles[subSubtitlesIndex][i].text})
             if(i < userSubSubtitles[subSubtitlesIndex].length - 1) {
-                tempTargetText += `${chatGPTResponse[subSubtitlesIndex][i].text}\n`;
+                promptText.push({"role": "assistant", "content": chatGPTResponse[subSubtitlesIndex][i].text});
             }
         }
-        targetText = tempTargetText+"\n\n";
     }
-    else {
-        targetText = `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text}\n\n`;
+    else{
+        if(copy_button_config[selectedIndex].use_original_text) {
+            promptText.push({"role": "user", "content": `Original Text: ${subSubtitles[subSubtitlesIndex].text}\n\n${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text}`})
+        }
+        else {
+            promptText.push({"role": "user", "content": userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text})
+        }
     }
-    let promptText = `${originalText}${targetText}${copy_button_config[selectedIndex].prompts}`;
     // model: gpt-4, gpt-3.5-turbo, text-moderation-playground
     setVisible(true);
     setLoopBody(["Generating","Generating.","Generating..","Generating..."]);
