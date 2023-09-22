@@ -90,8 +90,8 @@ function SubtitleSelector() {
                             value={model}
                             onChange={handleModelChange}
                         >
-                            <MenuItem value={"gpt-4"}>gpt-4</MenuItem>
                             <MenuItem value={"gpt-3.5-turbo"}>gpt-3.5-turbo</MenuItem>
+                            <MenuItem value={"gpt-4"}>gpt-4</MenuItem>
                             {/*<MenuItem value={"text-moderation-playground"}>text-moderation-playground</MenuItem>*/}
                             {/*<MenuItem value={"text-davinci-002-render-sha"}>text-davinci-002-render-sha</MenuItem>*/}
                         </StyledModelSelect>
