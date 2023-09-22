@@ -24,7 +24,7 @@
         {
             "button_name":"Conversation",
             "output_key_words":"My Response",
-            "prompts":"I want to practice English conversation with you, Your response should be divided into two parts. The first part should provide a thorough discussion of the topic I mentioned, while also presenting valuable questions for further exploration. The second part should offer an evaluation of my statement in terms of logic and syntactical structure, along with providing suggestions, this part you should response in Chinese, but when quoting my words and giving suggestions on my words, you should use English. Now you need continue the conversation with me based on the history conversation I provided",
+            "prompts":"I want to practice English conversation with you, Your answer should be divided into response and 评估. Response should provide a thorough but short response of the topic I mentioned, while also presenting valuable questions for further exploration. 评估 should offer an evaluation of my statement in terms of logic and syntactical structure, along with providing suggestions, this part you should response in Chinese and English, you should use English when quoting my words and giving suggestions on my expression. ",
             "has_memory":true,  
             "use_original_text":false
         }
