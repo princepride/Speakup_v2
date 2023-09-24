@@ -31,27 +31,12 @@ export default function SplitButton() {
 
 const handleClick = async () => {
     let systemContent = copy_button_config[selectedIndex].prompts;
-    // let targetText = "";
-    // if(copy_button_config[selectedIndex].has_memory){
-    //     let tempTargetText = ""
-    //     for(let i = 0; i < userSubSubtitles[subSubtitlesIndex].length; i++) {
-    //         tempTargetText += `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][i].text}\n`;
-    //         if(i < userSubSubtitles[subSubtitlesIndex].length - 1) {
-    //             tempTargetText += `${chatGPTResponse[subSubtitlesIndex][i].text}\n`;
-    //         }
-    //     }
-    //     targetText = tempTargetText+"\n\n";
-    // }
-    // else {
-    //     targetText = `${copy_button_config[selectedIndex].output_key_words}: ${userSubSubtitles[subSubtitlesIndex][userSubSubtitles[subSubtitlesIndex].length-1].text}\n\n`;
-    // }
-    // let promptText = `${originalText}${targetText}${copy_button_config[selectedIndex].prompts}`;
 
     let promptText = [
         {"role": "system", "content": systemContent},
     ]
     if(copy_button_config[selectedIndex].has_memory){
-        for(let i = 0; i < userSubSubtitles[subSubtitlesIndex].length; i++) {
+        for(let i = Math.max(0, userSubSubtitles[subSubtitlesIndex].length - 3); i < userSubSubtitles[subSubtitlesIndex].length; i++) {
             promptText.push({"role": "user", "content": userSubSubtitles[subSubtitlesIndex][i].text})
             if(i < userSubSubtitles[subSubtitlesIndex].length - 1) {
                 promptText.push({"role": "assistant", "content": chatGPTResponse[subSubtitlesIndex][i].text});
