@@ -325,7 +325,7 @@ def select_all_bookmarks(request):
             youtube = Youtube.objects.get(youtube_id=bookmark.youtube_id)
             response.append({
                 "youtube_id": youtube.youtube_id,
-                "youtube_name": youtube.youtube_name,
+                "youtube_name": youtube.youtube_name[7:-16],
                 "youtube_duration": youtube.youtube_duration,
             })
         except Exception:
