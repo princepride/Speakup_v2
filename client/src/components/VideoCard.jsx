@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 function VideoCard(props) {
     const navigate = useNavigate();
-    const { youtube_id, youtube_name, youtube_duration } = props
+    const { youtube_id, youtube_name, youtube_duration, editable } = props
     const [isLiked, setIsLiked] = useState(true);
     const { 
         userId,
@@ -45,19 +45,21 @@ function VideoCard(props) {
     });
 
     const handleHeartClick = () => {
-        if(isLiked) {
-            removeBookmark(userId, youtube_id)
-            if(youtube_id === youtubeId) {
-                setIsMainLiked(false)
+        if(editable) {
+            if(isLiked) {
+                removeBookmark(userId, youtube_id)
+                if(youtube_id === youtubeId) {
+                    setIsMainLiked(false)
+                }
             }
-        }
-        else {
-            addBookmark(userId, youtube_id)
-            if(youtube_id === youtubeId) {
-                setIsMainLiked(true)
+            else {
+                addBookmark(userId, youtube_id)
+                if(youtube_id === youtubeId) {
+                    setIsMainLiked(true)
+                }
             }
+            setIsLiked((prevIsLiked) => !prevIsLiked);
         }
-        setIsLiked((prevIsLiked) => !prevIsLiked);
     };
 
     const navigateToMain = () => {
@@ -122,10 +124,11 @@ function VideoCard(props) {
                         <FavoriteIcon
                         style={{
                             fontSize: "36px",
-                            color: "red",
-                            cursor: "pointer",
+                            color: editable?"red":"#FFD700",
+                            cursor: editable?"pointer":"",
                         }}
                         onClick={handleHeartClick}
+                        disabled={editable}
                         />
                         ) : (
                         <FavoriteBorderIcon
@@ -135,6 +138,7 @@ function VideoCard(props) {
                             cursor: "pointer",
                         }}
                         onClick={handleHeartClick}
+                        disabled={editable}
                         />
                     )}
                 </Box>

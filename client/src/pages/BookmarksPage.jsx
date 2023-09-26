@@ -58,6 +58,7 @@ const TextStyle = styled.div`
     justify-content: center;
     align-items: center;
     flex-grow: 1;
+    margin-bottom: 2vh;
     margin-top: 2vh;
 `;
 
@@ -116,6 +117,7 @@ function BookmarksPage() {
                                     youtube_id={bookmark.youtube_id}
                                     youtube_name={bookmark.youtube_name}
                                     youtube_duration={secondToString2(bookmark.youtube_duration)}
+                                    editable={true}
                                 />
                             </Grid>
                         ))}
@@ -130,6 +132,7 @@ function BookmarksPage() {
                                     youtube_id={recommended.youtube_id}
                                     youtube_name={recommended.youtube_name}
                                     youtube_duration={secondToString2(recommended.youtube_duration)}
+                                    editable={false}
                                 />
                             </Grid>
                         ))}
