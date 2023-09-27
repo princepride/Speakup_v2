@@ -118,3 +118,7 @@ class WeeklyTask(models.Model):
 
     def __str__(self):
         return str(self.task_id) + ' ' + self.name_en + ' ' + self.name_zh + ' ' + self.description_en + ' ' + self.description_zh + ' ' + str(self.exp)
+    
+class Achievement(models.Model):
+    achievement_id = models.CharField(max_length=10)
+    user_id = models.IntegerField()

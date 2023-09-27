@@ -25,6 +25,8 @@ export const ContextProvider = ({ children }) => {
     const [loopBody, setLoopBody] = useState([]);
     const [timeInterval, setTimeInterval] = useState(1000);
     const [loopIndex, setLoopIndex] = useState(0);
+
+    const [achievementList, setAchievementList] = useState(["A001", "A002"]);
     return (
         <StateContext.Provider value={{userId, setUserId, youtubeId, setYoutubeId
         , subtitle, setSubtitle, currentTime, setCurrentTime
@@ -36,7 +38,7 @@ export const ContextProvider = ({ children }) => {
         , model, setModel
         , visible, setVisible, loopBody, setLoopBody, timeInterval
         , setTimeInterval,loopIndex, setLoopIndex
-        , isMainLiked, setIsMainLiked}}>
+        , isMainLiked, setIsMainLiked, achievementList, setAchievementList}}>
             {children}
         </StateContext.Provider>
     );
