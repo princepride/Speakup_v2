@@ -6,11 +6,11 @@ import AchievementWall from '../components/AchievementWall'
 function SettingsPage() {
   return (
     <div style={{display:'flex',flexDirection:'row'}}>
-      <div style={{width:'67vw', flexDirection:'column', height: '100vh'}}>
-        <div style={{height:'50%'}} >
+      <div style={{width:'64vw', flexDirection:'column', height: '96vh', margin: '2vh 2vw 2vh 2vw'}}>
+        <div style={{height:'40%'}} >
           <UserProfile />
         </div>
-        <div style={{height:'50%'}} >
+        <div style={{height:'60%'}} >
         <AchievementWall />
         </div>
       </div>
