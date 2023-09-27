@@ -114,7 +114,7 @@ def download_youtube(request):
         while not os.path.exists(subtitle_file_en) and not os.path.exists(subtitle_file_zh) and not os.path.exists(subtitle_file_zh_TW):
             time.sleep(1)
         if os.path.exists(subtitle_file_en):
-            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en, user_id=user_id)
+            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_en)
             new_youtube_video.save()
             # Convert EN VTT to EN SRT
             with open(subtitle_file_en, 'r', encoding='utf-8', errors='replace') as f:
@@ -132,7 +132,7 @@ def download_youtube(request):
             os.remove(srt_file)
 
         elif os.path.exists(subtitle_file_zh):
-            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh, user_id=user_id)
+            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
             with open(subtitle_file_zh, 'r', encoding='utf-8', errors='replace') as f:
@@ -149,7 +149,7 @@ def download_youtube(request):
             # Delete original subtitle file
             os.remove(srt_file)
         elif os.path.exists(subtitle_file_zh_TW):
-            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh_TW, user_id=user_id)
+            new_youtube_video = Youtube(youtube_id=info['id'], youtube_name=ydl.prepare_filename(info), youtube_duration=video_duration, subtitle_name=subtitle_file_zh_TW)
             new_youtube_video.save()
             # Convert ZH VTT to ZH SRT
             with open(subtitle_file_zh_TW, 'r', encoding='utf-8', errors='replace') as f:
@@ -168,17 +168,17 @@ def download_youtube(request):
     youtube = Youtube.objects.get(youtube_id=youtube_url[-11:])
     subtitle = read_file(youtube.subtitle_name.replace(".en.vtt", " processed.en.srt").replace(".zh.vtt", " processed.zh.srt").replace(".zh-TW.vtt", " processed.zh-TW.srt"))
     youtube_id = youtube.youtube_id
-    sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True)
+    sub_subtitle_results = SubSubtitle.objects.filter(youtube_id=youtube_id, condition=True, user_id=user_id)
     sub_subtitle_data = [{'id':sub_subtitle_result.id, 'startTime': sub_subtitle_result.start_time, 'endTime': sub_subtitle_result.end_time, 'text': sub_subtitle_result.text} for sub_subtitle_result in sub_subtitle_results]
     record_data = []
     evaluation_data = []
     for data in sub_subtitle_data:
-        record_results = Record.objects.filter(sub_subtitle_id=data['id'])
-        evaluation_results = Evaluation.objects.filter(sub_subtitle_id=data['id'])
+        record_results = Record.objects.filter(sub_subtitle_id=data['id'], user_id=user_id)
+        evaluation_results = Evaluation.objects.filter(sub_subtitle_id=data['id'], user_id=user_id)
         record_data.append([{'id':record_result.id, 'text':record_result.text} for record_result in record_results])
         evaluation_data.append([{'id':evaluation_result.id, 'text':evaluation_result.text} for evaluation_result in evaluation_results])
     is_bookmark = False
-    bookmark = Bookmark.objects.filter(youtube_id=youtube_id)
+    bookmark = Bookmark.objects.filter(youtube_id=youtube_id, user_id=user_id)
     if bookmark.exists():
         is_bookmark = True
     return Response({"subSubtitle":sub_subtitle_data, "record":record_data, "evaluation":evaluation_data, "subtitle":subtitle, "isBookmark":is_bookmark}, status=200)
@@ -211,7 +211,7 @@ def speech_recognition(request):
         full_transcription = transcript["text"]
 
     if request_type == 'update':
-        record = Record.objects.get(id=id)
+        record = Record.objects.get(id=id, user_id=user_id)
         record.sub_subtitle_id = sub_subtitle_id
         record.text = full_transcription
         record.attempt_times += 1
@@ -242,7 +242,7 @@ def chatGPT(request):
     # result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
 
     if request_type == 'update':
-        evaluation = Evaluation.objects.get(id=id)
+        evaluation = Evaluation.objects.get(id=id, user_id=user_id)
         evaluation.sub_subtitle_id = sub_subtitle_id
         evaluation.mission_type = mission_type
         evaluation.model = model
@@ -273,11 +273,12 @@ def insert_sub_subtitle(request):
 @permission_classes([IsAuthenticated])
 def delete_sub_subtitle(request):
     sub_subtitle_id = request.data.get('sub_subtitle_id')
+    user_id = request.data.get('user_id')
     if not sub_subtitle_id:
         return Response({"error": "No id provided"}, status=400)
 
     try:
-        sub_subtitle = SubSubtitle.objects.get(id=sub_subtitle_id)
+        sub_subtitle = SubSubtitle.objects.get(id=sub_subtitle_id, user_id=user_id)
         sub_subtitle.condition = False
         sub_subtitle.last_update_time = timezone.now()
         sub_subtitle.save()
@@ -291,7 +292,8 @@ def delete_sub_subtitle(request):
 @permission_classes([IsAuthenticated])
 def remove_bookmark(request):
     youtube_id = request.data.get('youtube_id')
-    bookmarks = Bookmark.objects.filter(youtube_id=youtube_id)
+    user_id = request.data.get('user_id')
+    bookmarks = Bookmark.objects.filter(youtube_id=youtube_id, user_id=user_id)
     if bookmarks.exists():
         bookmarks.delete()
         return Response({"success": "Bookmarks with this id have been deleted"}, status=200)
@@ -317,7 +319,8 @@ def add_bookmark(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def select_all_bookmarks(request):
-    bookmarks = Bookmark.objects.all()
+    user_id = request.data.get('user_id')
+    bookmarks = Bookmark.objects.filter(user_id=user_id)
     response = []
     
     for bookmark in bookmarks:
@@ -338,7 +341,8 @@ def select_all_bookmarks(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_statistic(request):
-    evaluations = Evaluation.objects.all().order_by('last_update_time')
+    user_id = request.data.get('user_id')
+    evaluations = Evaluation.objects.filter(user_id=user_id).order_by('last_update_time')
     data = []
     # Extract all dates
     dates = [timezone.localtime(evaluation.last_update_time).date() for evaluation in evaluations]
@@ -346,11 +350,11 @@ def get_statistic(request):
     # Convert list to set to remove duplicates and then convert it back to list
     unique_dates = list(set(dates))
     for unique_date in unique_dates:
-        evaluations_on_date = Evaluation.objects.filter(last_update_time__date=unique_date)
+        evaluations_on_date = Evaluation.objects.filter(last_update_time__date=unique_date, user_id=user_id)
         categories = ['Paraphrase', 'Seque', 'Zh-En', 'Conversation']
         videonames = []
         for evaluation_on_date in evaluations_on_date:
-            youtube_id = SubSubtitle.objects.get(id = evaluation_on_date.sub_subtitle_id).youtube_id
+            youtube_id = SubSubtitle.objects.get(id = evaluation_on_date.sub_subtitle_id, user_id=user_id).youtube_id
             youtube_name = Youtube.objects.get(youtube_id = youtube_id).youtube_name
             #videonames.append(youtube_name[7:][:-16])
             videonames.append(youtube_name)
@@ -362,10 +366,10 @@ def get_statistic(request):
                 youtube_id = Youtube.objects.get(youtube_name=videoname).youtube_id
 
                 # 然后，根据获取的youtube_id，查找SubSubtitle对象的id
-                sub_subtitle_ids = SubSubtitle.objects.filter(youtube_id=youtube_id).values_list('id', flat=True)
+                sub_subtitle_ids = SubSubtitle.objects.filter(youtube_id=youtube_id, user_id=user_id).values_list('id', flat=True)
 
                 # 最后，根据sub_subtitle_id和mission_type过滤Evaluation对象
-                filtered_evaluations = evaluations_on_date.filter(sub_subtitle_id__in=sub_subtitle_ids, mission_type=category)
+                filtered_evaluations = evaluations_on_date.filter(sub_subtitle_id__in=sub_subtitle_ids, mission_type=category, user_id=user_id)
                 # Convert the queryset to a list
                 filtered_evaluations_list = list(filtered_evaluations)
 
@@ -385,15 +389,15 @@ def get_statistic(request):
             'date':unique_date.strftime('%Y-%m-%d'),
             'totalDuration':totalDuration,
             'categories':categories,
-            'videonames':[videoname[7:][:-16] for videoname in videonames],
+            'videonames':[videoname[7:-16] for videoname in videonames],
             'duration':duration,
             'specificDuration':specificDuration
         })
     extraExp = 0
-    filter_daily_tasks = DailyTask.objects.filter(isFinish = True)
+    filter_daily_tasks = DailyTask.objects.filter(isFinish = True, user_id=user_id)
     exp_daily = filter_daily_tasks.aggregate(Sum('exp'))['exp__sum']
     extraExp += exp_daily if exp_daily is not None else 0
-    filter_weekly_tasks = WeeklyTask.objects.filter(isFinish = True)
+    filter_weekly_tasks = WeeklyTask.objects.filter(isFinish = True, user_id=user_id)
     exp_weekly = filter_weekly_tasks.aggregate(Sum('exp'))['exp__sum']
     extraExp += exp_weekly if exp_weekly is not None else 0
     return Response({"data": data, "extraExp": extraExp}, status=200)
@@ -412,7 +416,7 @@ def get_tasks(request):
 
         # Get the date part
         date_today = now_local.date()
-        daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
+        daily_tasks = DailyTask.objects.filter(created_time__date=date_today, user_id=user_id)
         if not daily_tasks.exists():
             generated_tasks = generate_daily_tasks(n)
             for task in generated_tasks:
@@ -427,7 +431,7 @@ def get_tasks(request):
                     isFinish = task["isFinish"],
                     user_id = user_id
                 )
-        daily_tasks = DailyTask.objects.filter(created_time__date=date_today)
+        daily_tasks = DailyTask.objects.filter(created_time__date=date_today, user_id=user_id)
         return [model_to_dict(task) for task in daily_tasks]
 
     def get_or_create_weekly_tasks():
@@ -441,7 +445,7 @@ def get_tasks(request):
         date_today = now_local.date()
         start_week = date_today - timedelta(date_today.weekday())
         end_week = start_week + timedelta(6)
-        weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
+        weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week], user_id=user_id)
 
         if not weekly_tasks.exists():
             generated_tasks = generate_weekly_tasks()
@@ -457,7 +461,7 @@ def get_tasks(request):
                     isFinish = task["isFinish"],
                     user_id = user_id
                 )
-        weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week])
+        weekly_tasks = WeeklyTask.objects.filter(created_time__date__range=[start_week, end_week], user_id=user_id)
         return [model_to_dict(task) for task in weekly_tasks]
         
     weekly_tasks = get_or_create_weekly_tasks()
@@ -469,11 +473,11 @@ def get_tasks(request):
         now_local = timezone.localtime(now_utc)
         # Get the date part
         date_today = now_local.date()
-        filterd_daily_tasks = Evaluation.objects.filter(last_update_time__date=date_today, mission_type=mission_type)
+        filterd_daily_tasks = Evaluation.objects.filter(last_update_time__date=date_today, mission_type=mission_type, user_id=user_id)
         # filterd_daily_tasks = evals.filter(mission_type=mission_type).order_by('last_update_time')
         videonames = []
         for evaluation_on_date in filterd_daily_tasks:
-            youtube_id = SubSubtitle.objects.get(id = evaluation_on_date.sub_subtitle_id).youtube_id
+            youtube_id = SubSubtitle.objects.get(id = evaluation_on_date.sub_subtitle_id, user_id=user_id).youtube_id
             youtube_name = Youtube.objects.get(youtube_id = youtube_id).youtube_name
             #videonames.append(youtube_name[7:][:-16])
             videonames.append(youtube_name)
@@ -483,7 +487,7 @@ def get_tasks(request):
             # 首先根据给定的youtube_name获取对应的youtube_id
             youtube_id = Youtube.objects.get(youtube_name=videoname).youtube_id
             # 然后，根据获取的youtube_id，查找SubSubtitle对象的id
-            sub_subtitle_ids = SubSubtitle.objects.filter(youtube_id=youtube_id).values_list('id', flat=True)
+            sub_subtitle_ids = SubSubtitle.objects.filter(youtube_id=youtube_id, user_id=user_id).values_list('id', flat=True)
             # 最后，根据sub_subtitle_id过滤Evaluation对象
             filtered_evaluations = filterd_daily_tasks.filter(sub_subtitle_id__in=sub_subtitle_ids).order_by('last_update_time')
             # Convert the queryset to a list
@@ -508,7 +512,7 @@ def get_tasks(request):
                 daily_task["isFinish"] = False if durations < 15 else True
                 new_daily_tasks.append(daily_task)
                 if durations >= 15:
-                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask = DailyTask.objects.get(id = daily_task["id"], user_id=user_id)
                     tempTask.isFinish = True
                     tempTask.save()
             elif daily_task["task_id"] == "D002":
@@ -518,7 +522,7 @@ def get_tasks(request):
                 daily_task["isFinish"] = False if durations < 15 else True
                 new_daily_tasks.append(daily_task)
                 if durations >= 15:
-                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask = DailyTask.objects.get(id = daily_task["id"], user_id=user_id)
                     tempTask.isFinish = True
                     tempTask.save()
             elif daily_task["task_id"] == "D003":
@@ -528,7 +532,7 @@ def get_tasks(request):
                 daily_task["isFinish"] = False if durations < 15 else True
                 new_daily_tasks.append(daily_task)
                 if durations >= 15:
-                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask = DailyTask.objects.get(id = daily_task["id"], user_id=user_id)
                     tempTask.isFinish = True
                     tempTask.save()
             elif daily_task["task_id"] == "D004":
@@ -538,7 +542,7 @@ def get_tasks(request):
                 daily_task["isFinish"] = False if durations < 15 else True
                 new_daily_tasks.append(daily_task)
                 if durations >= 15:
-                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask = DailyTask.objects.get(id = daily_task["id"], user_id=user_id)
                     tempTask.isFinish = True
                     tempTask.save()
             elif daily_task["task_id"] == "D000":
@@ -546,7 +550,7 @@ def get_tasks(request):
                 if len(filter_tasks) > 0:
                     daily_task["completed"] = 1
                     daily_task["isFinish"] = True
-                    tempTask = DailyTask.objects.get(id = daily_task["id"])
+                    tempTask = DailyTask.objects.get(id = daily_task["id"], user_id=user_id)
                     tempTask.isFinish = True
                     tempTask.save()
                 else:
@@ -560,7 +564,7 @@ def get_tasks(request):
         else:
             start_week = timezone.localtime(timezone.now()).date() - timedelta(timezone.localtime(timezone.now()).date().weekday())
             end_week = timezone.localtime(timezone.now()).date()
-            filter_daily_tasks = DailyTask.objects.filter(created_time__date__range=[start_week, end_week])
+            filter_daily_tasks = DailyTask.objects.filter(created_time__date__range=[start_week, end_week], user_id=user_id)
             if weekly_task["task_id"] == "W001":
                 count = 0
                 for task in filter_daily_tasks:
@@ -575,14 +579,14 @@ def get_tasks(request):
             elif weekly_task["task_id"] == "W000":
                 count = 0
                 while start_week < end_week:
-                    tempTask = filter_daily_tasks.filter(created_time__date=start_week, task_id="D000")
+                    tempTask = filter_daily_tasks.filter(created_time__date=start_week, task_id="D000", user_id=user_id)
                     if len(tempTask) > 0 and tempTask[0].isFinish == True:
                         count += 1
                     start_week += timedelta(1)
                 weekly_task["completed"] = count
                 if weekly_task["completed"] == weekly_task["total"]:
                     weekly_task["isFinish"] = True
-                    tempTask = WeeklyTask.objects.get(id = weekly_task["id"])
+                    tempTask = WeeklyTask.objects.get(id = weekly_task["id"], user_id=user_id)
                     tempTask.isFinish = True
                     tempTask.save()
             new_weekly_tasks.append(weekly_task)

@@ -5,7 +5,6 @@ class Youtube(models.Model):
     youtube_name = models.CharField(max_length=255)
     youtube_duration = models.IntegerField()
     subtitle_name = models.CharField(max_length=255)
-    user_id = models.IntegerField()
     created_time = models.DateTimeField(auto_now_add=True)
     last_update_time = models.DateTimeField(auto_now=True)
 
