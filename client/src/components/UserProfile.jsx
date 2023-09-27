@@ -2,7 +2,8 @@ import React from 'react'
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-    height:100%;
+    height:98%;
+    margin-bottom:2%;
     width:100%;
     border: 1px solid #ccc;
     border-radius: 40px;
