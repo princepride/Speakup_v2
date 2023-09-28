@@ -33,7 +33,9 @@
         "A001": {
             "en_title":"First Steps",
             "zh_title":"初涉江湖",
-            "images":
+            "auto_play":false,
+            "static_image":"https://media.istockphoto.com/id/1453715348/photo/nishikawa-gorge-a-beautiful-canyon-in-japan.jpg?s=2048x2048&w=is&k=20&c=x-ZR-hWKcBuO8SVIUUDDhvD3XM_IJoCPzKuCay916-Y=",
+            "carousel_images":
             [
                 "https://media.istockphoto.com/id/1453715348/photo/nishikawa-gorge-a-beautiful-canyon-in-japan.jpg?s=2048x2048&w=is&k=20&c=x-ZR-hWKcBuO8SVIUUDDhvD3XM_IJoCPzKuCay916-Y=",
                 "https://cdn.pixabay.com/photo/2014/12/16/08/32/cherry-blossoms-570046_1280.jpg",
@@ -43,11 +45,21 @@
         "A002": {
             "en_title":"Growing Strength",
             "zh_title":"力量成长",
-            "images":
+            "auto_play":false,
+            "static_image":"https://cdn.mos.cms.futurecdn.net/uUFumMDENd8sbVHaCGDVf6.jpg",
+            "carousel_images":
             [
-                "https://media.istockphoto.com/id/1453715348/photo/nishikawa-gorge-a-beautiful-canyon-in-japan.jpg?s=2048x2048&w=is&k=20&c=x-ZR-hWKcBuO8SVIUUDDhvD3XM_IJoCPzKuCay916-Y=",
-                "https://cdn.pixabay.com/photo/2014/12/16/08/32/cherry-blossoms-570046_1280.jpg",
-                "https://cdn.pixabay.com/photo/2017/07/19/01/39/clouds-2517648_640.jpg"
+                "https://media.giphy.com/media/21PeokB8uIQvjIhVO5/giphy.gif"
+            ]
+        },
+        "A003": {
+            "en_title":"Seasoned Adventurer",
+            "zh_title":"经验丰富的冒险家",
+            "auto_play":false,
+            "static_image":"https://cdn.shopify.com/s/files/1/0150/0643/3380/files/SBP.png?11037498073554759253",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/UvOcKPHrkKSLm/giphy.gif"
             ]
         }
     }
