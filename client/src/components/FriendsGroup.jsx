@@ -1,5 +1,8 @@
 import React from 'react'
 import styled from '@emotion/styled';
+import FriendProfile from './FriendProfile';
+import { Grid, Box } from "@mui/material";
+import { useStateContext } from '../contexts/ContextProvider';
 
 const Container = styled.div`
     height:100%;
@@ -19,7 +22,7 @@ const TextStyle = styled.div`
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    font-size: 36px;
+    font-size: 24px;
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -28,10 +31,41 @@ const TextStyle = styled.div`
     margin-bottom: 2vh;
     margin-top: 2vh;
 `;
+
+const ScrollBox = styled(Box)({
+    height: "100%",
+    width:"100%",
+    overflowY: "auto",
+    overflowX: "hidden",
+    "&::-webkit-scrollbar": {
+        width: "4px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+        background: "#888",
+        borderRadius: "2px",
+    },
+    "&::-webkit-scrollbar-thumb:hover": {
+        background: "#555",
+    },
+  });
+
 function FriendsGroup() {
+    const { friendList } = useStateContext();
     return (
         <Container>
             <TextStyle>FriendsGroup</TextStyle>
+            <ScrollBox>
+                {
+                    friendList.map((friend,index) => 
+                        <FriendProfile 
+                            key={index}
+                            name={friend.name}
+                            title={friend.title}
+                            status={friend.status}
+                        />
+                    )
+                }
+            </ScrollBox>
         </Container>
     )
 }

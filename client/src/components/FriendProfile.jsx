@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from '@emotion/styled';
 
+
 const Container = styled.div`
-    height: 96%; 
-    width: 96%;
+    height: 12%; 
+    width: 92%;
     margin:4%;
     border: 1px solid #ccc;
-    border-radius: 40px;
+    border-radius: 20px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -15,10 +16,12 @@ const Container = styled.div`
     padding: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 `
-function FriendProfile() {
+function FriendProfile(props) {
+  const { name, title, status } = props
+  
   return (
     <Container>
-      FriendProfile
+        {name}
     </Container>
   )
 }

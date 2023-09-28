@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from '@emotion/styled';
-import { Grid } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 import { useStateContext } from '../contexts/ContextProvider';
 import Achievement from './Achievement';
 
@@ -29,11 +29,28 @@ const TextStyle = styled.div`
     margin-top: 2vh;
 `;
 
+const ScrollBox = styled(Box)({
+  height: "100%",
+  overflowY: "auto",
+  overflowX: "hidden",
+  "&::-webkit-scrollbar": {
+      width: "4px",
+  },
+  "&::-webkit-scrollbar-thumb": {
+      background: "#888",
+      borderRadius: "2px",
+  },
+  "&::-webkit-scrollbar-thumb:hover": {
+      background: "#555",
+  },
+});
+
 function AchievementWall() {
   const { achievementList } = useStateContext();
   return (
     <Container>
       <TextStyle>AchievementWall</TextStyle>
+      <ScrollBox>
         <Grid container spacing={2}>
         {achievementList.map((achievement, index) => (
           <Grid item xs={6} md={4} key={index}>
@@ -43,6 +60,7 @@ function AchievementWall() {
           </Grid>
         ))}
       </Grid>
+      </ScrollBox>
     </Container>
   )
 }

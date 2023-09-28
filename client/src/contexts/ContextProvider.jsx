@@ -27,6 +27,18 @@ export const ContextProvider = ({ children }) => {
     const [loopIndex, setLoopIndex] = useState(0);
 
     const [achievementList, setAchievementList] = useState(["A001", "A002", "A003"]);
+    const [friendList, setFriendList] = useState([
+        {
+            "name":"Naruto",
+            "title":"Master",
+            "status":"online",
+        },
+        {
+            "name":"Sasuke",
+            "title":"GrandMaster",
+            "status":"offline",
+        }
+    ])
     return (
         <StateContext.Provider value={{userId, setUserId, youtubeId, setYoutubeId
         , subtitle, setSubtitle, currentTime, setCurrentTime
@@ -38,7 +50,8 @@ export const ContextProvider = ({ children }) => {
         , model, setModel
         , visible, setVisible, loopBody, setLoopBody, timeInterval
         , setTimeInterval,loopIndex, setLoopIndex
-        , isMainLiked, setIsMainLiked, achievementList, setAchievementList}}>
+        , isMainLiked, setIsMainLiked, achievementList, setAchievementList
+        , friendList, setFriendList}}>
             {children}
         </StateContext.Provider>
     );

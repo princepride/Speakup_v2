@@ -6,7 +6,7 @@ import AchievementWall from '../components/AchievementWall'
 function SettingsPage() {
   return (
     <div style={{display:'flex',flexDirection:'row'}}>
-      <div style={{width:'64vw', flexDirection:'column', height: '96vh', margin: '2vh 2vw 2vh 2vw'}}>
+      <div style={{width:'72vw', flexDirection:'column', height: '96vh', margin: '2vh 2vw 2vh 2vw'}}>
         <div style={{height:'40%'}} >
           <UserProfile />
         </div>
@@ -14,7 +14,7 @@ function SettingsPage() {
         <AchievementWall />
         </div>
       </div>
-      <div style={{width:'26vw', height: '96vh',margin: '2vh 2vw 2vh 2vw'}}>
+      <div style={{width:'15vw', height: '96vh',margin: '2vh 2vw 2vh 2vw'}}>
         <FriendsGroup />
       </div>
     </div>
