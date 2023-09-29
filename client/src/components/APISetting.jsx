@@ -30,12 +30,12 @@ const TextStyle = styled.div`
     margin-top: 2vh;
 `;
 
-function UserProfile() {
-    return (
-        <Container>
-            <TextStyle>UserProfile</TextStyle>
-        </Container>
-    )
+function APISetting() {
+  return (
+    <Container>
+        <TextStyle>APISetting</TextStyle>
+    </Container>
+  )
 }
 
-export default UserProfile
+export default APISetting

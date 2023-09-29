@@ -9,7 +9,7 @@ import SpeakUpIcon from '@mui/icons-material/SettingsVoice';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import StatisticIcon from '@mui/icons-material/Equalizer';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import SettingsIcon from '@mui/icons-material/Settings';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import TasksPage from './TasksPage';
 import { shutDown } from '../utils/connect'
@@ -310,9 +310,9 @@ const DashboardPage = () => {
                     </NavigationItem>
                     <div className="autoFill" />
                     <NavigationItem component={Link} to="/settings">
-                        <Tooltip title="Settings">
+                        <Tooltip title="Manage Accounts">
                             <IconButton style={{ color : location.pathname === '/settings' ? "#45CFDD" : "gray" }}>
-                                <SettingsIcon />
+                                <ManageAccountsIcon />
                             </IconButton>
                         </Tooltip>
                     </NavigationItem>

@@ -106,40 +106,38 @@ function BookmarksPage() {
     }, []);
 
     return (
-        <>
-            <StyledContainer maxWidth="lg">
-                <LeftContainer>
-                <TextStyle>Favourite</TextStyle>
-                    <Grid container spacing={2}>
-                        {bookMarks.map((bookmark, index) => (
-                            <Grid item xs={6} md={4} key={index}>
-                                <VideoCard
-                                    youtube_id={bookmark.youtube_id}
-                                    youtube_name={bookmark.youtube_name}
-                                    youtube_duration={secondToString2(bookmark.youtube_duration)}
-                                    editable={true}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </LeftContainer>
-                <RightContainer>
-                    <TextStyle>Recommend</TextStyle>
-                    <Grid container spacing={2}>
-                        {recommendeds.map((recommended, index) => (
-                            <Grid item xs={6} md={4} key={index}>
-                                <VideoCard
-                                    youtube_id={recommended.youtube_id}
-                                    youtube_name={recommended.youtube_name}
-                                    youtube_duration={secondToString2(recommended.youtube_duration)}
-                                    editable={false}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </RightContainer>
-            </StyledContainer>
-        </>
+        <StyledContainer maxWidth="lg">
+            <LeftContainer>
+            <TextStyle>Favourite</TextStyle>
+                <Grid container spacing={2}>
+                    {bookMarks.map((bookmark, index) => (
+                        <Grid item xs={6} md={4} key={index}>
+                            <VideoCard
+                                youtube_id={bookmark.youtube_id}
+                                youtube_name={bookmark.youtube_name}
+                                youtube_duration={secondToString2(bookmark.youtube_duration)}
+                                editable={true}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            </LeftContainer>
+            <RightContainer>
+                <TextStyle>Recommend</TextStyle>
+                <Grid container spacing={2}>
+                    {recommendeds.map((recommended, index) => (
+                        <Grid item xs={6} md={4} key={index}>
+                            <VideoCard
+                                youtube_id={recommended.youtube_id}
+                                youtube_name={recommended.youtube_name}
+                                youtube_duration={secondToString2(recommended.youtube_duration)}
+                                editable={false}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            </RightContainer>
+        </StyledContainer>
     );
 }
 
