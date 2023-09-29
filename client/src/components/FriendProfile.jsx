@@ -37,8 +37,23 @@ const StyledCard = styled(Card)`
   color: ${(props) => (props.status === "offline" ? "#666" : "inherit")};
 `;
 
+// const StyledAvatar = styled(Avatar)`
+//   background-color: ${(props) => (props.status === "offline" ? "#666" : "#004477")};
+// `;
+
 const StyledAvatar = styled(Avatar)`
-  background-color: ${(props) => (props.status === "offline" ? "#666" : "#004477")};
+  background-color: ${(props) => {
+    const firstChar = props.name[0];
+    const status = props.status;
+    const colorValue = firstChar.charCodeAt(0) % 7; // 使用字符的Unicode值对7取模来生成颜色值
+    const hue = 40 + 20 * colorValue; // 将颜色值映射到40到120之间
+    if (status == "offline") {
+      return "#666"
+    }
+    else {
+      return `hsl(${hue}, 70%, 50%)`; // 使用HSL颜色模型，保证颜色不太暗或太亮
+    }
+  }};
 `;
 
 const StyledStatus = styled.div`
@@ -59,7 +74,7 @@ function FriendProfile(props) {
     <StyledCard status={status} sx={{ maxWidth: 345 }}>
       <CardHeader
         avatar={
-          <StyledAvatar status={status} aria-label="recipe">
+          <StyledAvatar status={status} name={name} aria-label="recipe">
             {name[0]}
           </StyledAvatar>
         }
