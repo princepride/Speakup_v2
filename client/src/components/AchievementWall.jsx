@@ -31,6 +31,7 @@ const TextStyle = styled.div`
 
 const ScrollBox = styled(Box)({
   height: "100%",
+  width: "100%",
   overflowY: "auto",
   overflowX: "hidden",
   "&::-webkit-scrollbar": {
@@ -53,7 +54,7 @@ function AchievementWall() {
       <ScrollBox>
         <Grid container spacing={2}>
         {achievementList.map((achievement, index) => (
-          <Grid item xs={6} md={4} key={index}>
+          <Grid item xs={6} md={4} lg={3} key={index}>
             <Achievement 
               achievement = {achievement}
             />

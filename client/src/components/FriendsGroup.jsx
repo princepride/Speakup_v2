@@ -37,6 +37,9 @@ const ScrollBox = styled(Box)({
     width:"100%",
     overflowY: "auto",
     overflowX: "hidden",
+    display: "flex",
+    flexDirection:"column",
+    alignItems:"center",
     "&::-webkit-scrollbar": {
         width: "4px",
     },
