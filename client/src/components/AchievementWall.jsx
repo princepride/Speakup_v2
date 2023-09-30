@@ -7,6 +7,7 @@ import Achievement from './Achievement';
 const Container = styled.div`
     height:100%;
     width:100%;
+    padding: 40px;
     border: 1px solid #ccc;
     border-radius: 40px;
     overflow: hidden;
@@ -52,7 +53,7 @@ function AchievementWall() {
     <Container>
       <TextStyle>AchievementWall</TextStyle>
       <ScrollBox>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} style={{padding:"1%"}}>
         {achievementList.map((achievement, index) => (
           <Grid item xs={6} md={4} lg={3} key={index}>
             <Achievement 
