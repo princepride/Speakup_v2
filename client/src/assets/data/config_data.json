@@ -45,11 +45,11 @@
         "A002": {
             "en_title":"Growing Strength",
             "zh_title":"力量成长",
-            "auto_play":false,
+            "auto_play":true,
             "static_image":"https://cdn.mos.cms.futurecdn.net/uUFumMDENd8sbVHaCGDVf6.jpg",
             "carousel_images":
             [
-                "https://media.giphy.com/media/21PeokB8uIQvjIhVO5/giphy.gif"
+                "https://media.giphy.com/media/piTF2qfkyjpG4EB5Kk/giphy.gif"
             ]
         },
         "A003": {
@@ -60,6 +60,16 @@
             "carousel_images":
             [
                 "https://media.giphy.com/media/UvOcKPHrkKSLm/giphy.gif"
+            ]
+        },
+        "A004": {
+            "en_title":"Adept's Triumph",
+            "zh_title":"精通者的胜利",
+            "auto_play":true,
+            "static_image":"https://c4.wallpaperflare.com/wallpaper/180/261/172/astri-lohne-sylvanas-windrunner-fictional-character-digital-art-artwork-hd-wallpaper-preview.jpg",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/69lYbX1hhFgyG9YjsU/giphy.gif"
             ]
         }
     }
