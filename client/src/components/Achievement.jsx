@@ -3,10 +3,38 @@ import styled from '@emotion/styled';
 import {Card, CardMedia, CardActionArea} from '@mui/material';
 import config_data from '../assets/data/config_data.json';
 
-const EnlargedCard = styled(Card) `
-    transition: transform 0.2s; 
-    &:hover { transform: scale(1.1); };
+// const EnlargedCard = styled(Card) `
+//     transition: transform 0.2s; 
+//     &:hover { transform: scale(1.1); };
+// `
+
+const EnlargedCard = styled(Card)`
+    transition: transform 0.2s;
+    &:hover {
+        transform: scale(1.1);
+        animation: borderAnimation 1.5s infinite alternate;
+    }
+
+    @keyframes borderAnimation {
+        0% {
+            border-color: #2e4f8b;
+            border-width: 6px;
+        }
+        33% {
+            border-color: #3e589d;
+            border-width: 6px;
+        }
+        66% {
+            border-color: #8f619b;
+            border-width: 6px;
+        }
+        100% {
+            border-color: #d0718f;
+            border-width: 6px;
+        }
+    }
 `
+
 const achievements_info = config_data.achievements_info
 
 function Achievement(props) {
