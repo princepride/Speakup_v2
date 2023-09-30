@@ -71,6 +71,66 @@
             [
                 "https://media.giphy.com/media/69lYbX1hhFgyG9YjsU/giphy.gif"
             ]
+        },
+        "A005": {
+            "en_title":"Veteran's Glory",
+            "zh_title":"老手的荣耀",
+            "auto_play":false,
+            "static_image":"https://itc.ua/wp-content/uploads/2016/04/ScreenShot2016-04-18at4.35.41PM-770x319.png",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/2uwt0cVf5cdvByhTLm/giphy.gif"
+            ]
+        },
+        "A006": {
+            "en_title":"Elite Conqueror",
+            "zh_title":"精英征服者",
+            "auto_play":true,
+            "static_image":"https://p4.wallpaperbetter.com/wallpaper/882/130/412/queen-starcraft-2-heart-of-the-swarm-sarah-kerrigan-wallpaper-preview.jpg",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/7kHd9cEajyyDC/giphy.gif"
+            ]
+        },
+        "A007": {
+            "en_title":"Champion's Ascension",
+            "zh_title":"冠军的升华",
+            "auto_play":true,
+            "static_image":"https://wallpapercave.com/dwp1x/wp9543115.png",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/26gR2u5Lvb2XoR7e8/giphy.gif"
+            ]
+        },
+        "A008": {
+            "en_title":"Master's Pinnacle",
+            "zh_title":"大师的巅峰",
+            "auto_play":true,
+            "static_image":"https://c4.wallpaperflare.com/wallpaper/180/261/172/astri-lohne-sylvanas-windrunner-fictional-character-digital-art-artwork-hd-wallpaper-preview.jpg",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/69lYbX1hhFgyG9YjsU/giphy.gif"
+            ]
+        },
+        "A009": {
+            "en_title":"Grandmaster's Legacy",
+            "zh_title":"宗师的传承",
+            "auto_play":true,
+            "static_image":"https://c4.wallpaperflare.com/wallpaper/180/261/172/astri-lohne-sylvanas-windrunner-fictional-character-digital-art-artwork-hd-wallpaper-preview.jpg",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/69lYbX1hhFgyG9YjsU/giphy.gif"
+            ]
+        },
+        "A010": {
+            "en_title":"Heroic Legend",
+            "zh_title":"英雄传奇",
+            "auto_play":true,
+            "static_image":"https://c4.wallpaperflare.com/wallpaper/180/261/172/astri-lohne-sylvanas-windrunner-fictional-character-digital-art-artwork-hd-wallpaper-preview.jpg",
+            "carousel_images":
+            [
+                "https://media.giphy.com/media/69lYbX1hhFgyG9YjsU/giphy.gif"
+            ]
         }
     }
 }
