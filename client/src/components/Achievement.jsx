@@ -34,7 +34,7 @@ return (
                 <CardMedia 
                     component="img" 
                     height="180" 
-                    image={isMouseOver?achievements_info[achievement].carousel_images[currentImage]:achievements_info[achievement].static_image} 
+                    image={achievements_info[achievement].auto_play?achievements_info[achievement].carousel_images[currentImage]:isMouseOver?achievements_info[achievement].carousel_images[currentImage]:achievements_info[achievement].static_image} 
                     alt={achievements_info[achievement].zh_title} 
                     title={achievements_info[achievement].zh_title} 
                     />
