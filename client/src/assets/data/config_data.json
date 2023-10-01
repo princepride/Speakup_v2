@@ -131,6 +131,56 @@
             [
                 "https://webstatic.hoyoverse.com/upload/contentweb/2023/02/06/6cd59dd7498fc7a86fd66ad4dc882571_4364389912925427245.gif"
             ]
+        },
+        "A011": {
+            "en_title":"Becoming a Legend",
+            "zh_title":"成为传奇",
+            "auto_play":false,
+            "static_image":"https://gd-hbimg.huaban.com/646984d3c45a33b6bdc05eb93ce8a6a9936e839b1f013b-RvakSv_fw658webp",
+            "carousel_images":
+            [
+                "https://webstatic.hoyoverse.com/upload/contentweb/2023/02/06/6cd59dd7498fc7a86fd66ad4dc882571_4364389912925427245.gif"
+            ]
+        },
+        "A012": {
+            "en_title":"Demigod Ascension",
+            "zh_title":"半神的升华",
+            "auto_play":false,
+            "static_image":"https://gd-hbimg.huaban.com/646984d3c45a33b6bdc05eb93ce8a6a9936e839b1f013b-RvakSv_fw658webp",
+            "carousel_images":
+            [
+                "https://webstatic.hoyoverse.com/upload/contentweb/2023/02/06/6cd59dd7498fc7a86fd66ad4dc882571_4364389912925427245.gif"
+            ]
+        },
+        "A013": {
+            "en_title":"Reaching Mythic Heights",
+            "zh_title":"达到神话级高度",
+            "auto_play":false,
+            "static_image":"https://gd-hbimg.huaban.com/646984d3c45a33b6bdc05eb93ce8a6a9936e839b1f013b-RvakSv_fw658webp",
+            "carousel_images":
+            [
+                "https://webstatic.hoyoverse.com/upload/contentweb/2023/02/06/6cd59dd7498fc7a86fd66ad4dc882571_4364389912925427245.gif"
+            ]
+        },
+        "A014": {
+            "en_title":"Divine Convergence",
+            "zh_title":"神圣融合",
+            "auto_play":false,
+            "static_image":"https://gd-hbimg.huaban.com/646984d3c45a33b6bdc05eb93ce8a6a9936e839b1f013b-RvakSv_fw658webp",
+            "carousel_images":
+            [
+                "https://webstatic.hoyoverse.com/upload/contentweb/2023/02/06/6cd59dd7498fc7a86fd66ad4dc882571_4364389912925427245.gif"
+            ]
+        },
+        "A015": {
+            "en_title":"Eternity's Embrace",
+            "zh_title":"永恒的拥抱",
+            "auto_play":false,
+            "static_image":"https://gd-hbimg.huaban.com/646984d3c45a33b6bdc05eb93ce8a6a9936e839b1f013b-RvakSv_fw658webp",
+            "carousel_images":
+            [
+                "https://webstatic.hoyoverse.com/upload/contentweb/2023/02/06/6cd59dd7498fc7a86fd66ad4dc882571_4364389912925427245.gif"
+            ]
         }
     }
 }
