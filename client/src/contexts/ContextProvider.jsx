@@ -26,7 +26,7 @@ export const ContextProvider = ({ children }) => {
     const [timeInterval, setTimeInterval] = useState(1000);
     const [loopIndex, setLoopIndex] = useState(0);
 
-    const [achievementList, setAchievementList] = useState(["A001", "A002", "A003", "A004"]);
+    const [achievementList, setAchievementList] = useState(["A001", "A002", "A003", "A004", "A005", "A006", "A007", "A008", "A009", "A010"]);
     const [friendList, setFriendList] = useState([
         {
             "name":"Naruto",

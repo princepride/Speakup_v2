@@ -12,25 +12,25 @@ const EnlargedCard = styled(Card)`
     transition: transform 0.2s;
     &:hover {
         transform: scale(1.1);
-        animation: borderAnimation 1.5s infinite alternate;
+        animation: borderAnimation 2s infinite alternate;
     }
 
     @keyframes borderAnimation {
         0% {
             border-color: #2e4f8b;
-            border-width: 6px;
+            border-width: 4px;
         }
         33% {
             border-color: #3e589d;
-            border-width: 6px;
+            border-width: 4px;
         }
         66% {
             border-color: #8f619b;
-            border-width: 6px;
+            border-width: 4px;
         }
         100% {
             border-color: #d0718f;
-            border-width: 6px;
+            border-width: 4px;
         }
     }
 `
