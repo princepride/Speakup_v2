@@ -8,7 +8,7 @@ import os
 from util.process_subtitle import process_subtitle
 from util.api import ChatGPT
 import json
-from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask
+from base.models import Youtube, SubSubtitle, Record, Evaluation, Bookmark, DailyTask, WeeklyTask, Apikey
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.db.models import Sum
@@ -27,7 +27,6 @@ with open(r'config.json') as file:
 
 
 settings.JSON_DATA = json_data
-openai.api_key = json_data["OPENAI_API_KEY"]
 
 def read_file(file_path):
     # 获取脚本的父路径
@@ -54,7 +53,7 @@ class FinalChatGPT:
     def __init__(self, type) -> None:
         self.type = type
 
-    def response(self, model, prompt) -> str:
+    def response(self, model, prompt, api_key) -> str:
         if self.type == 'access_token':
             chatGPT = ChatGPT(json_data["ACCESS_TOKENS"])
             result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
@@ -64,6 +63,7 @@ class FinalChatGPT:
                 last_item = item
             return last_item['message']['content']['parts'][0]
         elif self.type == 'api_key':
+            openai.api_key = api_key 
             result = openai.ChatCompletion.create(model=model,messages=prompt,temperature=0.3,max_tokens=1024)
             return result["choices"][0]["message"]["content"]
         else:
@@ -205,6 +205,14 @@ def speech_recognition(request):
     # Load the wav file
     full_transcription = ""
     if settings.JSON_DATA["SPEECH_RECOGNITION_TYPE"] == "api_key":
+        api_key = ""
+        try:
+            api_key_data = Apikey.objects.get(user_id = user_id)
+            api_key = api_key_data.api_key
+        except Apikey.DoesNotExist:
+            api_key_data = Apikey.objects.create(user_id = user_id, api_key="")
+            api_key = api_key_data.api_key
+        openai.api_key = api_key
         audio_file= open("sounds/speech_fixed.wav", "rb")
         duration = calculate_duration("sounds/speech_fixed.wav")
         transcript = openai.Audio.transcribe("whisper-1", audio_file)
@@ -238,7 +246,14 @@ def chatGPT(request):
     print(prompt)
     model = request.data.get('model', None)
     user_id = request.data.get('user_id', None)
-    result = chatGPT.response(model=model, prompt=prompt)
+    api_key = ""
+    try:
+        api_key_data = Apikey.objects.get(user_id = user_id)
+        api_key = api_key_data.api_key
+    except Apikey.DoesNotExist:
+        api_key_data = Apikey.objects.create(user_id = user_id, api_key="")
+        api_key = api_key_data.api_key
+    result = chatGPT.response(model=model, prompt=prompt, api_key=api_key)
     # result = chatGPT.talk(prompt=prompt, model=model, message_id="aaa2f50e-0bb1-4f64-94b8-d57e3fca6d25", parent_message_id="")
 
     if request_type == 'update':
@@ -591,6 +606,32 @@ def get_tasks(request):
                     tempTask.save()
             new_weekly_tasks.append(weekly_task)
     return Response({"tasks":{"dailyTasks":new_daily_tasks, "weeklyTasks":new_weekly_tasks}}, status=200)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def import_api_key(request):
+    user_id = request.data.get('user_id')
+    api_key = ""
+    try:
+        api_key_data = Apikey.objects.get(user_id = user_id)
+        api_key = api_key_data.api_key
+    except Apikey.DoesNotExist:
+        api_key_data = Apikey.objects.create(user_id = user_id, api_key="")
+        api_key = api_key_data.api_key
+    return Response(api_key)
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def edit_api_key(request):
+    user_id = request.data.get('user_id')
+    api_key = request.data.get('api_key')
+    api_key_data = Apikey.objects.get(user_id = user_id)
+    api_key_data.api_key = api_key
+    api_key_data.save()
+    return Response("sucess")
+
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])

@@ -14,4 +14,6 @@ urlpatterns = [
     path('get_statistic', views.get_statistic),
     path('get_tasks', views.get_tasks),
     path('shut_down', views.shut_down),
+    path('import_api_key', views.import_api_key),
+    path('edit_api_key', views.edit_api_key),
 ]
