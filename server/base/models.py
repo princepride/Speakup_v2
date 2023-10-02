@@ -122,3 +122,7 @@ class WeeklyTask(models.Model):
 class Achievement(models.Model):
     achievement_id = models.CharField(max_length=10)
     user_id = models.IntegerField()
+
+class Apikey(models.Model):
+    user_id = models.IntegerField(primary_key=True)
+    api_key = models.CharField(max_length=255)
