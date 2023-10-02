@@ -202,3 +202,32 @@ export const login = async (username, password) => {
     }
 }
 
+export const importApiKey = async (user_id) => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/import_api_key';
+    const data = {
+        user_id: user_id
+    }
+    try {
+        const response = await Axios.post(url, data, {headers: getHeaders()});
+        return response.data;
+    } catch(error) {
+        console.log(error.message);
+        return "error";
+    }
+}
+
+export const editApiKey = async (user_id, api_key) => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/edit_api_key';
+    const data = {
+        user_id: user_id,
+        api_key: api_key
+    }
+    try {
+        await Axios.post(url, data, {headers: getHeaders()});
+        return "success";
+    } catch(error) {
+        console.log(error.message);
+        return "error";
+    }
+}
+
