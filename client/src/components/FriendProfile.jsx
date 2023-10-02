@@ -58,7 +58,7 @@ const StyledAvatar = styled(Avatar)`
 
 const StyledStatus = styled.div`
   color: ${(props) => (props.status === "offline" ? "#666" : "#00aa00")};
-  font-size: 1.5rem;
+  font-size: 1rem;
   align-items: center;
   font-style: italic;
 `;

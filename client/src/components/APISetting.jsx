@@ -35,16 +35,20 @@ const TextStyle = styled.div`
 function APISetting() {
   const [isEditApiKey, setIsEditApiKey] = useState(false)
   const { userId } = useStateContext();
-  const [apiKey, setApiKey] = useState("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")
-  const [tempApiKey, setTempApiKey] = useState();
+  const [apiKey, setApiKey] = useState("")
+  const [tempApiKey, setTempApiKey] = useState("");
 
-  useEffect(async () => {
-    try {
-      const apikeyData = await importApiKey(userId);
-      setApiKey(apikeyData);
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    const fetchApiKeyData = async () => {
+      try {
+        const apikeyData = await importApiKey(userId);
+        console.log(apikeyData)
+        setApiKey(apikeyData);
+      } catch (error) {
+        console.error(error);
+      }
     }
+    fetchApiKeyData()
   }, []);
 
   const processApiKey = (apiKey) => {
@@ -69,7 +73,7 @@ function APISetting() {
     setIsEditApiKey(!isEditApiKey)
     setApiKey(tempApiKey)
     try{
-      await editApiKey()
+      await editApiKey(userId, tempApiKey)
     }
     catch (error) {
       console.log(error)
@@ -92,13 +96,13 @@ function APISetting() {
         {
           !isEditApiKey && <TextStyle>{processApiKey(apiKey)}</TextStyle>
         }
-        {!isEditApiKey && <Button variant="contained" color="primary" onClick={handleEdit} style={{width:"6rem", marginLeft:"1rem"}}>
+        {!isEditApiKey && <Button variant="contained" color="primary" onClick={handleEdit} style={{width:"6rem", marginLeft:"0.5rem"}}>
           Edit
         </Button>}
-        {isEditApiKey && <Button variant="contained" color="secondary" onClick={handleCancel} style={{width:"6rem", marginLeft:"1rem"}}>
+        {isEditApiKey && <Button variant="contained" color="secondary" onClick={handleCancel} style={{width:"6rem", marginLeft:"0.5rem"}}>
           Cancel
         </Button>}
-        {isEditApiKey && <Button variant="contained" color="primary" onClick={handleConfirm} style={{width:"6rem", marginLeft:"1rem"}}>
+        {isEditApiKey && <Button variant="contained" color="primary" onClick={handleConfirm} style={{width:"6rem", marginLeft:"0.5rem"}}>
           Confirm
         </Button>}
     </Container>
