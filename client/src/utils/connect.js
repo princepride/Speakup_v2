@@ -202,6 +202,21 @@ export const login = async (username, password) => {
     }
 }
 
+export const signup = async (username, email, password) => {
+    const url = process.env.REACT_APP_BACKEND_URL + '/signup';
+    const data = {
+        username: username,
+        email:email,
+        password: password
+    }
+    try {
+        await Axios.post(url, data);
+        return "success";
+    } catch(error) {
+        return "error";
+    }
+}
+
 export const importApiKey = async (user_id) => {
     const url = process.env.REACT_APP_BACKEND_URL + '/import_api_key';
     const data = {
@@ -230,4 +245,3 @@ export const editApiKey = async (user_id, api_key) => {
         return "error";
     }
 }
-

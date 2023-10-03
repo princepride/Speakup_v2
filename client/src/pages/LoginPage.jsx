@@ -2,16 +2,17 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStateContext } from '../contexts/ContextProvider';
 import login_video from "../assets/videos/login_video.mp4";
-import { login } from "../utils/connect.js"
+import { login, signup } from "../utils/connect.js"
 import './LoginPage.sass';
+import { Axios } from 'axios';
 
 function LoginPage() {
     const listElement = useRef(null);
     const { setUserId } = useStateContext();
     const navigate = useNavigate();
-    const registerText = "hello1";
-    const loginText = "Salute to the great Wang Zhipeng.";
-
+    const registerText = "Salute to The Great Wang Zhipeng.";
+    const loginText = "Salute to The Great Wang Zhipeng.";
+    const [passwordsMatch, setPasswordsMatch] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
@@ -21,10 +22,6 @@ function LoginPage() {
     const handleSignup = () => {
         listElement.current.classList.remove('bounceRight');
         listElement.current.classList.add('bounceLeft');
-        setTimeout(() => {
-            listElement.current.classList.remove('bounceLeft');
-            listElement.current.classList.add('bounceRight');
-        }, 1000)
     };
 
     const handleLogin = () => {
@@ -50,9 +47,41 @@ function LoginPage() {
         })
     };
 
-    const sumbitSignupForm = () => {
-        const signupEmail = document.querySelector('#signup-email').value;
+    const sumbitSignupForm = async (event) => {
+        event.preventDefault();
+        const username = document.querySelector('#signup-username').value;
+        const email = document.querySelector('#signup-email').value;
+        const password = document.querySelector('#signup-password').value;
+        await signup(username, email, password)
+        .then(data => {
+            document.querySelector('#signup-username').value = ""
+            document.querySelector('#signup-email').value = ""
+            document.querySelector('#signup-password').value = ""
+            document.querySelector('#confirm-password').value = ""
+            if(data === "error") {
+                alert("The user name have been signed up !")
+            }
+            else {
+                listElement.current.classList.remove('bounceLeft');
+                listElement.current.classList.add('bounceRight');
+                alert("Thanks for your sign up !")
+            }
+        })
+
+    };
+
+    const handleConfirmPasswordChange = (event) => {
         const signupPassword = document.querySelector('#signup-password').value;
+        const confirmPassword = event.target.value;
+    
+        setPasswordsMatch(signupPassword === confirmPassword);
+    
+        // 如果密码匹配，则移除错误类
+        if (signupPassword === confirmPassword) {
+            document.querySelector('#confirm-password').classList.remove('error');
+        } else {
+            document.querySelector('#confirm-password').classList.add('error');
+        }
     };
 
     return (
@@ -110,13 +139,23 @@ function LoginPage() {
                         <form className="forms_form">
                         <fieldset className="forms_fieldset">
                             <div className="forms_field">
-                            <input type="email" placeholder="Email" className="forms_field-input" id="signup-email" required />
+                                <input placeholder="User Name" className="forms_field-input" id="signup-username" required autoFocus />
                             </div>
                             <div className="forms_field">
-                            <input type="password" placeholder="Password" className="forms_field-input" id="signup-password" required />
+                                <input placeholder="Email" className="forms_field-input" id="signup-email" required autoFocus />
                             </div>
                             <div className="forms_field">
-                            <input type="password" placeholder="Confirm Password" className="forms_field-input" id="signup-password" required />
+                                <input type="password" placeholder="Password" className="forms_field-input" id="signup-password" required />
+                            </div>
+                            <div className="forms_field">
+                                <input
+                                    type="password"
+                                    placeholder="Confirm Password"
+                                    className={`forms_field-input ${passwordsMatch ? '' : 'error'}`}
+                                    id="confirm-password"
+                                    required
+                                    onChange={handleConfirmPasswordChange}
+                                />
                             </div>
                         </fieldset>
                         <div className="forms_buttons">
