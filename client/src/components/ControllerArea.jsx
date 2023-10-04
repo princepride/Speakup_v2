@@ -7,7 +7,7 @@ import SelectSubtitleButton from "./SelectSubtitleButton"
 const StyledContainer = styled.div`
   display: 'flex';
   align-items: 'center';
-  margin-top: 5vh;
+  margin-top: 2vh;
   margin-left: 2vw;
   margin-right: 2vw;
   width: 92vw;

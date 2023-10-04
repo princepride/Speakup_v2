@@ -9,7 +9,9 @@ let mediaRecorder = null;
 let recordedChunks = [];
 
 const AudioPlayer = styled.audio`
+  margin-top:2vh;
   width: 38vw;
+  height: 5vh;
   pointer-events: ${({ clickable }) => (clickable ? 'auto' : 'none')};
   opacity: ${({ clickable }) => (clickable ? '1' : '0.5')};
 `;
