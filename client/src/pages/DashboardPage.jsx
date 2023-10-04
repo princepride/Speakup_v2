@@ -53,7 +53,7 @@ const NavigationList = styled(List)`
         flex-direction: row;
         justify-content: space-around;
         margin-top: 0px;
-        height: 8vh;
+        height: auto;
     }
 `;
 
