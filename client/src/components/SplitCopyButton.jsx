@@ -109,7 +109,7 @@ return (
         userSubSubtitles[subSubtitlesIndex] !== "" &&
         <React.Fragment>
         <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-            <Button style={{width: "8rem"}} title="Copy" onClick={handleClick}>{copy_button_config[selectedIndex].button_name}</Button>
+            <Button style={{width: "7vw"}} title={copy_button_config[selectedIndex].button_name} onClick={handleClick}>{copy_button_config[selectedIndex].button_name}</Button>
             <Button
                 size="small"
                 aria-controls={open ? 'split-button-menu' : undefined}
@@ -118,7 +118,7 @@ return (
                 aria-haspopup="menu"
                 onClick={handleToggle}
             >
-            <ExpandMoreIcon />
+            <ExpandMoreIcon style={{width:"1vw"}}/>
             </Button>
         </ButtonGroup>
         <Popper

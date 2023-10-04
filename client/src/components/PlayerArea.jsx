@@ -6,9 +6,9 @@ import styled from "@emotion/styled";
 
 const StyledContainer = styled.div`
     display: flex;
-    margin-top: 1rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
+    margin-top: 1vh;
+    margin-left: 2vw;
+    margin-right: 2vw;
 
     @media screen and (max-width: 1080px) {
       flex-direction: column;

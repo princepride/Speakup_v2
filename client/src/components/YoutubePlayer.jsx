@@ -6,7 +6,7 @@ import styled from '@emotion/styled';
 const Container = styled.div`
   padding: 20px;
   height: 80vh;
-  width: 80vw;
+  width: 76vw;
 
   @media screen and (max-width: 1080px) {
     width: 92vw;
