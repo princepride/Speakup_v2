@@ -12,7 +12,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
     height: 58vh;
     overflow-y: auto;
-    padding-top: 1rem;
+    padding-top: 1vh;
 
     @media screen and (max-width: 1080px) {
         height: 50vh;
