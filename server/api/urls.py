@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('login', views.login),
+    path('signup', views.signup),
     path('download-youtube', views.download_youtube),
     path('speech-recognition', views.speech_recognition),
     path('chatGPT', views.chatGPT),

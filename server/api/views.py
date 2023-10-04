@@ -21,6 +21,7 @@ import wave
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from django.contrib.auth.hashers import check_password
 
 with open(r'config.json') as file:
     json_data = json.load(file)
@@ -73,13 +74,28 @@ class FinalChatGPT:
 def login(request):
     username = request.data.get('username')
     password = request.data.get('password')
-    # 验证用户名和密码
-    user = User.objects.filter(username=username, password=password).first()
-    if user:
+    # 验证用户名
+    user = User.objects.filter(username=username).first()
+    
+    if user and check_password(password, user.password):
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key, 'userId': user.id}, status=200)
     else:
         return Response({"error": "User name or password error!"}, status=400)
+    
+@api_view(['POST'])
+def signup(request):
+    username = request.data.get('username')
+    email = request.data.get('email')
+    password = request.data.get('password')
+    # 检查是否已存在相同的用户名
+    if User.objects.filter(username=username).exists():
+        return Response({'message': 'Username already exists'}, status=400)
+
+    # 创建新用户
+    user = User.objects.create_user(username=username, email=email, password=password)
+    user.save()
+    return Response({'message': 'User created successfully'}, status=200)
     
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])

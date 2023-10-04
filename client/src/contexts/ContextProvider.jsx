@@ -1,6 +1,4 @@
 import React, { createContext, useContext, useState } from 'react';
-// import dummySubtitles from "../assets/dummy/subsubtitles.js"
-
 
 const StateContext = createContext();
 
