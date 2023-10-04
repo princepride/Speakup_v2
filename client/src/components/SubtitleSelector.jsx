@@ -20,16 +20,14 @@ const StyledContainer = styled.div`
 `
 
 const StyledSelect = styled(Select)`
-    width: 200px;
-    margin-left: 1rem;
-    height: 40px;
+    width: 10rem;
+    height: 2.5rem;
 `;
 
 const StyledController = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
 `;
 
 const StyledModel = styled.div`
@@ -39,8 +37,8 @@ const StyledModel = styled.div`
 `
 
 const StyledModelSelect = styled(Select)`
-    width: 150px;
-    height: 40px;
+    width: 9rem;
+    height: 2.5rem;
 `
 
 function SubtitleSelector() {
