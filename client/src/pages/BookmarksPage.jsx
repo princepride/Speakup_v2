@@ -22,6 +22,7 @@ const LeftContainer = styled.div`
     flex: 1;
     border-right: 1px solid #ccc;
     padding-right: 2rem;
+    padding-left: 2rem;
     overflow-x: visible;
     overflow-y: auto;
     @media (max-width: 1080px) {
@@ -32,10 +33,21 @@ const LeftContainer = styled.div`
         overflow-y: visible; 
         height: 50%; 
     }
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 2px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
 `;
 
 const RightContainer = styled.div`
     flex: 1;
+    padding-right: 2rem;
     padding-left: 2rem;
     overflow-x: visible;
     overflow-y: auto;
@@ -44,6 +56,16 @@ const RightContainer = styled.div`
         overflow-x: auto; 
         overflow-y: visible; 
         height: 50%; 
+    }
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 2px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        background: #555;
     }
 `;
 
