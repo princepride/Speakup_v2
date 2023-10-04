@@ -11,7 +11,6 @@ let recordedChunks = [];
 const AudioPlayer = styled.audio`
   padding-top: 8px;
   width: 38vw;
-  height: 6vh;
   pointer-events: ${({ clickable }) => (clickable ? 'auto' : 'none')};
   opacity: ${({ clickable }) => (clickable ? '1' : '0.5')};
 `;
