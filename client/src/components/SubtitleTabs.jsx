@@ -7,7 +7,7 @@ import SubtitleSelector from "./SubtitleSelector";
 
 const StyledContainer = styled.div`
     width: 17vw;
-    height: 80vh;
+    height: 76vh;
 
     @media screen and (max-width: 1080px) {
         margin-top: 20px;

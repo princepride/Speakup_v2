@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 const MainContainer = styled(Box)`
     display: flex;
     flex-direction: row;
-    height: 100vh;
 
     @media screen and (max-width: 1080px) {
         flex-direction: column;
@@ -41,11 +40,10 @@ const NavigationContainer = styled(Box)`
 `;
 
 const NavigationList = styled(List)`
-    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 90%;
+    height: 96vh;
 
     > div.autoFill {
         flex-grow: 1;

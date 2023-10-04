@@ -12,8 +12,8 @@ const StyledContainer = styled.div`
     display: 'flex';
     align-items: 'center';
     margin-top: 1vh;
-    margin-left: 2vw;
-    margin-right: 2vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
     width: 92vw;
     @media screen and (max-width: 1080px) {
         width: 92vw;

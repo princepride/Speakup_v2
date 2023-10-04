@@ -10,7 +10,7 @@ import SplitCopyButton from './SplitCopyButton'
 const StyledContainer = styled.div`
     display: flex;
     flex-direction: column;
-    height: 64vh;
+    height: 58vh;
     overflow-y: auto;
     padding-top: 1rem;
 

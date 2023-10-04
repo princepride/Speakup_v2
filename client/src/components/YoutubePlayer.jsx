@@ -4,8 +4,7 @@ import YouTube from 'react-youtube';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  padding: 20px;
-  height: 80vh;
+  height: 76vh;
   width: 76vw;
 
   @media screen and (max-width: 1080px) {
