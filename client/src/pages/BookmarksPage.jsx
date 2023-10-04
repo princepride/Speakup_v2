@@ -23,20 +23,15 @@ const LeftContainer = styled.div`
     border-right: 1px solid #ccc;
     padding-right: 2rem;
     padding-left: 2rem;
+    overflow-x: visible;
+    overflow-y: auto;
     @media (max-width: 1080px) {
         border-right: none;
         padding-right: 0;
         border-bottom: 1px solid #ccc;
-        height: 50%; 
-    }
-`
-
-const LeftScrollArea = styled.div`
-    overflow-x: visible;
-    overflow-y: auto;
-    @media (max-width: 1080px) {
         overflow-x: auto; 
         overflow-y: visible; 
+        height: 50%; 
     }
     &::-webkit-scrollbar {
         width: 4px;
@@ -54,18 +49,13 @@ const RightContainer = styled.div`
     flex: 1;
     padding-right: 2rem;
     padding-left: 2rem;
-    @media (max-width: 1080px) {
-        padding-left: 0;
-        height: 50%; 
-    }
-`
-
-const RightScrollArea = styled.div`
     overflow-x: visible;
     overflow-y: auto;
     @media (max-width: 1080px) {
+        padding-left: 0;
         overflow-x: auto; 
         overflow-y: visible; 
+        height: 50%; 
     }
     &::-webkit-scrollbar {
         width: 4px;
@@ -142,7 +132,6 @@ function BookmarksPage() {
         <StyledContainer maxWidth="lg">
             <LeftContainer>
             <TextStyle>Favourite</TextStyle>
-            <LeftScrollArea>
                 <Grid container spacing={2}>
                     {bookMarks.map((bookmark, index) => (
                         <Grid item xs={6} md={4} key={index}>
@@ -155,11 +144,9 @@ function BookmarksPage() {
                         </Grid>
                     ))}
                 </Grid>
-            </LeftScrollArea>
             </LeftContainer>
             <RightContainer>
-            <TextStyle>Recommend</TextStyle>
-            <RightScrollArea>
+                <TextStyle>Recommend</TextStyle>
                 <Grid container spacing={2}>
                     {recommendeds.map((recommended, index) => (
                         <Grid item xs={6} md={4} key={index}>
@@ -172,7 +159,6 @@ function BookmarksPage() {
                         </Grid>
                     ))}
                 </Grid>
-            </RightScrollArea>
             </RightContainer>
         </StyledContainer>
     );
