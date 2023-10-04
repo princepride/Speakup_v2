@@ -2,9 +2,10 @@ import React from 'react'
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-    height:98%;
-    margin-bottom:2%;
-    width:50%;
+    height:97%;
+    margin-bottom:3%;
+    margin-right:0.5%;
+    width:49.5%;
     border: 1px solid #ccc;
     border-radius: 40px;
     overflow: hidden;
