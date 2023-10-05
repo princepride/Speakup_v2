@@ -34,20 +34,16 @@ export default function GitHubActivityGraph(props) {
 
     return (
         <div style={{display:"flex", flexDirection:"row"}}>
-        <FormControl>
-            <InputLabel id="year-select-label">Year</InputLabel>
             <StyledSelect
                 labelId="year-select-label"
                 id="year-select"
                 value={selectedYear}
-                label="Year"
                 onChange={handleChangeYear}
             >
                 {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
                     <MenuItem key={year} value={year}>{year}</MenuItem>
                 ))}
             </StyledSelect>
-        </FormControl>
         <CalendarHeatmap
             startDate={new Date(`${selectedYear}-01-01`)}
             endDate={new Date(`${selectedYear}-12-31`)}
