@@ -33,7 +33,7 @@ export default function GitHubActivityGraph(props) {
     }
 
     return (
-        <div style={{display:"flex", flexDirection:"row", height:"21vh", marginTop:"1vh"}}>
+        <div style={{display:"flex", flexDirection:"row", marginTop:"1vh"}}>
             <StyledSelect
                 labelId="year-select-label"
                 id="year-select"
@@ -44,7 +44,7 @@ export default function GitHubActivityGraph(props) {
                     <MenuItem key={year} value={year}>{year}</MenuItem>
                 ))}
             </StyledSelect>
-            <div style={{width:"calc(98% - 6rem)", height:"21vh"}}>
+            <div style={{width:"calc(98% - 6rem)"}}>
                 <CalendarHeatmap
                     startDate={new Date(`${selectedYear}-01-01`)}
                     endDate={new Date(`${selectedYear}-12-31`)}
