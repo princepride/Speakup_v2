@@ -17,7 +17,7 @@ import ProgressBar from '../components/ProgressBar'
 import { useStateContext } from '../contexts/ContextProvider';
 
 const UserCardContainer = styled.div`
-    height: 35vh; 
+    height: 38vh; 
     margin-top:1vh;
     margin-left:1vw;
     margin-right:1vw;
@@ -33,7 +33,7 @@ const UserCardContainer = styled.div`
 `
 
 const SummaryContainer = styled.div`
-    height: 36vh; 
+    height: 38vh; 
     width: 36vw;
     margin-top:2vh;
     margin-left:1vw;
