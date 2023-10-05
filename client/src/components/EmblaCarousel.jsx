@@ -76,7 +76,7 @@ const BottomDiv = styled.div`
 `
 
 const ChartContainer1 = styled.div`
-    height: 56vh; 
+    height: 40vh; 
     width: 36vw;
     margin-top:1vh;
     margin-left:1vw;

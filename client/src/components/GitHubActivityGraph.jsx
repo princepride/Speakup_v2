@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import 'react-calendar-heatmap/dist/styles.css';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import styled from '@emotion/styled';
+
+const StyledSelect = styled(Select)`
+    width: 6rem;
+    height: 2.5rem;
+`;
 
 export default function GitHubActivityGraph(props) {
     const { values, setDate} = props
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+    const handleChangeYear = (event) => {
+        setSelectedYear(event.target.value);
+    }
 
     const handleClick = (value) => {
         if (value) {
@@ -21,9 +33,24 @@ export default function GitHubActivityGraph(props) {
     }
 
     return (
+        <div>
+        <FormControl>
+            <InputLabel id="year-select-label">Year</InputLabel>
+            <StyledSelect
+                labelId="year-select-label"
+                id="year-select"
+                value={selectedYear}
+                label="Year"
+                onChange={handleChangeYear}
+            >
+                {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                    <MenuItem key={year} value={year}>{year}</MenuItem>
+                ))}
+            </StyledSelect>
+        </FormControl>
         <CalendarHeatmap
-            startDate={new Date('2023-01-01')}
-            endDate={new Date('2023-12-31')}
+            startDate={new Date(`${selectedYear}-01-01`)}
+            endDate={new Date(`${selectedYear}-12-31`)}
             values={values}
             classForValue={(value) => {
                 if (!value) {
@@ -34,5 +61,21 @@ export default function GitHubActivityGraph(props) {
             titleForValue={getTitleForValue} // 添加这一行
             onClick={handleClick}
         />
+        </div>
     );
 }
+
+    {/* </div>
+        <CalendarHeatmap
+            startDate={new Date('2023-01-01')}
+            endDate={new Date('2023-12-31')}
+            values={values}
+            classForValue={(value) => {
+                if (!value) {
+                    return 'color-empty';
+                }
+                return `color-github-${Math.ceil(value.totalDuration/10)}`;
+            }}
+            titleForValue={getTitleForValue} 
+            onClick={handleClick}
+        /> */}
