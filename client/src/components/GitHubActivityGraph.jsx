@@ -33,7 +33,7 @@ export default function GitHubActivityGraph(props) {
     }
 
     return (
-        <div>
+        <div style={{display:"flex", flexDirection:"row"}}>
         <FormControl>
             <InputLabel id="year-select-label">Year</InputLabel>
             <StyledSelect
