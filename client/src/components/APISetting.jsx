@@ -5,9 +5,10 @@ import { editApiKey, importApiKey } from '../utils/connect';
 import { useStateContext } from '../contexts/ContextProvider';
 
 const Container = styled.div`
-    height:98%;
-    margin-bottom:2%;
-    width:50%;
+    height:97%;
+    margin-bottom:3%;
+    margin-left:0.5%;
+    width:49.5%;
     border: 1px solid #ccc;
     border-radius: 40px;
     overflow: hidden;

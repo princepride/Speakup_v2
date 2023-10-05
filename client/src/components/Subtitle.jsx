@@ -7,7 +7,7 @@ import {stringToSecond} from "../utils/timeConvert.js"
 const SubtitleStyle = styled.div`
     display: flex;
     flex-direction: column;
-    height: 78vh;
+    height: calc(76vh - 3rem);;
     overflow-y: auto;
     padding-top: 1rem;
     

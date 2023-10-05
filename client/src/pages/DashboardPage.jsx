@@ -12,7 +12,7 @@ import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import TasksPage from './TasksPage';
-import { shutDown } from '../utils/connect'
+// import { shutDown } from '../utils/connect'
 import SettingsPage from './SettingsPage'
 import { useStateContext } from '../contexts/ContextProvider'
 import { useNavigate } from "react-router-dom";
@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 const MainContainer = styled(Box)`
     display: flex;
     flex-direction: row;
-    height: 100vh;
 
     @media screen and (max-width: 1080px) {
         flex-direction: column;
@@ -41,11 +40,10 @@ const NavigationContainer = styled(Box)`
 `;
 
 const NavigationList = styled(List)`
-    margin-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 90%;
+    height: 96vh;
 
     > div.autoFill {
         flex-grow: 1;
@@ -55,6 +53,7 @@ const NavigationList = styled(List)`
         flex-direction: row;
         justify-content: space-around;
         margin-top: 0px;
+        height: auto;
     }
 `;
 
@@ -82,7 +81,7 @@ const ShutDownCard = styled.div`
     background-color: white;
     padding: 16px;
     border-radius: 8px;
-    margin-top: 200px;
+    margin-top: 30vh;
     margin-left: 50%;
     transform: translateX(-50%);
     width: 50vw;
@@ -263,13 +262,18 @@ const DashboardPage = () => {
             navigate("/");
         }
     }, [])
+
+    const shutDown = () => {
+        navigate("/");
+    }
+
     return (
         <>
         {
             shutDownSelectorVisible && 
             <Overlay onClick={event => event.stopPropagation()}>
                 <ShutDownCard>
-                    <h1 style={{"marginLeft":"20px"}}>SHUT DOWN YOUR SYSTEM ?</h1>
+                    <h1 style={{display:"flex", alignItems:"center", justifyContent:"center"}}>CONFIRM LOG OUT ?</h1>
                     <CenterButtonGroup>
                     <ShutDownButton style={{"backgroundColor":"#F31559", "color":"white"}} onClick={shutDown}>CONFIRM</ShutDownButton>
                     <ShutDownButton onClick={() => {setShutDownSelectorVisible(false)}}>CANCEL</ShutDownButton>

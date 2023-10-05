@@ -25,7 +25,7 @@ const FooterContainer = styled.div`
     justify-content: center;
     align-items: center;
     position: absolute;
-    bottom: 12vh;
+    bottom: 20%;
     left: 0;
     width: 100%;
     height: 50px;

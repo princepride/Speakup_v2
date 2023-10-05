@@ -11,10 +11,10 @@ import {removeBookmark, addBookmark} from "../utils/connect"
 const StyledContainer = styled.div`
     display: 'flex';
     align-items: 'center';
-    margin-top: 2rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
-    width: 96vw;
+    margin-top: 1vh;
+    margin-left: 1vw;
+    margin-right: 1vw;
+    width: 92vw;
     @media screen and (max-width: 1080px) {
         width: 92vw;
     }
