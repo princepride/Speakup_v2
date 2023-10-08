@@ -14,6 +14,10 @@ const Container = styled.div`
     align-items: center;
     padding: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    @media (max-width: 1080px) {
+        margin-left:0;
+        width:100%;
+    }
 `
 
 const TextStyle = styled.div`
