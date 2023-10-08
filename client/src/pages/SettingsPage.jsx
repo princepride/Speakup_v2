@@ -3,15 +3,25 @@ import FriendsGroup from '../components/FriendsGroup'
 import UserProfile from '../components/UserProfile'
 import APISetting from '../components/APISetting'
 import AchievementWall from '../components/AchievementWall'
+import styled from "@emotion/styled";
+
+const StyledProfileAPI = styled.div`
+  height: 40%;
+  display: flex;
+  flex-direction: row;
+  @media (max-width: 1080px) {
+    flex-direction: column;
+  }
+`
 
 function SettingsPage() {
   return (
     <div style={{display:'flex',flexDirection:'row'}}>
       <div style={{width:'74vw', flexDirection:'column', height: '92vh', margin: '2vh 1vw 2vh 1vw'}}>
-        <div style={{height:'40%', display:'flex',flexDirection: 'row'}} >
+        <StyledProfileAPI>
           <UserProfile />
           <APISetting />
-        </div>
+        </StyledProfileAPI>
         <div style={{height:'60%'}} >
         <AchievementWall />
         </div>
