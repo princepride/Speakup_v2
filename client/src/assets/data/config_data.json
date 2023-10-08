@@ -3,7 +3,8 @@
         {
             "button_name":"Paraphrase",
             "output_key_words":"Paraphrase Text",
-            "prompts":"Please provide a score for the following paraphrase, and explain your rating considering various dimensions such as accuracy, grammatical complexity and coherence. After that, you should give me some advice. 请全部用中文回答问题",
+            "prompts":"请对的释义打分， 同时从准确性，语法复杂度和连贯性的角度打分同时说明理由，你应该给我一些提升的建议，请全部用中文回答问题",
+            "promptx":"Please provide a score for the following paraphrase, and explain your rating considering various dimensions such as accuracy, grammatical complexity and coherence. After that, you should give me some advice. ",
             "has_memory":false,
             "use_original_text":true
         },

@@ -28,6 +28,7 @@ const LeftContainer = styled.div`
     @media (max-width: 1080px) {
         border-right: none;
         padding-right: 0;
+        padding-left: 0;
         border-bottom: 1px solid #ccc;
         overflow-x: auto; 
         overflow-y: visible; 
@@ -52,6 +53,7 @@ const RightContainer = styled.div`
     overflow-x: visible;
     overflow-y: auto;
     @media (max-width: 1080px) {
+        padding-right: 0;
         padding-left: 0;
         overflow-x: auto; 
         overflow-y: visible; 
