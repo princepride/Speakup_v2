@@ -4,6 +4,22 @@ import 'react-calendar-heatmap/dist/styles.css';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import styled from '@emotion/styled';
 
+const StyledGithubGroup = styled.div`
+    margin-top: 1vh;
+    display: flex;
+    flex-direction: row;
+    @media (max-width: 1080px) {
+        flex-direction: column;
+    }
+`
+
+const StyledGithub = styled.div`
+    width: calc(98% - 6rem);
+    @media (max-width: 1080px) {
+        width: 100%;
+    }
+`
+
 const StyledSelect = styled(Select)`
     width: 6rem;
     height: 2.5rem;
@@ -33,7 +49,7 @@ export default function GitHubActivityGraph(props) {
     }
 
     return (
-        <div style={{display:"flex", flexDirection:"row", marginTop:"1vh"}}>
+        <StyledGithubGroup>
             <StyledSelect
                 labelId="year-select-label"
                 id="year-select"
@@ -44,7 +60,7 @@ export default function GitHubActivityGraph(props) {
                     <MenuItem key={year} value={year}>{year}</MenuItem>
                 ))}
             </StyledSelect>
-            <div style={{width:"calc(98% - 6rem)"}}>
+            <StyledGithub>
                 <CalendarHeatmap
                     startDate={new Date(`${selectedYear}-01-01`)}
                     endDate={new Date(`${selectedYear}-12-31`)}
@@ -58,22 +74,7 @@ export default function GitHubActivityGraph(props) {
                     titleForValue={getTitleForValue} // 添加这一行
                     onClick={handleClick}
                 />
-            </div>
-        </div>
+            </StyledGithub>
+        </StyledGithubGroup>
     );
 }
-
-    {/* </div>
-        <CalendarHeatmap
-            startDate={new Date('2023-01-01')}
-            endDate={new Date('2023-12-31')}
-            values={values}
-            classForValue={(value) => {
-                if (!value) {
-                    return 'color-empty';
-                }
-                return `color-github-${Math.ceil(value.totalDuration/10)}`;
-            }}
-            titleForValue={getTitleForValue} 
-            onClick={handleClick}
-        /> */}
