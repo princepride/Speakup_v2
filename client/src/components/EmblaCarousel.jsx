@@ -16,6 +16,22 @@ import { calculateExpEn } from '../utils/algorithm'
 import ProgressBar from '../components/ProgressBar'
 import { useStateContext } from '../contexts/ContextProvider';
 
+const StyledChartGroup = styled.div`
+    display: flex;
+    flex-direction: row;
+    @media (max-width: 1080px) {
+    flex-direction: column;
+    }
+`
+
+const StyledSummaryGroup = styled.div`
+    display: flex;
+    flex-direction: row;
+    @media (max-width: 1080px) {
+    flex-direction: column;
+    }
+`
+
 const UserCardContainer = styled.div`
     height: 38vh; 
     margin-top:1vh;
@@ -30,6 +46,9 @@ const UserCardContainer = styled.div`
     align-items: center;
     padding: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    @media (max-width: 1080px) {
+        height: 20vh; 
+    }
 `
 
 const SummaryContainer = styled.div`
@@ -47,6 +66,10 @@ const SummaryContainer = styled.div`
     align-items: center;
     padding: 10px;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    @media (max-width: 1080px) {
+        height: 20vh; 
+        width: 100%;
+    }
 `
 const ImageContainer = styled.div`
     height: 80vh; 
@@ -75,7 +98,7 @@ const BottomDiv = styled.div`
     align-items: flex-end;
 `
 
-const ChartContainer1 = styled.div`
+const ChartContainer = styled.div`
     height: 56vh; 
     width: 36vw;
     margin-top:1vh;
@@ -85,6 +108,10 @@ const ChartContainer1 = styled.div`
     border-radius: 40px;
     overflow: hidden;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    @media (max-width: 1080px) {
+        height: 24vh; 
+        width: 64vw;
+    }
 `;
 const EmblaPrevButton = styled.div`
     position: absolute;
@@ -98,10 +125,6 @@ const EmblaNextButton = styled.div`
     top: 50%;
     transform: translateY(-50%);
     right: 2%;
-
-    @media screen and (max-width: 1080px) {
-        top: 60%;
-    }
 `
 const TextStyle = styled.div`
     background-image: linear-gradient(90deg,#2e4f8b 0%,#3e589d 35%,#8f619b 60%,#d0718f 70%);
@@ -178,7 +201,7 @@ const EmblaCarousel = (props) => {
                         </TopDiv>
                         <ProgressBar completed={totalExp} total={calculateExpEn(totalExp).expNeed} unit="EXP"/>
                     </UserCardContainer>
-                    <div style={{display:"flex",flexDirection:"row"}}>
+                    <StyledSummaryGroup>
                         <SummaryContainer>
                         <TopDiv>
                             <TextStyle>{totalDuration(data)}</TextStyle>
@@ -195,20 +218,20 @@ const EmblaCarousel = (props) => {
                                 <TextStyle>Total Active Days</TextStyle>
                             </BottomDiv>
                         </SummaryContainer>
-                    </div>
+                    </StyledSummaryGroup>
                 </div>
                 <div className="embla__slide">
                     <GitHubActivityGraph values={data.map(item=>({date: new Date(item.date),totalDuration:item.totalDuration}))} setDate={setDate}/>
-                    <div style={{display:"flex",flexDirection:"row"}}>
-                        <ChartContainer1>
+                    <StyledChartGroup>
+                        <ChartContainer>
                             <Chart 
                                 type="pie" 
                                 data = {[pieData]}
                                 title='Pie chart of daily practice categories'
                                 seriesNames={[""]} 
                             />
-                        </ChartContainer1>
-                        <ChartContainer1>
+                        </ChartContainer>
+                        <ChartContainer>
                             <Chart 
                                 type="bar" 
                                 data={barData} 
@@ -217,8 +240,8 @@ const EmblaCarousel = (props) => {
                                 yAxisTitle="Practice times"
                                 title='Bar chart of daily practice categories'
                             />
-                        </ChartContainer1>
-                    </div>
+                        </ChartContainer>
+                    </StyledChartGroup>
                 </div>
                 <div className="embla__slide">
                     <ImageContainer>
