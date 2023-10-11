@@ -37,8 +37,9 @@ const StyledModel = styled.div`
 `
 
 const StyledModelSelect = styled(Select)`
-    width: 9rem;
+    width: 8rem;
     height: 2.5rem;
+    font-size: 0.8rem;
 `
 
 function SubtitleSelector() {
@@ -87,8 +88,8 @@ function SubtitleSelector() {
                             value={model}
                             onChange={handleModelChange}
                         >
-                            <MenuItem value={"gpt-3.5-turbo"}>gpt-3.5-turbo</MenuItem>
-                            <MenuItem value={"gpt-4"}>gpt-4</MenuItem>
+                            <MenuItem value={"gpt-3.5-turbo"} style={{fontSize:"0.8rem"}}>gpt-3.5-turbo</MenuItem>
+                            <MenuItem value={"gpt-4"} style={{fontSize:"0.8rem"}}>gpt-4</MenuItem>
                             {/*<MenuItem value={"text-moderation-playground"}>text-moderation-playground</MenuItem>*/}
                             {/*<MenuItem value={"text-davinci-002-render-sha"}>text-davinci-002-render-sha</MenuItem>*/}
                         </StyledModelSelect>
