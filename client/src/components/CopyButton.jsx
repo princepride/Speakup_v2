@@ -28,7 +28,7 @@ function CopyButton() {
             {
                 userSubSubtitles[subSubtitlesIndex] !== "" &&
                 <Button 
-                style={{'marginTop': '8px','width': '6rem', 'marginLeft': 'auto'}}
+                style={{'marginTop': '8px','width': '7rem', 'marginLeft': 'auto'}}
                 variant="contained" 
                 onClick={handleCopyClick}>
                     Copy
