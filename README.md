@@ -75,6 +75,7 @@ Get it and replace it in `server\config.json`
 
 You can use your own prompts by changing `client\src\assets\data\config_data.json`
 
+
 ## User Guide
 
 ![1686489915963](image/README.zh/1686489915963.png)
