@@ -17,7 +17,7 @@ export const ContextProvider = ({ children }) => {
     const [subtitleStartTime, setSubtitleStartTime] = useState(-1);
     const [subtitleEndTime, setSubtitleEndTime] = useState(-1);
     const [chatGPTResponse, setChatGPTResponse] = useState([]);
-    const [model, setModel] = useState("gpt-3.5-turbo")
+    const [model, setModel] = useState("gpt-3.5-turbo-1106")
 
     const [visible, setVisible] = useState(false);
     const [loopBody, setLoopBody] = useState([]);

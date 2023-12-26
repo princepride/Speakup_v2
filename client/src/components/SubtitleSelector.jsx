@@ -88,7 +88,7 @@ function SubtitleSelector() {
                             value={model}
                             onChange={handleModelChange}
                         >
-                            <MenuItem value={"gpt-3.5-turbo"} style={{fontSize:"0.8rem"}}>gpt-3.5-turbo</MenuItem>
+                            <MenuItem value={"gpt-3.5-turbo-1106"} style={{fontSize:"0.8rem"}}>gpt-3.5-turbo-1106</MenuItem>
                             <MenuItem value={"gpt-4"} style={{fontSize:"0.8rem"}}>gpt-4</MenuItem>
                             <MenuItem value={"gpt-4–1106-preview"} style={{fontSize:"0.8rem"}}>gpt-4–1106-preview</MenuItem>
                             {/*<MenuItem value={"text-moderation-playground"}>text-moderation-playground</MenuItem>*/}
