@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Button, ButtonGroup, Grow, Paper, ClickAwayListener, Popper, MenuItem, MenuList} from '@mui/material';
+import React, { useState, useRef, useEffect } from 'react';
+import { Button, ButtonGroup, Grow, Paper, ClickAwayListener, Popper, MenuItem, MenuList, TextField} from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import config_data from '../assets/data/config_data.json';
 import { useStateContext } from '../contexts/ContextProvider';
@@ -11,11 +11,18 @@ const StyledContainer = styled.div`
     justify-content: flex-end;
 `
 
+const StyledContainer2 = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
 const copy_button_config = config_data.copy_button_config
 
 export default function SplitButton(props) {
   const {disclickable} = props
   const [open, setOpen] = useState(false);
+  const [extraInfo, setExtraInfo] = useState("");
+  const [inputValue, setInputValue] = useState();
   const anchorRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const {
@@ -30,11 +37,19 @@ export default function SplitButton(props) {
     setLoopBody,
     setLoopIndex} = useStateContext()
 
+useEffect(() => {
+    setExtraInfo(copy_button_config[selectedIndex].extra_info)
+}, [selectedIndex])
+
+const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+};
+
 const handleClick = async () => {
     let systemContent = copy_button_config[selectedIndex].prompts;
 
     let promptText = [
-        {"role": "system", "content": systemContent},
+        {"role": "system", "content": extraInfo === "" ? systemContent: systemContent.replace(`{{${extraInfo}}}`,inputValue)},
     ]
     if(copy_button_config[selectedIndex].has_memory){
         for(let i = Math.max(0, userSubSubtitles[subSubtitlesIndex].length - 3); i < userSubSubtitles[subSubtitlesIndex].length; i++) {
@@ -105,12 +120,15 @@ const handleClick = async () => {
   };
 //
 return (
+    <StyledContainer2>
     <StyledContainer>
     {
         userSubSubtitles[subSubtitlesIndex] !== "" &&
         <React.Fragment>
         <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-            <Button style={{width: "7rem",fontSize:"0.8rem"}} title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
+            {/* <Button size="small" title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
+             */}
+            <Button style={{width: "7rem",fontSize:"0.8rem"}} size="small" title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
             <Button
                 size="small"
                 aria-controls={open ? 'split-button-menu' : undefined}
@@ -163,5 +181,16 @@ return (
         </React.Fragment>
     }
     </StyledContainer>
+        {
+            extraInfo !== "" && 
+            <TextField
+                label = {extraInfo}
+                variant="outlined"
+                value={inputValue}
+                onChange={handleInputChange}
+                size="small"
+            />
+        }
+    </StyledContainer2>
     );
 }
