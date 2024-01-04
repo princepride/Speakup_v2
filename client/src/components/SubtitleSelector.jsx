@@ -81,22 +81,19 @@ function SubtitleSelector() {
                     </React.Fragment>
                 ))}
             </StyledContainer>
-                {
-                    userSubSubtitles[subSubtitlesIndex].length > 0 &&
-                    <StyledModel>
-                        <StyledModelSelect
-                            value={model}
-                            onChange={handleModelChange}
-                        >
-                            <MenuItem value={"gpt-3.5-turbo-1106"} style={{fontSize:"0.8rem"}}>gpt-3.5-turbo-1106</MenuItem>
-                            <MenuItem value={"gpt-4"} style={{fontSize:"0.8rem"}}>gpt-4</MenuItem>
-                            <MenuItem value={"gpt-4–1106-preview"} style={{fontSize:"0.8rem"}}>gpt-4–1106-preview</MenuItem>
-                            {/*<MenuItem value={"text-moderation-playground"}>text-moderation-playground</MenuItem>*/}
-                            {/*<MenuItem value={"text-davinci-002-render-sha"}>text-davinci-002-render-sha</MenuItem>*/}
-                        </StyledModelSelect>
-                        <SplitCopyButton />
-                    </StyledModel>
-                }
+            <StyledModel>
+                <StyledModelSelect
+                    value={model}
+                    onChange={handleModelChange}
+                >
+                    <MenuItem value={"gpt-3.5-turbo-1106"} style={{fontSize:"0.8rem"}}>gpt-3.5-turbo-1106</MenuItem>
+                    <MenuItem value={"gpt-4"} style={{fontSize:"0.8rem"}}>gpt-4</MenuItem>
+                    <MenuItem value={"gpt-4–1106-preview"} style={{fontSize:"0.8rem"}}>gpt-4–1106-preview</MenuItem>
+                    {/*<MenuItem value={"text-moderation-playground"}>text-moderation-playground</MenuItem>*/}
+                    {/*<MenuItem value={"text-davinci-002-render-sha"}>text-davinci-002-render-sha</MenuItem>*/}
+                </StyledModelSelect>
+                <SplitCopyButton disclickable={userSubSubtitles[subSubtitlesIndex].length == 0}/>
+            </StyledModel>
         </>
     )
 }

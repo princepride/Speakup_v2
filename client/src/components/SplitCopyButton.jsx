@@ -13,7 +13,8 @@ const StyledContainer = styled.div`
 
 const copy_button_config = config_data.copy_button_config
 
-export default function SplitButton() {
+export default function SplitButton(props) {
+  const {disclickable} = props
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -109,7 +110,7 @@ return (
         userSubSubtitles[subSubtitlesIndex] !== "" &&
         <React.Fragment>
         <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
-            <Button style={{width: "7rem",fontSize:"0.8rem"}} title={copy_button_config[selectedIndex].button_name} onClick={handleClick}>{copy_button_config[selectedIndex].button_name}</Button>
+            <Button style={{width: "7rem",fontSize:"0.8rem"}} title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
             <Button
                 size="small"
                 aria-controls={open ? 'split-button-menu' : undefined}
