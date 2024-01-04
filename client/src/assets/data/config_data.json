@@ -6,28 +6,40 @@
             "prompts":"请对的释义打分， 同时从准确性，语法复杂度和连贯性的角度打分同时说明理由，你应该给我一些提升的建议，请全部用中文回答问题",
             "promptx":"Please provide a score for the following paraphrase, and explain your rating considering various dimensions such as accuracy, grammatical complexity and coherence. After that, you should give me some advice. ",
             "has_memory":false,
-            "use_original_text":true
+            "use_original_text":true,
+            "extra_info":""
         },
         {
             "button_name":"Seque",
             "output_key_words":"Sentence Continuation",
             "prompts":"Please provide a score for the following sentence continuation, and explain your rating considering various dimensions such as the rationality of logic, the correctness of grammar, and the complexity of the sentence. After that, you should give me some advice. 请全部用中文回答问题",
             "has_memory":false,
-            "use_original_text":true
+            "use_original_text":true,
+            "extra_info":""
         },
         {
             "button_name":"Zh-En",
             "output_key_words":"Chinese to English Translation",
             "prompts":"Please provide a score for the following Chinese to English translation, and explain your rating considering various dimensions such as fidelity to the original text, linguistic intricacy, and overall fluency. After that, you should give me some advice. finally you should give me the English version translate of it, 除了翻译部分，请全部用中文回答问题",
             "has_memory":false,
-            "use_original_text":true
+            "use_original_text":true,
+            "extra_info":""
         },
         {
             "button_name":"Conversation",
             "output_key_words":"My Response",
             "prompts":"I want to practice English conversation with you, Your answer should be divided into response and 评估. Response should provide a thorough but short response of the topic I mentioned, while also presenting valuable questions for further exploration. 评估 should offer an evaluation of my statement in terms of logic and syntactical structure, along with providing suggestions, this part you should response in Chinese and English, you should use English when quoting my words and giving suggestions on my expression. ",
             "has_memory":true,  
-            "use_original_text":false
+            "use_original_text":false,
+            "extra_info":""
+        },
+        {
+            "button_name": "Interview",
+            "output_key_words":"My Response",
+            "prompts":"I want you to act as an interviewer. I will be the candidate and you will ask me the interview questions for the {{position}}. I want you to only reply as the interviewer. Do not write all the conservation at once. I want you to only do the interview with me. Ask me the questions and wait for my answers. Do not write explanations. Ask me the questions one by one like an interviewer does and wait for my answers. My first sentence is 'Hi'",
+            "has_memory":true,
+            "use_original_text":false,
+            "extra_info":"position"
         }
     ],
     "achievements_info": {
