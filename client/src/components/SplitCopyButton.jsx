@@ -128,7 +128,7 @@ return (
         <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
             {/* <Button size="small" title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
              */}
-            <Button style={{width: "7rem",fontSize:"0.8rem"}} size="small" title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
+            <Button style={{width: "7rem",fontSize:"0.8rem"}} title={copy_button_config[selectedIndex].button_name} onClick={handleClick} disabled={disclickable}>{copy_button_config[selectedIndex].button_name}</Button>
             <Button
                 size="small"
                 aria-controls={open ? 'split-button-menu' : undefined}

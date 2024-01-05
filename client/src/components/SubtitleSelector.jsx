@@ -82,8 +82,7 @@ function SubtitleSelector() {
                 ))}
             </StyledContainer>
             <StyledModel>
-                <Select
-                    size="small"
+                <StyledModelSelect
                     value={model}
                     onChange={handleModelChange}
                 >
@@ -92,7 +91,7 @@ function SubtitleSelector() {
                     <MenuItem value={"gpt-4–1106-preview"} style={{fontSize:"0.8rem"}}>gpt-4–1106-preview</MenuItem>
                     {/*<MenuItem value={"text-moderation-playground"}>text-moderation-playground</MenuItem>*/}
                     {/*<MenuItem value={"text-davinci-002-render-sha"}>text-davinci-002-render-sha</MenuItem>*/}
-                </Select>
+                </StyledModelSelect>
                 <SplitCopyButton disclickable={userSubSubtitles[subSubtitlesIndex].length == 0}/>
             </StyledModel>
         </>
